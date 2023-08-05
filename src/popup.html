@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>Ali Manager</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet" />
+
+		<link rel="stylesheet" href="styles.css" />
+		<script src="popup.js"></script>
+	</head>
+	<body>
+		<div class="popup">
+			<div class="popup-title">Ali Manager <span>версия 0.0.1</span></div>
+			<div class="popup-content">
+				<div class="dates">
+					<textarea name="dates" id="dates" placeholder="Введите дату заказа"></textarea>
+
+					<div class="params">
+						<label><input type="checkbox" name="info" checked /> Информация о заказе</label>
+						<label><input type="checkbox" name="param1" /> Тестовый параметр</label>
+					</div>
+
+					<div class="btns">
+						<a href="https://www.aliexpress.com/p/order/index.html" id="start" class="disabled" target="_blank">Выполнить</a>
+						<button id="clear-dates">Очистить</button>
+					</div>
+				</div>
+
+				<div class="documentation">
+					<div class="documentation-title">Инструкция</div>
+					<div class="documentation-content" data-farmatted-text>
+						<ul>
+							<li><b>д-м-г</b> - заказы за это число. Для нескольких дат, используйте пробел или перенос строки</li>
+							<li><b>д-м-г~</b> - все заказы начиная с этого числа</li>
+							<li><b>д-м-г~д-м-г</b> - диапазон дат</li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- <button id="btn-check-orders">Выполнить</button>
+
+				<div class="test"></div> -->
+
+				<div class="copyright">Разработал <a href="https://github.com/Veiron93" target="_blank">Дмитрий Юдин</a></div>
+			</div>
+		</div>
+	</body>
+</html>

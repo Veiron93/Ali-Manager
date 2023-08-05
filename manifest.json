@@ -1,0 +1,19 @@
+{
+	"name": "Ali Manager",
+	"description": "description test",
+	"version": "0.1",
+	"manifest_version": 3,
+	"icons": {},
+	"action": {
+		"default_title": "Ali Manager",
+		"default_popup": "src/popup.html"
+	},
+
+	"permissions": ["scripting", "activeTab", "storage", "tabs"],
+	"host_permissions": ["https://www.aliexpress.com/*"],
+	"optional_host_permissions": ["https://*/*", "http://*/*"],
+	"background": {
+		"service_worker": "src/background.js",
+		"type": "module"
+	}
+}

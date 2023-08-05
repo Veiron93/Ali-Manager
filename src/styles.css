@@ -1,0 +1,134 @@
+* {
+  box-sizing: border-box;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat", sans-serif;
+}
+
+a {
+  color: #fc9500;
+  text-decoration: none;
+}
+
+*[data-farmatted-text] > * {
+  line-height: 1.35em;
+}
+*[data-farmatted-text] p {
+  margin-bottom: 10px;
+}
+*[data-farmatted-text] ul,
+*[data-farmatted-text] ol {
+  margin-left: 25px;
+}
+*[data-farmatted-text] ul li,
+*[data-farmatted-text] ol li {
+  font-size: 14px;
+}
+*[data-farmatted-text] ul li:not(:last-child),
+*[data-farmatted-text] ol li:not(:last-child) {
+  margin-bottom: 5px;
+}
+
+.popup {
+  border: 2px solid #ca2709;
+  width: 330px;
+  background: #fff;
+}
+.popup-title {
+  font-size: 20px;
+  padding: 10px;
+  background: #ca2709;
+  color: #fff;
+  display: flex;
+  align-items: center;
+}
+.popup-title span {
+  font-size: 12px;
+  margin-left: auto;
+}
+.popup-content {
+  padding: 10px;
+}
+.popup-content .dates textarea {
+  border: 1px solid #c5c5c5;
+  padding: 10px;
+  width: 100%;
+  min-height: 30px;
+  overflow: auto;
+  resize: vertical;
+  border-radius: 4px;
+}
+.popup-content .dates .params {
+  margin-top: 7px;
+}
+.popup-content .dates .params label {
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+  user-select: none;
+}
+.popup-content .dates .params label:not(:last-child) {
+  margin-bottom: 5px;
+}
+.popup-content .dates .btns {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  margin-top: 12px;
+}
+.popup-content .dates .btns > * {
+  height: 40px;
+  width: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+}
+.popup-content .dates .btns #start {
+  background: #ca2709;
+  color: #fff;
+}
+.popup-content .dates .btns #start.disabled {
+  pointer-events: none;
+  background: #eaeaea;
+  color: #777;
+}
+.popup-content .dates .btns #clear-dates {
+  background: #fc9500;
+  color: #fff;
+}
+.popup-content #btn-check-orders {
+  border-radius: 4px;
+  background: #ca2709;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 14px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+.popup-content .documentation {
+  margin-top: 20px;
+  font-size: 14px;
+}
+.popup-content .documentation-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+.popup-content .documentation-content > * {
+  font-size: 14px;
+}
+.popup-content .test {
+  margin-top: 20px;
+  overflow-x: scroll;
+}
+.popup-content .copyright {
+  margin-top: 20px;
+  font-size: 12px;
+}
