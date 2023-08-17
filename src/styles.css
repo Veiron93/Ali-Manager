@@ -112,6 +112,22 @@ a {
   margin-top: 5px;
   cursor: pointer;
 }
+.popup-content .last-checking {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  color: #fff;
+  display: flex;
+  column-gap: 5px;
+  background-color: #0d9822;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzIgMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTIyIDlhMSAxIDAgMCAwIDAgMS40Mmw0LjYgNC42SDMuMDZhMSAxIDAgMSAwIDAgMmgyMy41MkwyMiAyMS41OUExIDEgMCAwIDAgMjIgMjNhMSAxIDAgMCAwIDEuNDEgMGw2LjM2LTYuMzZhLjg4Ljg4IDAgMCAwIDAtMS4yN0wyMy40MiA5QTEgMSAwIDAgMCAyMiA5WiIgZGF0YS1uYW1lPSJMYXllciAyIiBmaWxsPSIjZmZmZmZmIiBjbGFzcz0iZmlsbC0wMDAwMDAiPjwvcGF0aD48L3N2Zz4=);
+  background-position: center right 10px;
+  background-size: 22px;
+  background-repeat: no-repeat;
+}
+.popup-content .last-checking span {
+  font-weight: 500;
+}
 .popup-content .documentation {
   margin-top: 20px;
   font-size: 14px;

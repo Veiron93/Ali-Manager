@@ -1,6 +1,7 @@
 class OrderData {
-	numberOrder = null;
+	orderNumber = null;
 	products = null; // список товаров в заказе
+	productsData = null;
 	countProducts = 0; // общее количество товаров в заказе
 
 	prePriceOrder = 0;
@@ -15,7 +16,7 @@ class OrderData {
 	constructor() {
 		(async () => {
 			await this.pageLoaded();
-			await this.getUriParams("orderId").then((result) => (this.numberOrder = result));
+			await this.getUriParams("orderId").then((result) => (this.orderNumber = result));
 			await this.getPriceOrder().then(
 				(result) =>
 					([
@@ -29,8 +30,8 @@ class OrderData {
 			);
 
 			await this.getProducts().then((result) => (this.products = result));
-			await this.getDataProducts().then((result) => console.log(result));
-			await this.setDataLocalStorage();
+			await this.getDataProducts().then((result) => (this.productsData = result));
+			await this.initDataOrder();
 		})();
 	}
 
@@ -292,27 +293,47 @@ class OrderData {
 
 	/**
 	 * возвращает заказ из localStorage
-	 * @param {Array} orders заказы
+	 * @param {Number} orders заказы
+	 * @returns {Number}
+	 */
+	getOrderIndexLocalStorage(orders) {
+		let orderIndex = orders.findIndex((order) => order.orderNumber == this.orderNumber);
+		return orderIndex;
+	}
+
+	/**
+	 * инициализация данных о заказе
 	 * @returns {Promise}
 	 */
-	getOrderLocalStorage(orders) {
-		return orders.find((order) => order.orderNumber == this.orderNumber);
+	initDataOrder() {
+		return new Promise((resolve) => {
+			let orders = this.getOrdersLocalStorage();
+
+			if (!orders) {
+				return false;
+			}
+
+			let orderIndex = this.getOrderIndexLocalStorage(orders);
+
+			orders[orderIndex].products = this.productsData;
+			orders[orderIndex].countProducts = this.countProducts;
+			orders[orderIndex].totalPrice = Math.round(this.totalPriceOrder);
+			orders[orderIndex].deliveryPrice = Math.round(this.deliveryPriceOrder);
+			orders[orderIndex].discount = Math.round(this.discountOrder);
+
+			this.setDataLocalStorage(orders);
+
+			resolve();
+		});
 	}
 
 	/**
 	 * запись данных о заказе в localStorage
+	 * @param {Object} orders
 	 * @returns {Promise}
 	 */
-	setDataLocalStorage() {
-		let orders = this.getOrdersLocalStorage();
-
-		if (!orders) {
-			return false;
-		}
-
-		let order = getOrderLocalStorage(orders);
-
-		console.log(order);
+	setDataLocalStorage(orders) {
+		localStorage.setItem("orders", JSON.stringify(orders));
 	}
 
 	/**

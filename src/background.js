@@ -4,11 +4,13 @@
 
 const indexPathName = "/p/order/index.html";
 const orderPathName = "/p/order/detail.html";
+const resultPathName = "/p/";
 
 chrome.tabs.onActivated.addListener(async () => {
 	await chrome.tabs.query({ active: true, lastFocusedWindow: true }).then((currenTab) => {
 		let tab = currenTab[0];
 
+		// список заказов
 		if (getPathNameTab(tab) == indexPathName) {
 			(async () => {
 				let dates = null;
@@ -34,7 +36,24 @@ chrome.tabs.onActivated.addListener(async () => {
 					target: { tabId: tab.id },
 					files: ["./src/clientside.js"],
 				});
+
+				// дата проверки
+				let dateNow = new Date();
+				chrome.storage.local.set({
+					["last_checked_ali_manager"]: dateNow.getDate() + "-" + (dateNow.getMonth() + 1) + "-" + dateNow.getFullYear(),
+				});
 			})();
+		}
+
+		// страница результата
+		if (getPathNameTab(tab) == resultPathName) {
+			chrome.scripting.executeScript({
+				target: { tabId: tab.id },
+
+				func: () => {
+					console.log("страница результата");
+				},
+			});
 		}
 	});
 });

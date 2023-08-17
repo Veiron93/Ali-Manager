@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	let params = document.querySelectorAll(".params input");
 
-	let testWrapper = document.querySelector(".test");
+	let lastChecking = document.querySelector(".last-checking");
 
 	// инициализация расширения
 	init();
@@ -38,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	// отслеживание параметров
 	// параметры
 	paramsInit();
-	//clearStorageLocal("params_dates_am");
 	paramsChange();
 
 	function init() {
@@ -48,6 +47,11 @@ document.addEventListener("DOMContentLoaded", () => {
 				dates.value = result;
 				btnStart.classList.remove("disabled");
 			}
+		});
+
+		// дата последней проверки заказа
+		chrome.storage.local.get(["last_checked_ali_manager"]).then((result) => {
+			lastChecking.querySelector("span").textContent = result["last_checked_ali_manager"];
 		});
 	}
 
@@ -134,114 +138,3 @@ document.addEventListener("DOMContentLoaded", () => {
 		chrome.storage.local.remove([key]);
 	}
 });
-
-// class PopupAliManage {
-// 	currenTab = null;
-
-// 	constructor() {
-// 		(async () => {
-// 			await this.getCurrentTab().then((result) => (this.currenTab = result));
-
-// 			//test.textContent = tab.url;
-// 		})();
-// 	}
-
-// 	// активная вкладка
-// 	async getCurrentTab() {
-// 		let queryOptions = { active: true };
-// 		let tabs = await chrome.tabs.query(queryOptions);
-// 		return tabs[0];
-// 	}
-// }
-
-// new PopupAliManage();
-
-// document.addEventListener("DOMContentLoaded", () => {
-// 	let test = document.querySelector(".test");
-
-// 	let currenTab = null;
-
-// 	(async () => {
-// 		await getCurrentTab().then((result) => (currenTab = result));
-
-// 		test.textContent = JSON.stringify(currenTab);
-// 	})();
-
-// 	// активная вкладка
-// 	async function getCurrentTab() {
-// 		let queryOptions = { active: true };
-// 		let tabs = await chrome.tabs.query(queryOptions);
-// 		return tabs[0];
-// 	}
-
-// 	// chrome.tabs.query({ active: true }, function (tabs) {
-// 	// 	let tab = tabs[0];
-
-// 	// 	if (tab) {
-// 	// 		//let pathName = location.pathname;
-// 	// 		// test.textContent = JSON.stringify(tab);
-// 	// 		pageActiveUrl = tab.url;
-// 	// 		test.textContent = pageActiveUrl;
-// 	// 	}
-
-// 	// 	// if (tab) {
-// 	// 	// 	chrome.scripting.executeScript(
-// 	// 	// 		{
-// 	// 	// 			target: { tabId: tab.id, allFrames: true },
-// 	// 	// 			func: grabImages,
-// 	// 	// 		},
-// 	// 	// 		onResult
-// 	// 	// 	);
-// 	// 	// } else {
-// 	// 	// 	alert("There are no active tabs");
-// 	// 	// }
-// 	// });
-
-// 	// const btnCheckOrders = document.getElementById("btn-check-orders");
-
-// 	// let test = document.querySelector(".test");
-
-// 	// document.getElementById("btn-check-orders").addEventListener("click", () => {
-// 	// 	chrome.tabs.query({ active: true }, function (tabs) {
-// 	// 		var tab = tabs[0];
-
-// 	// 		if (tab) {
-// 	// 			//let pathName = location.pathname;
-// 	// 			//test.textContent = JSON.stringify(tab);
-
-// 	// 			test.textContent = tab.url;
-
-// 	// 			//console.log(777)
-// 	// 		}
-
-// 	// 		// if (tab) {
-// 	// 		// 	chrome.scripting.executeScript(
-// 	// 		// 		{
-// 	// 		// 			target: { tabId: tab.id, allFrames: true },
-// 	// 		// 			func: grabImages,
-// 	// 		// 		},
-// 	// 		// 		onResult
-// 	// 		// 	);
-// 	// 		// } else {
-// 	// 		// 	alert("There are no active tabs");
-// 	// 		// }
-// 	// 	});
-// 	// });
-
-// 	// document.getElementById("btn-check-orders").addEventListener("click", myFunction);
-// 	// chrome.storage.local.get(["test"]).then((result) => {
-// 	// 	//console.log("Value currently is " + result.key);
-// 	// 	document.querySelector("#dates").value = result.test;
-// 	// 	//www.innerHTML = result.test;
-// 	// });
-// 	// function myFunction() {
-// 	// 	let btn = document.querySelector("#btn-check-orders");
-// 	// 	// if (btn) {
-// 	// 	// 	btn.textContent = "поменяли текст";
-// 	// 	// }
-// 	// 	let data = document.querySelector("#dates").value;
-// 	// 	let dates = document.querySelector(".test");
-// 	// 	chrome.storage.local.set({ test: data });
-// 	// 	//chrome.storage.local.clear();
-// 	// }
-// });

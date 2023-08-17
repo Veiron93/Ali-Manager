@@ -273,7 +273,7 @@ class GetOrders {
 	}
 
 	getOrderData() {
-		window.open("https://www.aliexpress.com/p/order/detail.html?orderId=5191082767223465", "_blank");
+		window.open("https://www.aliexpress.com/p/order/detail.html?orderId=5191082767193465", "_blank");
 	}
 }
 

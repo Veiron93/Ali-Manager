@@ -2,6 +2,7 @@ $color: #ca2709;
 $color1: #c5c5c5;
 $color2: #fc9500;
 $color3: #eaeaea;
+$color4: #0d9822;
 
 * {
 	box-sizing: border-box;
@@ -145,6 +146,24 @@ body {
 			font-size: 14px;
 			margin-top: 5px;
 			cursor: pointer;
+		}
+
+		.last-checking {
+			margin-top: 15px;
+			padding: 10px;
+			border-radius: 4px;
+			color: #fff;
+			display: flex;
+			column-gap: 5px;
+			background-color: $color4;
+			background-image: url(data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzIgMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTIyIDlhMSAxIDAgMCAwIDAgMS40Mmw0LjYgNC42SDMuMDZhMSAxIDAgMSAwIDAgMmgyMy41MkwyMiAyMS41OUExIDEgMCAwIDAgMjIgMjNhMSAxIDAgMCAwIDEuNDEgMGw2LjM2LTYuMzZhLjg4Ljg4IDAgMCAwIDAtMS4yN0wyMy40MiA5QTEgMSAwIDAgMCAyMiA5WiIgZGF0YS1uYW1lPSJMYXllciAyIiBmaWxsPSIjZmZmZmZmIiBjbGFzcz0iZmlsbC0wMDAwMDAiPjwvcGF0aD48L3N2Zz4=);
+			background-position: center right 10px;
+			background-size: 22px;
+			background-repeat: no-repeat;
+
+			span {
+				font-weight: 500;
+			}
 		}
 
 		.documentation {
