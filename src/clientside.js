@@ -33,6 +33,8 @@ class GetOrders {
 			await this.getOrders();
 			await this.getNumberOrders();
 			await this.setOrdersLocalStorage();
+
+			await this.getOrderData();
 		})();
 	}
 
@@ -237,6 +239,41 @@ class GetOrders {
 				}
 			});
 		});
+	}
+
+	/**
+	 * Открывает страницу с заказом
+	 * @returns {Promise}
+	 */
+
+	openPageOrder() {
+		return new Promise(async (resolve) => {
+			let ordersJSON = localStorage.getItem("orders");
+
+			if (!ordersJSON) {
+				console.log("В LocalStorage не найдено данных о заказах");
+				return false;
+			}
+
+			let orders = JSON.parse(ordersJSON);
+			let i = 0;
+
+			for (const order of orders) {
+				//console.log("страница открыта");
+				window.open("https://track.aliexpress.com" + this.trackingUrl + "?tradeId=" + order.orderNumber + "&getTrackingOrder=true", "_blank");
+				await this.checkGetTrackCode(order);
+
+				i++;
+
+				if (i == orders.length) {
+					resolve();
+				}
+			}
+		});
+	}
+
+	getOrderData() {
+		window.open("https://www.aliexpress.com/p/order/detail.html?orderId=5191082767223465", "_blank");
 	}
 }
 

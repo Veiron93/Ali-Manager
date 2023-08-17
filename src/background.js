@@ -2,13 +2,14 @@
  * запись даты заказов в localstorage из расширения для браузера
  */
 
-const indexPageUrl = "https://www.aliexpress.com/p/order/index.html";
+const indexPathName = "/p/order/index.html";
+const orderPathName = "/p/order/detail.html";
 
 chrome.tabs.onActivated.addListener(async () => {
 	await chrome.tabs.query({ active: true, lastFocusedWindow: true }).then((currenTab) => {
 		let tab = currenTab[0];
 
-		if (tab && tab.pendingUrl == indexPageUrl) {
+		if (getPathNameTab(tab) == indexPathName) {
 			(async () => {
 				let dates = null;
 
@@ -37,3 +38,35 @@ chrome.tabs.onActivated.addListener(async () => {
 		}
 	});
 });
+
+chrome.tabs.onCreated.addListener(() => {
+	chrome.tabs.query({ active: true, lastFocusedWindow: true }).then((currenTab) => {
+		let tab = currenTab[0];
+
+		// страница информации о заказе
+		if (getPathNameTab(tab) == orderPathName) {
+			chrome.scripting.executeScript({
+				target: { tabId: tab.id },
+				files: ["./src/order-data.js"],
+			});
+		}
+	});
+});
+
+/**
+ * pathname tab
+ * @param {Object} tab
+ * @returns {String, Boolean}
+ */
+
+function getPathNameTab(tab) {
+	let urlString = tab.pendingUrl;
+
+	if (!urlString) {
+		return false;
+	}
+
+	let url = new URL(urlString);
+
+	return url ? url.pathname : false;
+}
