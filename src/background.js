@@ -49,10 +49,7 @@ chrome.tabs.onActivated.addListener(async () => {
 		if (getPathNameTab(tab) == resultPathName) {
 			chrome.scripting.executeScript({
 				target: { tabId: tab.id },
-
-				func: () => {
-					console.log("страница результата");
-				},
+				files: ["./src/result.js"],
 			});
 		}
 	});
