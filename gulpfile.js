@@ -11,6 +11,8 @@ import notify from "gulp-notify";
 
 let gs = gulpSass(sass);
 
+let styleFiles = ["main", "result"];
+
 gulp.task("browser-sync-start", function (done) {
 	browserSync.init({
 		notify: false,
@@ -30,19 +32,21 @@ gulp.task("browser-sync-reload", function () {
 });
 
 gulp.task("styles", function () {
-	gulp.src("src/assets/scss/*.scss")
-		.pipe(plumber({ errorHandler: notify.onError("Error: <%= error.message %>") }))
-		.pipe(gs())
-		.pipe(rename({ dirname: "" }))
-		.pipe(concat("styles.css"))
-		// .pipe(
-		// 	autoprefixer({
-		// 		browsers: ["last 10 versions"],
-		// 		cascade: true,
-		// 	})
-		// )
-		.pipe(gulp.dest("src"))
-		.pipe(browserSync.reload({ stream: true }));
+	styleFiles.forEach((styleFile) => {
+		gulp.src("src/assets/scss/" + styleFile + ".scss")
+			.pipe(plumber({ errorHandler: notify.onError("Error: <%= error.message %>") }))
+			.pipe(gs())
+			.pipe(rename({ dirname: "" }))
+			.pipe(concat(styleFile + ".css"))
+			// .pipe(
+			// 	autoprefixer({
+			// 		browsers: ["last 10 versions"],
+			// 		cascade: true,
+			// 	})
+			// )
+			.pipe(gulp.dest("src"))
+			.pipe(browserSync.reload({ stream: true }));
+	});
 
 	gulp.watch("src/assets/scss/*.scss", gulp.parallel(["styles"]));
 });

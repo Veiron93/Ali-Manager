@@ -1,0 +1,187 @@
+$color: #c52828;
+$color1: #0384b8;
+
+* {
+	font-family: sans-serif;
+}
+
+body {
+	//background-color: #000 !important;
+}
+
+.list-orders-wrapper {
+	max-width: 1200px;
+	width: 100%;
+	margin: 0 auto;
+	//border: 1px solid red;
+
+	.order {
+		//border: 1px solid red;
+		padding: 15px;
+		border-radius: 10px;
+
+		&:nth-child(2n) {
+			background: #fef7f3;
+		}
+
+		&:not(:last-child) {
+			margin-bottom: 5px;
+		}
+
+		&-header {
+			margin-bottom: 10px;
+
+			&_date {
+				font-size: 14px;
+				font-weight: bold;
+			}
+		}
+
+		&-body {
+			display: flex;
+			column-gap: 20px;
+
+			.products-list {
+				.product {
+					//border: 1px solid red;
+					display: flex;
+					column-gap: 30px;
+
+					&:not(:last-child) {
+						padding-bottom: 5px;
+						border-bottom: 1px solid #fceadf;
+					}
+
+					&:not(:last-child) {
+						margin-bottom: 10px;
+					}
+
+					&-description-wrapper {
+						display: flex;
+						column-gap: 20px;
+
+						.product-photo {
+							border-radius: 10px;
+							overflow: hidden;
+							flex: none;
+							height: 70px;
+							width: 70px;
+							img {
+								display: block;
+							}
+						}
+
+						.product-name {
+							line-height: 1.35em;
+							font-size: 15px;
+
+							.product-sku {
+								margin-top: 5px;
+								font-weight: bold;
+								color: $color1;
+							}
+						}
+					}
+
+					&-prices-wrapper {
+						flex: none;
+						width: 150px;
+
+						//border: 1px solid red;
+
+						> div {
+							font-weight: bold;
+
+							&:before {
+								font-weight: normal;
+							}
+
+							&:not(:last-child) {
+								margin-bottom: 10px;
+							}
+						}
+
+						.product-count {
+							&:before {
+								content: "Количество: ";
+							}
+						}
+
+						.product-price {
+							&:before {
+								content: "Цена 1 шт: ";
+							}
+						}
+
+						.product-total-price {
+							&:before {
+								content: "Всего: ";
+							}
+						}
+					}
+				}
+			}
+
+			.order-info {
+				width: 350px;
+				//border: 1px solid red;
+				height: 100%;
+				position: sticky;
+				top: 10px;
+				background: #fceadf;
+				padding: 10px;
+				border-radius: 10px;
+
+				> div {
+					font-weight: bold;
+
+					&:before {
+						font-weight: normal;
+					}
+
+					&:not(:last-child) {
+						margin-bottom: 10px;
+					}
+				}
+
+				.number-order {
+					color: $color;
+				}
+
+				.tracking-number {
+					color: $color1;
+				}
+
+				.count-products {
+					&:before {
+						content: "Количество: ";
+					}
+				}
+
+				.price-order {
+					&:before {
+						content: "Сумма заказа: ";
+					}
+				}
+
+				.discount-order {
+					&:before {
+						content: "Скидка: ";
+					}
+				}
+
+				.delivery-order {
+					&:before {
+						content: "Доставка: ";
+					}
+				}
+
+				.total-price-order {
+					&:before {
+						content: "Итого: ";
+					}
+				}
+			}
+		}
+	}
+}

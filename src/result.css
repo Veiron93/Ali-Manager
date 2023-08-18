@@ -1,0 +1,126 @@
+@charset "UTF-8";
+* {
+  font-family: sans-serif;
+}
+
+.list-orders-wrapper {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+.list-orders-wrapper .order {
+  padding: 15px;
+  border-radius: 10px;
+}
+.list-orders-wrapper .order:nth-child(2n) {
+  background: #fef7f3;
+}
+.list-orders-wrapper .order:not(:last-child) {
+  margin-bottom: 5px;
+}
+.list-orders-wrapper .order-header {
+  margin-bottom: 10px;
+}
+.list-orders-wrapper .order-header_date {
+  font-size: 14px;
+  font-weight: bold;
+}
+.list-orders-wrapper .order-body {
+  display: flex;
+  column-gap: 20px;
+}
+.list-orders-wrapper .order-body .products-list .product {
+  display: flex;
+  column-gap: 30px;
+}
+.list-orders-wrapper .order-body .products-list .product:not(:last-child) {
+  padding-bottom: 5px;
+  border-bottom: 1px solid #fceadf;
+}
+.list-orders-wrapper .order-body .products-list .product:not(:last-child) {
+  margin-bottom: 10px;
+}
+.list-orders-wrapper .order-body .products-list .product-description-wrapper {
+  display: flex;
+  column-gap: 20px;
+}
+.list-orders-wrapper .order-body .products-list .product-description-wrapper .product-photo {
+  border-radius: 10px;
+  overflow: hidden;
+  flex: none;
+  height: 70px;
+  width: 70px;
+}
+.list-orders-wrapper .order-body .products-list .product-description-wrapper .product-photo img {
+  display: block;
+}
+.list-orders-wrapper .order-body .products-list .product-description-wrapper .product-name {
+  line-height: 1.35em;
+  font-size: 15px;
+}
+.list-orders-wrapper .order-body .products-list .product-description-wrapper .product-name .product-sku {
+  margin-top: 5px;
+  font-weight: bold;
+  color: #0384b8;
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper {
+  flex: none;
+  width: 150px;
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper > div {
+  font-weight: bold;
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper > div:before {
+  font-weight: normal;
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper > div:not(:last-child) {
+  margin-bottom: 10px;
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper .product-count:before {
+  content: "Количество: ";
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper .product-price:before {
+  content: "Цена 1 шт: ";
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper .product-total-price:before {
+  content: "Всего: ";
+}
+.list-orders-wrapper .order-body .order-info {
+  width: 350px;
+  height: 100%;
+  position: sticky;
+  top: 10px;
+  background: #fceadf;
+  padding: 10px;
+  border-radius: 10px;
+}
+.list-orders-wrapper .order-body .order-info > div {
+  font-weight: bold;
+}
+.list-orders-wrapper .order-body .order-info > div:before {
+  font-weight: normal;
+}
+.list-orders-wrapper .order-body .order-info > div:not(:last-child) {
+  margin-bottom: 10px;
+}
+.list-orders-wrapper .order-body .order-info .number-order {
+  color: #c52828;
+}
+.list-orders-wrapper .order-body .order-info .tracking-number {
+  color: #0384b8;
+}
+.list-orders-wrapper .order-body .order-info .count-products:before {
+  content: "Количество: ";
+}
+.list-orders-wrapper .order-body .order-info .price-order:before {
+  content: "Сумма заказа: ";
+}
+.list-orders-wrapper .order-body .order-info .discount-order:before {
+  content: "Скидка: ";
+}
+.list-orders-wrapper .order-body .order-info .delivery-order:before {
+  content: "Доставка: ";
+}
+.list-orders-wrapper .order-body .order-info .total-price-order:before {
+  content: "Итого: ";
+}

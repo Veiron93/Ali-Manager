@@ -51,6 +51,11 @@ chrome.tabs.onActivated.addListener(async () => {
 				target: { tabId: tab.id },
 				files: ["./src/result.js"],
 			});
+
+			chrome.scripting.insertCSS({
+				target: { tabId: tab.id },
+				files: ["./src/result.css"],
+			});
 		}
 	});
 });
