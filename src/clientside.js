@@ -31,10 +31,17 @@ class GetOrders {
 			await this.initListOrders().then((value) => this.listOrdersNode.push(...value));
 
 			await this.getOrders();
-			await this.getNumberOrders();
+			await this.getDataOrders();
 			await this.setOrdersLocalStorage();
 
-			await this.getOrderData();
+			// данные о товаре
+			if (1 == 1) {
+				await this.getOrdersData();
+			}
+
+			// трек номер посылки
+			if (2 == 2) {
+			}
 		})();
 	}
 
@@ -137,16 +144,24 @@ class GetOrders {
 	 * @returns Promise
 	 */
 
-	getNumberOrders() {
+	getDataOrders() {
 		return new Promise((resolve) => {
 			let countOrders = this.listOrdersNode.length;
 			let i = 0;
 
 			Array.from(this.listOrdersNode).forEach((order) => {
+				// дата заказа
+				let dateOrder = order.querySelector(".order-item-header-right-info div:nth-child(1)").textContent;
+				dateOrder = datesAliManager.formatingDateAliToRus(dateOrder.split(":")[1]);
+
+				// номер заказа
 				let orderNumber = order.querySelector(".order-item-header-right-info div:nth-child(2)").textContent;
 				orderNumber = orderNumber.replace(/[^0-9]/g, "");
 
-				this.listOrders.push(orderNumber);
+				this.listOrders.push({
+					dateOrder: dateOrder,
+					orderNumber: orderNumber,
+				});
 
 				i++;
 
@@ -169,9 +184,6 @@ class GetOrders {
 		let year = orderDateArr[2];
 
 		let orderDateObject = new Date(year + "-" + month + "-" + day);
-
-		// console.log(this.minDateOrder);
-		// console.log(orderDateObject.getTime());
 
 		return this.minDateOrder <= orderDateObject.getTime() ? true : false;
 	}
@@ -229,7 +241,8 @@ class GetOrders {
 
 			this.listOrders.forEach((order) => {
 				orders.push({
-					orderNumber: order,
+					orderNumber: order.orderNumber,
+					dateOrder: order.dateOrder,
 					trackingNumber: "",
 				});
 
@@ -272,8 +285,9 @@ class GetOrders {
 		});
 	}
 
-	getOrderData() {
-		window.open("https://www.aliexpress.com/p/order/detail.html?orderId=5191082767193465", "_blank");
+	getOrdersData() {
+		return new Promise((resolve) => {});
+		//window.open("https://www.aliexpress.com/p/order/detail.html?orderId=5191082767193465", "_blank");
 	}
 }
 

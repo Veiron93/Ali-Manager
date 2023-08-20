@@ -11,7 +11,7 @@ import notify from "gulp-notify";
 
 let gs = gulpSass(sass);
 
-let styleFiles = ["main", "result"];
+let styleFiles = ["popup", "result"];
 
 gulp.task("browser-sync-start", function (done) {
 	browserSync.init({

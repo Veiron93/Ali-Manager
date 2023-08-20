@@ -9,7 +9,7 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet" />
 
-		<link rel="stylesheet" href="styles.css" />
+		<link rel="stylesheet" href="popup.css" />
 		<script src="popup.js"></script>
 	</head>
 	<body>
@@ -20,8 +20,8 @@
 					<textarea name="dates" id="dates" placeholder="Введите дату заказа"></textarea>
 
 					<div class="params">
-						<label><input type="checkbox" name="info" checked /> Информация о заказе</label>
-						<label><input type="checkbox" name="param1" /> Тестовый параметр</label>
+						<label><input type="checkbox" name="info" checked /> Информация о заказах</label>
+						<label><input type="checkbox" name="param1" /> Трек-номер посылок</label>
 					</div>
 
 					<div class="btns">
@@ -36,7 +36,7 @@
 					<div class="documentation-title">Инструкция</div>
 					<div class="documentation-content" data-farmatted-text>
 						<ul>
-							<li><b>д-м-г</b> - заказы за это число. Для нескольких дат, используйте пробел или перенос строки</li>
+							<li><b>д-м-г</b> - для нескольких дат, используйте перенос строки</li>
 							<li><b>д-м-г~</b> - все заказы начиная с этого числа</li>
 							<li><b>д-м-г~д-м-г</b> - диапазон дат</li>
 						</ul>

@@ -1,6 +1,7 @@
 @charset "UTF-8";
 * {
   font-family: sans-serif;
+  font-size: 14px;
 }
 
 .list-orders-wrapper {
@@ -15,19 +16,32 @@
 .list-orders-wrapper .order:nth-child(2n) {
   background: #fef7f3;
 }
+.list-orders-wrapper .order:nth-child(2n+1) {
+  border: 1px solid #fef7f3;
+}
 .list-orders-wrapper .order:not(:last-child) {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 .list-orders-wrapper .order-header {
   margin-bottom: 10px;
 }
 .list-orders-wrapper .order-header_date {
-  font-size: 14px;
-  font-weight: bold;
+  width: 70px;
+  font-size: 13px;
+  padding: 5px 0;
+  border-radius: 10px;
+  background: #d7f7fc;
+  text-align: center;
 }
 .list-orders-wrapper .order-body {
   display: flex;
   column-gap: 20px;
+}
+.list-orders-wrapper .order-body .products-list {
+  width: 100%;
+}
+.list-orders-wrapper .order-body .products-list:empty {
+  display: none;
 }
 .list-orders-wrapper .order-body .products-list .product {
   display: flex;
@@ -43,6 +57,7 @@
 .list-orders-wrapper .order-body .products-list .product-description-wrapper {
   display: flex;
   column-gap: 20px;
+  width: 100%;
 }
 .list-orders-wrapper .order-body .products-list .product-description-wrapper .product-photo {
   border-radius: 10px;
@@ -65,7 +80,7 @@
 }
 .list-orders-wrapper .order-body .products-list .product-prices-wrapper {
   flex: none;
-  width: 150px;
+  width: 130px;
 }
 .list-orders-wrapper .order-body .products-list .product-prices-wrapper > div {
   font-weight: bold;
@@ -86,7 +101,8 @@
   content: "Всего: ";
 }
 .list-orders-wrapper .order-body .order-info {
-  width: 350px;
+  flex: none;
+  width: 250px;
   height: 100%;
   position: sticky;
   top: 10px;

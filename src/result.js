@@ -67,7 +67,7 @@ class Result {
 			let header = this.createElement("div", "order-header");
 
 			// дата
-			let date = this.createElement("div", "order-header_date", 123);
+			let date = this.createElement("div", "order-header_date", order.dateOrder);
 
 			// сборка шапки
 			header.appendChild(date);
@@ -146,7 +146,7 @@ class Result {
 			let countProducts = this.createElement("div", "count-products", order.countProducts);
 
 			// сумма заказа
-			let priceOrder = this.createElement("div", "price-order", order.totalPrice - order.discount + order.deliveryPrice);
+			let priceOrder = this.createElement("div", "price-order", order.totalPrice + order.discount - order.deliveryPrice);
 
 			// скидка
 			let discount = this.createElement("div", "discount-order", order.discount);

@@ -162,6 +162,22 @@ class DatesAliManager {
 
 		this.minDate = sortingDates.at(-1).timestamp;
 	}
+
+	formatingDateAliToRus(dateAli) {
+		let orderDateArr = dateAli.split(" ");
+
+		if (orderDateArr[0] == "") {
+			orderDateArr.splice(0, 1);
+		}
+
+		let day = orderDateArr[1].slice(0, -1);
+		let month = this.monthNamesShort.indexOf(orderDateArr[0]) + 1;
+		let year = orderDateArr[2];
+
+		let dateRus = day + "." + month + "." + year;
+
+		return dateRus ? dateRus : null;
+	}
 }
 
 window.datesAliManager = new DatesAliManager();

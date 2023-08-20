@@ -242,7 +242,7 @@ class OrderData {
 		let name = null;
 
 		if (nameWrapper) {
-			name = nameWrapper.textContent;
+			name = nameWrapper.textContent.slice(0, 140) + "...";
 		}
 
 		return name;
