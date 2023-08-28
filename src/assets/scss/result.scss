@@ -35,6 +35,8 @@ body {
 
 		&-header {
 			margin-bottom: 10px;
+			display: flex;
+			align-items: center;
 
 			&_date {
 				width: 70px;
@@ -43,6 +45,13 @@ body {
 				border-radius: 10px;
 				background: #d7f7fc;
 				text-align: center;
+			}
+
+			&_order-link {
+				margin-left: auto;
+				color: $color;
+				font-weight: bold;
+				text-decoration: none;
 			}
 		}
 
@@ -90,6 +99,7 @@ body {
 						.product-name {
 							line-height: 1.35em;
 							font-size: 15px;
+							text-decoration: none;
 
 							.product-sku {
 								margin-top: 5px;

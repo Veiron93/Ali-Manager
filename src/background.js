@@ -4,7 +4,9 @@
 
 const indexPathName = "/p/order/index.html";
 const orderPathName = "/p/order/detail.html";
-const resultPathName = "/p/";
+const trackingPathName = "/logisticsdetail.htm";
+
+const blankPathName = "/p";
 
 chrome.tabs.onActivated.addListener(async () => {
 	await chrome.tabs.query({ active: true, lastFocusedWindow: true }).then((currenTab) => {
@@ -46,7 +48,7 @@ chrome.tabs.onActivated.addListener(async () => {
 		}
 
 		// страница результата
-		if (getPathNameTab(tab) == resultPathName) {
+		if (getPathNameTab(tab) == blankPathName) {
 			chrome.scripting.executeScript({
 				target: { tabId: tab.id },
 				files: ["./src/result.js"],
@@ -71,6 +73,24 @@ chrome.tabs.onCreated.addListener(() => {
 				files: ["./src/order-data.js"],
 			});
 		}
+
+		// трек-номер
+		if (getPathNameTab(tab) == trackingPathName) {
+			trackingNumberTabId = tab.id;
+
+			chrome.scripting.executeScript({
+				target: { tabId: tab.id },
+				files: ["./src/tracking-number.js"],
+			});
+		}
+
+		// запись трек-номера
+		if (getUriParams(tab, "trackingNumber") != "") {
+			chrome.scripting.executeScript({
+				target: { tabId: tab.id },
+				files: ["./src/tracking-number.js"],
+			});
+		}
 	});
 });
 
@@ -90,4 +110,18 @@ function getPathNameTab(tab) {
 	let url = new URL(urlString);
 
 	return url ? url.pathname : false;
+}
+
+/**
+ * возвращает значение get параметра
+ * @param {String} param заказы
+ * @returns {String | Number}
+ */
+
+function getUriParams(tab, param) {
+	let params = new URL(tab.pendingUrl).searchParams;
+
+	//console.log(params.get(param));
+
+	return params.get(param);
 }

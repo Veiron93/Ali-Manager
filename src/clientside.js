@@ -5,8 +5,8 @@
 class GetOrders {
 	// сслылки на страницы для парсинга
 	indexUrl = "/p/order/index.html"; // список заказов
-	trackingUrl = "/logisticsdetail.htm"; // трекинг посылки
 	detailUrl = "/p/order/detail.html"; // информация о заказе
+	trackingUrl = "/logisticsdetail.htm"; // трекинг посылки
 
 	// даты
 	datesSingle = []; // конкретные даты
@@ -35,12 +35,13 @@ class GetOrders {
 			await this.setOrdersLocalStorage();
 
 			// данные о товаре
-			if (1 == 1) {
-				await this.getOrdersData();
-			}
+			// if (1 == 1) {
+			// 	await this.getOrdersData();
+			// }
 
 			// трек номер посылки
 			if (2 == 2) {
+				await this.getTrackingNumber();
 			}
 		})();
 	}
@@ -255,39 +256,63 @@ class GetOrders {
 	}
 
 	/**
-	 * Открывает страницу с заказом
+	 * получает информацию о заказе
 	 * @returns {Promise}
 	 */
 
-	openPageOrder() {
+	getOrdersData() {
 		return new Promise(async (resolve) => {
-			let ordersJSON = localStorage.getItem("orders");
-
-			if (!ordersJSON) {
-				console.log("В LocalStorage не найдено данных о заказах");
-				return false;
-			}
-
-			let orders = JSON.parse(ordersJSON);
 			let i = 0;
 
-			for (const order of orders) {
-				//console.log("страница открыта");
-				window.open("https://track.aliexpress.com" + this.trackingUrl + "?tradeId=" + order.orderNumber + "&getTrackingOrder=true", "_blank");
-				await this.checkGetTrackCode(order);
+			for (const order of this.listOrders) {
+				window.open("https://www.aliexpress.com" + this.detailUrl + "?orderId=" + order.orderNumber, "_blank");
+
+				await this.checkComplete(order, "dataCompleted");
 
 				i++;
 
-				if (i == orders.length) {
+				if (i == this.listOrders.length) {
 					resolve();
 				}
 			}
 		});
 	}
 
-	getOrdersData() {
-		return new Promise((resolve) => {});
-		//window.open("https://www.aliexpress.com/p/order/detail.html?orderId=5191082767193465", "_blank");
+	/**
+	 * получает трек-номер заказа
+	 * @returns {Promise}
+	 */
+
+	getTrackingNumber() {
+		return new Promise(async (resolve) => {
+			let i = 0;
+
+			for (const order of this.listOrders) {
+				window.open("https://track.aliexpress.com" + this.trackingUrl + "?tradeId=" + order.orderNumber, "_blank");
+
+				await this.checkComplete(order, "trackingNumberCompleted");
+
+				i++;
+
+				if (i == this.listOrders.length) {
+					resolve();
+				}
+			}
+		});
+	}
+
+	checkComplete(order, flagName) {
+		return new Promise((resolve) => {
+			let idIntarval = setInterval(() => {
+				let orders = JSON.parse(localStorage.getItem("orders"));
+				let actualOrder = orders.find((item) => item.orderNumber == order.orderNumber);
+
+				if (actualOrder[flagName] == true) {
+					clearInterval(idIntarval);
+					resolve();
+				}
+			}, 500);
+		});
 	}
 }
 

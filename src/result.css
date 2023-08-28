@@ -24,6 +24,8 @@
 }
 .list-orders-wrapper .order-header {
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
 }
 .list-orders-wrapper .order-header_date {
   width: 70px;
@@ -32,6 +34,12 @@
   border-radius: 10px;
   background: #d7f7fc;
   text-align: center;
+}
+.list-orders-wrapper .order-header_order-link {
+  margin-left: auto;
+  color: #c52828;
+  font-weight: bold;
+  text-decoration: none;
 }
 .list-orders-wrapper .order-body {
   display: flex;
@@ -72,6 +80,7 @@
 .list-orders-wrapper .order-body .products-list .product-description-wrapper .product-name {
   line-height: 1.35em;
   font-size: 15px;
+  text-decoration: none;
 }
 .list-orders-wrapper .order-body .products-list .product-description-wrapper .product-name .product-sku {
   margin-top: 5px;

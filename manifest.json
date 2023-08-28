@@ -10,7 +10,7 @@
 	},
 
 	"permissions": ["scripting", "activeTab", "storage", "tabs"],
-	"host_permissions": ["https://www.aliexpress.com/*"],
+	"host_permissions": ["https://www.aliexpress.com/*", "https://track.aliexpress.com/*"],
 	"optional_host_permissions": ["https://*/*", "http://*/*"],
 	"background": {
 		"service_worker": "src/background.js",

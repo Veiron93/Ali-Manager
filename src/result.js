@@ -69,8 +69,13 @@ class Result {
 			// дата
 			let date = this.createElement("div", "order-header_date", order.dateOrder);
 
+			// дата
+			let orderLink = this.createElement("a", "order-header_order-link", "О заказе");
+			orderLink.href = "https://www.aliexpress.com/p/order/detail.html?orderId=" + order.orderNumber;
+			orderLink.setAttribute("target", "_blank");
+
 			// сборка шапки
-			header.appendChild(date);
+			this.appendChild([date, orderLink], header);
 
 			// ТЕЛО
 			let body = this.createElement("div", "order-body");
@@ -99,7 +104,9 @@ class Result {
 					productPhotoWrapper.appendChild(img);
 
 					// название товара
-					let productName = this.createElement("div", "product-name", product.name);
+					let productName = this.createElement("a", "product-name", product.name);
+					productName.href = product.link;
+					productName.setAttribute("target", "_blank");
 
 					// sku товара
 					let productSku = this.createElement("div", "product-sku", product.sku);
@@ -113,17 +120,17 @@ class Result {
 					// обвёртка
 					let productPricesWrapper = this.createElement("div", "product-prices-wrapper");
 
-					// количество товара
-					let productCount = this.createElement("div", "product-count", product.count);
-
 					// стоимость товара
 					let productPrice = this.createElement("div", "product-price", product.price);
+
+					// количество товара
+					let productCount = this.createElement("div", "product-count", product.count);
 
 					// стоимость товара
 					let productTotalPrice = this.createElement("div", "product-total-price", product.price * product.count);
 
 					// сборка информации о стоимости
-					this.appendChild([productCount, productPrice, productTotalPrice], productPricesWrapper);
+					this.appendChild([productPrice, productCount, productTotalPrice], productPricesWrapper);
 
 					// сборка товара
 					this.appendChild([productDescriptionWrapper, productPricesWrapper], productWrapper);

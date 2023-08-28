@@ -32,6 +32,8 @@ class OrderData {
 			await this.getProducts().then((result) => (this.products = result));
 			await this.getDataProducts().then((result) => (this.productsData = result));
 			await this.initDataOrder();
+
+			window.close();
 		})();
 	}
 
@@ -242,7 +244,12 @@ class OrderData {
 		let name = null;
 
 		if (nameWrapper) {
-			name = nameWrapper.textContent.slice(0, 140) + "...";
+			if (nameWrapper.textContent.length > 140) {
+				name = nameWrapper.textContent.slice(0, 140);
+				name += "...";
+			} else {
+				name = nameWrapper.textContent;
+			}
 		}
 
 		return name;
@@ -320,6 +327,7 @@ class OrderData {
 			orders[orderIndex].totalPrice = Math.round(this.totalPriceOrder);
 			orders[orderIndex].deliveryPrice = Math.round(this.deliveryPriceOrder);
 			orders[orderIndex].discount = Math.round(this.discountOrder);
+			orders[orderIndex].dataCompleted = true;
 
 			this.setDataLocalStorage(orders);
 
