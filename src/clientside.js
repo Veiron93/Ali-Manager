@@ -35,9 +35,9 @@ class GetOrders {
 			await this.setOrdersLocalStorage();
 
 			// данные о товаре
-			// if (1 == 1) {
-			// 	await this.getOrdersData();
-			// }
+			if (1 == 1) {
+				await this.getOrdersData();
+			}
 
 			// трек номер посылки
 			if (2 == 2) {
@@ -55,8 +55,6 @@ class GetOrders {
 		this.datesFrom = datesAliManager.datesFrom;
 		this.datesRange = datesAliManager.datesRange;
 		this.minDateOrder = datesAliManager.minDate;
-
-		//console.log(this.datesSingle);
 	}
 
 	/**
@@ -265,7 +263,7 @@ class GetOrders {
 			let i = 0;
 
 			for (const order of this.listOrders) {
-				window.open("https://www.aliexpress.com" + this.detailUrl + "?orderId=" + order.orderNumber, "_blank");
+				window.open("https://www.aliexpress.com" + this.detailUrl + "?alimanager=1&orderId=" + order.orderNumber, "_blank");
 
 				await this.checkComplete(order, "dataCompleted");
 
@@ -288,7 +286,7 @@ class GetOrders {
 			let i = 0;
 
 			for (const order of this.listOrders) {
-				window.open("https://track.aliexpress.com" + this.trackingUrl + "?tradeId=" + order.orderNumber, "_blank");
+				window.open("https://track.aliexpress.com" + this.trackingUrl + "?alimanager=1&tradeId=" + order.orderNumber, "_blank");
 
 				await this.checkComplete(order, "trackingNumberCompleted");
 

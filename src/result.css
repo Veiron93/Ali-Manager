@@ -4,6 +4,44 @@
   font-size: 14px;
 }
 
+.orders-info {
+  display: flex;
+  column-gap: 20px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 20px auto;
+  padding: 15px;
+  background: #ebebeb;
+  border-radius: 10px;
+}
+.orders-info > div {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+.orders-info > div:before {
+  margin-right: 10px;
+}
+.orders-info .total-price {
+  color: #c52828;
+}
+.orders-info .total-price:before {
+  content: "Итого:";
+}
+.orders-info .total-count-orders:before {
+  content: "Количество заказов:";
+}
+.orders-info .total-count-products:before {
+  content: "Количество товаров:";
+}
+.orders-info .total-discount:before {
+  content: "Скидка:";
+}
+.orders-info .total-delivery:before {
+  content: "Доставка:";
+}
+
 .list-orders-wrapper {
   max-width: 1200px;
   width: 100%;
@@ -11,6 +49,7 @@
 }
 .list-orders-wrapper .order {
   padding: 15px;
+  width: 100%;
   border-radius: 10px;
 }
 .list-orders-wrapper .order:nth-child(2n) {
@@ -100,6 +139,16 @@
 .list-orders-wrapper .order-body .products-list .product-prices-wrapper > div:not(:last-child) {
   margin-bottom: 10px;
 }
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper input {
+  border: none;
+  background: none;
+  padding: 0;
+  font-weight: bold;
+  outline: none;
+  cursor: pointer;
+  color: #0c8c06;
+  width: auto;
+}
 .list-orders-wrapper .order-body .products-list .product-prices-wrapper .product-count:before {
   content: "Количество: ";
 }
@@ -110,6 +159,9 @@
   content: "Всего: ";
 }
 .list-orders-wrapper .order-body .order-info {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
   flex: none;
   width: 250px;
   height: 100%;
@@ -125,8 +177,13 @@
 .list-orders-wrapper .order-body .order-info > div:before {
   font-weight: normal;
 }
-.list-orders-wrapper .order-body .order-info > div:not(:last-child) {
-  margin-bottom: 10px;
+.list-orders-wrapper .order-body .order-info input {
+  border: none;
+  background: none;
+  padding: 0;
+  font-weight: bold;
+  outline: none;
+  cursor: pointer;
 }
 .list-orders-wrapper .order-body .order-info .number-order {
   color: #c52828;

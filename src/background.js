@@ -1,16 +1,16 @@
-/**
- * запись даты заказов в localstorage из расширения для браузера
- */
-
 const indexPathName = "/p/order/index.html";
 const orderPathName = "/p/order/detail.html";
 const trackingPathName = "/logisticsdetail.htm";
 
-const blankPathName = "/p";
+const blankPathName = "/p/";
 
 chrome.tabs.onActivated.addListener(async () => {
 	await chrome.tabs.query({ active: true, lastFocusedWindow: true }).then((currenTab) => {
 		let tab = currenTab[0];
+
+		if (!getUriParams(tab, "alimanager")) {
+			return false;
+		}
 
 		// список заказов
 		if (getPathNameTab(tab) == indexPathName) {
@@ -41,6 +41,7 @@ chrome.tabs.onActivated.addListener(async () => {
 
 				// дата проверки
 				let dateNow = new Date();
+
 				chrome.storage.local.set({
 					["last_checked_ali_manager"]: dateNow.getDate() + "-" + (dateNow.getMonth() + 1) + "-" + dateNow.getFullYear(),
 				});
@@ -48,6 +49,8 @@ chrome.tabs.onActivated.addListener(async () => {
 		}
 
 		// страница результата
+
+		//console.log(getPathNameTab(tab));
 		if (getPathNameTab(tab) == blankPathName) {
 			chrome.scripting.executeScript({
 				target: { tabId: tab.id },
@@ -66,6 +69,10 @@ chrome.tabs.onCreated.addListener(() => {
 	chrome.tabs.query({ active: true, lastFocusedWindow: true }).then((currenTab) => {
 		let tab = currenTab[0];
 
+		if (!getUriParams(tab, "alimanager")) {
+			return false;
+		}
+
 		// страница информации о заказе
 		if (getPathNameTab(tab) == orderPathName) {
 			chrome.scripting.executeScript({
@@ -76,8 +83,6 @@ chrome.tabs.onCreated.addListener(() => {
 
 		// трек-номер
 		if (getPathNameTab(tab) == trackingPathName) {
-			trackingNumberTabId = tab.id;
-
 			chrome.scripting.executeScript({
 				target: { tabId: tab.id },
 				files: ["./src/tracking-number.js"],
@@ -85,10 +90,10 @@ chrome.tabs.onCreated.addListener(() => {
 		}
 
 		// запись трек-номера
-		if (getUriParams(tab, "trackingNumber") != "") {
+		if (getUriParams(tab, "trackingNumber")) {
 			chrome.scripting.executeScript({
 				target: { tabId: tab.id },
-				files: ["./src/tracking-number.js"],
+				files: ["./src/set-tracking-number.js"],
 			});
 		}
 	});
@@ -119,9 +124,10 @@ function getPathNameTab(tab) {
  */
 
 function getUriParams(tab, param) {
+	if (!tab.pendingUrl) {
+		return false;
+	}
+
 	let params = new URL(tab.pendingUrl).searchParams;
-
-	//console.log(params.get(param));
-
 	return params.get(param);
 }

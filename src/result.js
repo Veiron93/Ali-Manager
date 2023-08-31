@@ -6,7 +6,11 @@ class Result {
 			await this.pageLoaded();
 			await this.clearPage();
 			await this.getOrdersLocalStorage().then((result) => (this.orders = result));
-			this.initListOrders();
+
+			if (this.orders.length) {
+				this.initInfoOrders();
+				this.initListOrders();
+			}
 
 			console.log(this.orders);
 		})();
@@ -51,7 +55,63 @@ class Result {
 	}
 
 	/**
-	 * возвращает заказы из localStorage
+	 * информация по всем заказам
+	 * @returns {Promise} object || null
+	 */
+
+	initInfoOrders() {
+		let ordersInfoWrapper = this.createElement("div", "orders-info");
+
+		// цена
+		let totalPriceWrapper = this.createElement("div", "total-price");
+		let totalPrice = 0;
+
+		// количество заказов
+		let totalCountOrdersWrapper = this.createElement("div", "total-count-orders");
+		let totalCountOrders = 0;
+
+		// количество товаров
+		let totalCountProductsWrapper = this.createElement("div", "total-count-products");
+		let totalCountProducts = 0;
+
+		// скидка
+		let totalDiscountWrapper = this.createElement("div", "total-discount");
+		let totalDiscount = 0;
+
+		// доставка
+		let totalDeliveryWrapper = this.createElement("div", "total-delivery");
+		let totalDelivery = 0;
+
+		let i = 0;
+
+		totalCountOrders = this.orders.length;
+
+		this.orders.forEach((order) => {
+			totalPrice += order.totalPrice;
+			totalCountProducts += order.countProducts;
+			totalDiscount += order.discount;
+			totalDelivery += order.deliveryPrice;
+
+			i++;
+
+			if (i == this.orders.length) {
+				totalPriceWrapper.textContent = totalPrice;
+				totalCountOrdersWrapper.textContent = totalCountOrders;
+				totalCountProductsWrapper.textContent = totalCountProducts;
+				totalDiscountWrapper.textContent = totalDiscount;
+				totalDeliveryWrapper.textContent = totalDelivery;
+
+				this.appendChild(
+					[totalPriceWrapper, totalDiscountWrapper, totalDeliveryWrapper, totalCountOrdersWrapper, totalCountProductsWrapper],
+					ordersInfoWrapper
+				);
+				document.body.appendChild(ordersInfoWrapper);
+			}
+		});
+	}
+
+	/**
+	 * список товаров
 	 * @returns {Promise} object || null
 	 */
 	initListOrders() {
@@ -129,8 +189,11 @@ class Result {
 					// стоимость товара
 					let productTotalPrice = this.createElement("div", "product-total-price", product.price * product.count);
 
+					let templateExel = this.createElement("input", "product-total-price", "п - " + product.price + " (" + product.count + " шт) - ");
+					this.copyText(templateExel);
+
 					// сборка информации о стоимости
-					this.appendChild([productPrice, productCount, productTotalPrice], productPricesWrapper);
+					this.appendChild([productPrice, productCount, productTotalPrice, templateExel], productPricesWrapper);
 
 					// сборка товара
 					this.appendChild([productDescriptionWrapper, productPricesWrapper], productWrapper);
@@ -144,10 +207,12 @@ class Result {
 			let orderInfo = this.createElement("div", "order-info");
 
 			// номер заказа
-			let numberOrder = this.createElement("div", "number-order", order.orderNumber);
+			let numberOrder = this.createElement("input", "number-order", order.orderNumber);
+			this.copyText(numberOrder);
 
 			// трек номер посылки
-			let trackingNumber = this.createElement("div", "tracking-number", order.trackingNumber);
+			let trackingNumber = this.createElement("input", "tracking-number", order.trackingNumber);
+			this.copyText(trackingNumber);
 
 			// количество товара
 			let countProducts = this.createElement("div", "count-products", order.countProducts);
@@ -192,7 +257,11 @@ class Result {
 		}
 
 		if (content != null) {
-			element.textContent = content;
+			if (elementName == "input") {
+				element.value = content;
+			} else {
+				element.textContent = content;
+			}
 		}
 
 		return element;
@@ -212,6 +281,16 @@ class Result {
 		} else {
 			parenElement.appendChild(nodes);
 		}
+	}
+
+	/**
+	 * копирует при клике
+	 * @param {Node} parenElement
+	 * @returns {void}
+	 */
+
+	copyText(element) {
+		element.addEventListener("click", () => document.execCommand("copy", false, element.select()));
 	}
 }
 

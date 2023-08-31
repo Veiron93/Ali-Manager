@@ -1,16 +1,9 @@
 class TrackingNumber {
 	constructor() {
 		(async () => {
-			if (this.getUriParams("trackingNumber")) {
-				// запись трек-номера
-				console.log(777);
-				// await this.setTrackingNumberLocalStorage();
-				// window.close();
-			} else {
-				// получение трек-номера
-				await this.pageLoaded();
-				this.getTrackingNumber();
-			}
+			// получение трек-номера
+			await this.pageLoaded();
+			this.getTrackingNumber();
 		})();
 	}
 
@@ -42,34 +35,11 @@ class TrackingNumber {
 
 		let trackNumber = trackNumberWrapper ? trackNumberWrapper.textContent : null;
 
-		//location.href = "https://www.aliexpress.com/p/?trackingNumber=" + trackNumber + "&tradeId=" + this.getUriParams("tradeId");
-
-		//window.location.replace("https://www.aliexpress.com/p/?trackingNumber=" + trackNumber + "&tradeId=" + this.getUriParams("tradeId"));
-
-		window.open("https://www.aliexpress.com/p/?trackingNumber=" + trackNumber + "&tradeId=" + this.getUriParams("tradeId"), "_blank");
+		window.open(
+			"https://www.aliexpress.com/p/?alimanager=1&trackingNumber=" + trackNumber + "&tradeId=" + this.getUriParams("tradeId"),
+			"_blank"
+		);
 		window.close();
-	}
-
-	setTrackingNumberLocalStorage() {
-		return new Promise((resolve) => {
-			let orders = localStorage.getItem("orders");
-			let orderArr = JSON.parse(orders);
-
-			let orderNumber = this.getUriParams("tradeId");
-			let trackingNumber = this.getUriParams("trackingNumber");
-
-			let indexOrder = orderArr.findIndex((order) => order.orderNumber == orderNumber);
-
-			if (indexOrder == -1 || trackingNumber == null) {
-				resolve();
-			}
-
-			orderArr[indexOrder].trackingNumber = trackingNumber;
-
-			localStorage.setItem("orders", JSON.stringify(orderArr));
-
-			resolve();
-		});
 	}
 
 	/**

@@ -1,13 +1,64 @@
 $color: #c52828;
 $color1: #0384b8;
+$color2: #0c8c06;
 
 * {
 	font-family: sans-serif;
 	font-size: 14px;
 }
 
-body {
-	//background-color: #000 !important;
+.orders-info {
+	display: flex;
+	column-gap: 20px;
+	max-width: 1200px;
+	width: 100%;
+	margin: 20px auto;
+	padding: 15px;
+	background: #ebebeb;
+	border-radius: 10px;
+
+	> div {
+		display: flex;
+		align-items: center;
+		font-size: 16px;
+		font-weight: bold;
+
+		&:before {
+			margin-right: 10px;
+		}
+	}
+
+	.total-price {
+		color: $color;
+
+		&:before {
+			content: "Итого:";
+		}
+	}
+
+	.total-count-orders {
+		&:before {
+			content: "Количество заказов:";
+		}
+	}
+
+	.total-count-products {
+		&:before {
+			content: "Количество товаров:";
+		}
+	}
+
+	.total-discount {
+		&:before {
+			content: "Скидка:";
+		}
+	}
+
+	.total-delivery {
+		&:before {
+			content: "Доставка:";
+		}
+	}
 }
 
 .list-orders-wrapper {
@@ -19,6 +70,7 @@ body {
 	.order {
 		//border: 1px solid red;
 		padding: 15px;
+		width: 100%;
 		border-radius: 10px;
 
 		&:nth-child(2n) {
@@ -127,6 +179,17 @@ body {
 							}
 						}
 
+						input {
+							border: none;
+							background: none;
+							padding: 0;
+							font-weight: bold;
+							outline: none;
+							cursor: pointer;
+							color: $color2;
+							width: auto;
+						}
+
 						.product-count {
 							&:before {
 								content: "Количество: ";
@@ -149,6 +212,9 @@ body {
 			}
 
 			.order-info {
+				display: flex;
+				flex-direction: column;
+				row-gap: 10px;
 				flex: none;
 				width: 250px;
 				//border: 1px solid red;
@@ -165,10 +231,15 @@ body {
 					&:before {
 						font-weight: normal;
 					}
+				}
 
-					&:not(:last-child) {
-						margin-bottom: 10px;
-					}
+				input {
+					border: none;
+					background: none;
+					padding: 0;
+					font-weight: bold;
+					outline: none;
+					cursor: pointer;
 				}
 
 				.number-order {

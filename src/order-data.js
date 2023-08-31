@@ -268,8 +268,6 @@ class OrderData {
 			sku = skuWrapper.textContent;
 		}
 
-		//console.log(sku);
-
 		return sku;
 	}
 
