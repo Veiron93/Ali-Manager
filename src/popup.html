@@ -13,9 +13,23 @@
 		<script src="popup.js"></script>
 	</head>
 	<body>
-		<div class="popup">
-			<div class="popup-title">Ali Manager <span>версия 0.1.0</span></div>
-			<div class="popup-content">
+		<div class="app-wrapper">
+			<header>
+				<a href="https://alimanager.ru" target="_blank">AliManager</a>
+				<span>версия 0.1.0</span>
+			</header>
+
+			<div class="license-expired">
+				<div class="title">Закончилась подписка</div>
+				<div class="description">Если Вы хотите и далее пользоваться этим чудесным расширением, продлите подписку!</div>
+
+				<div class="btns">
+					<a href="/fe" class="btn btn--payment">Продлить</a>
+					<a href="/fe" class="btn btn--support">Поддержка</a>
+				</div>
+			</div>
+
+			<div class="app-content">
 				<div class="dates">
 					<textarea name="dates" id="dates" placeholder="Введите дату заказа"></textarea>
 
@@ -42,11 +56,18 @@
 							<li><b>д-м-г~</b> - все заказы начиная с этого числа</li>
 							<li><b>д-м-г~д-м-г</b> - диапазон дат</li>
 						</ul>
+
+						<ol>
+							<li>Формат даты: <b>20-7-23</b>, и никак иначе!!!</li>
+							<li>Вы должны быть авторизованны на <a href="https://www.aliexpress.ru/" target="_blank">aliexpress.ru</a></li>
+						</ol>
 					</div>
 				</div>
-
-				<div class="copyright">Разработал <a href="https://github.com/Veiron93" target="_blank">Дмитрий Юдин</a></div>
 			</div>
+
+			<footer>
+				<p class="copyright">Разработал <a href="https://vk.com/veiron93" target="_blank">Дмитрий Юдин</a></p>
+			</footer>
 		</div>
 	</body>
 </html>

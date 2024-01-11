@@ -12,19 +12,23 @@ $color4: #0d9822;
 	font-family: "Montserrat", sans-serif;
 }
 
-p {
-	//font-size: 16px;
-}
-
 a {
 	color: $color2;
 	text-decoration: none;
 }
 
-html {
-}
-
-body {
+.btn {
+	height: 40px;
+	width: 110px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px;
+	font-size: 14px;
+	border: none;
+	cursor: pointer;
+	user-select: none;
+	background: #000;
 }
 
 *[data-farmatted-text] {
@@ -50,49 +54,103 @@ body {
 	}
 }
 
-.popup {
-	border: 2px solid $color;
-	//padding: 20px;
-	width: 330px;
-	//width: 600px;
+.app-wrapper {
+	position: relative;
+	width: 350px;
+	padding: 55px 10px 10px;
 	background: #fff;
+	border: 2px solid $color;
 
-	&-title {
-		font-size: 20px;
-		padding: 10px;
-		background: $color;
-		color: #fff;
+	header {
 		display: flex;
 		align-items: center;
 
+		position: absolute;
+		top: 0;
+		left: 0;
+
+		width: 100%;
+		padding: 10px;
+
+		background: $color;
+
+		a,
 		span {
-			font-size: 12px;
+			color: #fff;
+		}
+
+		a {
+			font-size: 20px;
+		}
+
+		span {
+			font-size: 14px;
 			margin-left: auto;
 		}
 	}
 
-	&-content {
-		padding: 10px;
+	footer {
+		margin-top: 25px;
+
+		.copyright {
+			font-size: 14px;
+		}
+	}
+
+	.license-expired {
+		display: none;
+
+		.title {
+			font-weight: bold;
+			font-size: 20px;
+		}
+
+		.description {
+			margin-top: 7px;
+			font-size: 18px;
+		}
+
+		.btns {
+			margin-top: 20px;
+			display: flex;
+			column-gap: 15px;
+
+			.btn--payment {
+				background: $color4;
+				color: #fff;
+			}
+
+			.btn--support {
+				background: $color2;
+				color: #fff;
+			}
+		}
+	}
+
+	.app-content {
+		//display: none;
 
 		.dates {
 			textarea {
 				border: 1px solid $color1;
 				padding: 10px;
 				width: 100%;
-				min-height: 30px;
+				min-height: 45px;
 				overflow: auto;
 				resize: vertical;
 				border-radius: 4px;
+				font-size: 16px;
 			}
 
 			.params {
-				margin-top: 7px;
+				margin-top: 10px;
 
 				label {
 					display: flex;
 					align-items: center;
 					column-gap: 5px;
 					user-select: none;
+					font-size: 16px;
 
 					&:not(:last-child) {
 						margin-bottom: 5px;
@@ -104,7 +162,7 @@ body {
 				display: flex;
 				align-items: center;
 				column-gap: 10px;
-				margin-top: 12px;
+				margin-top: 18px;
 
 				> * {
 					height: 40px;
@@ -160,6 +218,7 @@ body {
 			background-position: center right 10px;
 			background-size: 22px;
 			background-repeat: no-repeat;
+			font-size: 13px;
 
 			span {
 				font-weight: 500;
@@ -180,17 +239,23 @@ body {
 				> * {
 					font-size: 14px;
 				}
+
+				ul {
+				}
+
+				ol {
+					margin-top: 15px;
+
+					li {
+						font-weight: 500;
+					}
+
+					a {
+						color: $color4;
+						border-bottom: 1px dashed;
+					}
+				}
 			}
-		}
-
-		.test {
-			margin-top: 20px;
-			overflow-x: scroll;
-		}
-
-		.copyright {
-			margin-top: 20px;
-			font-size: 12px;
 		}
 	}
 }

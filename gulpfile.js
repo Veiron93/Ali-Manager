@@ -8,6 +8,7 @@ import rename from "gulp-rename";
 import concat from "gulp-concat";
 import plumber from "gulp-plumber";
 import notify from "gulp-notify";
+import zip from "gulp-zip";
 
 let gs = gulpSass(sass);
 
@@ -53,4 +54,26 @@ gulp.task("styles", function () {
 
 gulp.task("default", gulp.parallel("browser-sync-start", "styles"), function () {
 	return true;
+});
+
+// BUILD
+
+gulp.task("build", () => {
+	const ignoredFiles = [
+		".DS_Store",
+		".git",
+		"dist/**",
+		"src/assets/**",
+		"node_modules/**",
+		".gitignore",
+		"gulpfile.js",
+		"package-lock.json",
+		"package.json",
+	];
+
+	return gulp
+		.src([".*", "*", "*/**"], { base: "./", ignore: ignoredFiles })
+		.pipe(zip("build.zip"))
+		.pipe(gulp.dest("./dist"))
+		.on("end", () => console.log("👌 Проект собран"));
 });

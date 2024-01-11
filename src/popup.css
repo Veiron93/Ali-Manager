@@ -11,6 +11,20 @@ a {
   text-decoration: none;
 }
 
+.btn {
+  height: 40px;
+  width: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  background: #000;
+}
+
 *[data-farmatted-text] > * {
   line-height: 1.35em;
 }
@@ -30,54 +44,94 @@ a {
   margin-bottom: 5px;
 }
 
-.popup {
-  border: 2px solid #ca2709;
-  width: 330px;
+.app-wrapper {
+  position: relative;
+  width: 350px;
+  padding: 55px 10px 10px;
   background: #fff;
+  border: 2px solid #ca2709;
 }
-.popup-title {
-  font-size: 20px;
-  padding: 10px;
-  background: #ca2709;
-  color: #fff;
+.app-wrapper header {
   display: flex;
   align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  background: #ca2709;
 }
-.popup-title span {
-  font-size: 12px;
+.app-wrapper header a,
+.app-wrapper header span {
+  color: #fff;
+}
+.app-wrapper header a {
+  font-size: 20px;
+}
+.app-wrapper header span {
+  font-size: 14px;
   margin-left: auto;
 }
-.popup-content {
-  padding: 10px;
+.app-wrapper footer {
+  margin-top: 25px;
 }
-.popup-content .dates textarea {
+.app-wrapper footer .copyright {
+  font-size: 14px;
+}
+.app-wrapper .license-expired {
+  display: none;
+}
+.app-wrapper .license-expired .title {
+  font-weight: bold;
+  font-size: 20px;
+}
+.app-wrapper .license-expired .description {
+  margin-top: 7px;
+  font-size: 18px;
+}
+.app-wrapper .license-expired .btns {
+  margin-top: 20px;
+  display: flex;
+  column-gap: 15px;
+}
+.app-wrapper .license-expired .btns .btn--payment {
+  background: #0d9822;
+  color: #fff;
+}
+.app-wrapper .license-expired .btns .btn--support {
+  background: #fc9500;
+  color: #fff;
+}
+.app-wrapper .app-content .dates textarea {
   border: 1px solid #c5c5c5;
   padding: 10px;
   width: 100%;
-  min-height: 30px;
+  min-height: 45px;
   overflow: auto;
   resize: vertical;
   border-radius: 4px;
+  font-size: 16px;
 }
-.popup-content .dates .params {
-  margin-top: 7px;
+.app-wrapper .app-content .dates .params {
+  margin-top: 10px;
 }
-.popup-content .dates .params label {
+.app-wrapper .app-content .dates .params label {
   display: flex;
   align-items: center;
   column-gap: 5px;
   user-select: none;
+  font-size: 16px;
 }
-.popup-content .dates .params label:not(:last-child) {
+.app-wrapper .app-content .dates .params label:not(:last-child) {
   margin-bottom: 5px;
 }
-.popup-content .dates .btns {
+.app-wrapper .app-content .dates .btns {
   display: flex;
   align-items: center;
   column-gap: 10px;
-  margin-top: 12px;
+  margin-top: 18px;
 }
-.popup-content .dates .btns > * {
+.app-wrapper .app-content .dates .btns > * {
   height: 40px;
   width: 110px;
   display: flex;
@@ -89,20 +143,20 @@ a {
   cursor: pointer;
   user-select: none;
 }
-.popup-content .dates .btns #start {
+.app-wrapper .app-content .dates .btns #start {
   background: #ca2709;
   color: #fff;
 }
-.popup-content .dates .btns #start.disabled {
+.app-wrapper .app-content .dates .btns #start.disabled {
   pointer-events: none;
   background: #eaeaea;
   color: #777;
 }
-.popup-content .dates .btns #clear-dates {
+.app-wrapper .app-content .dates .btns #clear-dates {
   background: #fc9500;
   color: #fff;
 }
-.popup-content #btn-check-orders {
+.app-wrapper .app-content #btn-check-orders {
   border-radius: 4px;
   background: #ca2709;
   border: none;
@@ -112,7 +166,7 @@ a {
   margin-top: 5px;
   cursor: pointer;
 }
-.popup-content .last-checking {
+.app-wrapper .app-content .last-checking {
   margin-top: 10px;
   padding: 10px;
   border-radius: 4px;
@@ -124,27 +178,30 @@ a {
   background-position: center right 10px;
   background-size: 22px;
   background-repeat: no-repeat;
+  font-size: 13px;
 }
-.popup-content .last-checking span {
+.app-wrapper .app-content .last-checking span {
   font-weight: 500;
 }
-.popup-content .documentation {
+.app-wrapper .app-content .documentation {
   margin-top: 20px;
   font-size: 14px;
 }
-.popup-content .documentation-title {
+.app-wrapper .app-content .documentation-title {
   font-weight: bold;
   margin-bottom: 8px;
   font-size: 18px;
 }
-.popup-content .documentation-content > * {
+.app-wrapper .app-content .documentation-content > * {
   font-size: 14px;
 }
-.popup-content .test {
-  margin-top: 20px;
-  overflow-x: scroll;
+.app-wrapper .app-content .documentation-content ol {
+  margin-top: 15px;
 }
-.popup-content .copyright {
-  margin-top: 20px;
-  font-size: 12px;
+.app-wrapper .app-content .documentation-content ol li {
+  font-weight: 500;
+}
+.app-wrapper .app-content .documentation-content ol a {
+  color: #0d9822;
+  border-bottom: 1px dashed;
 }
