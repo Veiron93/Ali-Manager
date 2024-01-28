@@ -1,0 +1,212 @@
+@charset "UTF-8";
+* {
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+.orders-info {
+  display: flex;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 20px auto;
+  padding: 15px;
+  background: #ebebeb;
+  border-radius: 10px;
+}
+.orders-info > div {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+.orders-info > div:before {
+  margin-right: 10px;
+}
+.orders-info .total-price {
+  color: #c52828;
+}
+.orders-info .total-price:before {
+  content: "Итого:";
+}
+.orders-info .total-count-orders:before {
+  content: "Количество заказов:";
+}
+.orders-info .total-count-products:before {
+  content: "Количество товаров:";
+}
+.orders-info .total-discount:before {
+  content: "Скидка:";
+}
+.orders-info .total-delivery:before {
+  content: "Доставка:";
+}
+
+.list-orders-wrapper {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+.list-orders-wrapper .order {
+  padding: 15px;
+  width: 100%;
+  border-radius: 10px;
+}
+.list-orders-wrapper .order:nth-child(2n) {
+  background: #fef7f3;
+}
+.list-orders-wrapper .order:nth-child(2n+1) {
+  border: 1px solid #fef7f3;
+}
+.list-orders-wrapper .order:not(:last-child) {
+  margin-bottom: 10px;
+}
+.list-orders-wrapper .order-header {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+.list-orders-wrapper .order-header_date {
+  width: 70px;
+  font-size: 13px;
+  padding: 5px 0;
+  border-radius: 10px;
+  background: #d7f7fc;
+  text-align: center;
+}
+.list-orders-wrapper .order-header_order-link {
+  margin-left: auto;
+  color: #c52828;
+  font-weight: bold;
+  text-decoration: none;
+}
+.list-orders-wrapper .order-body {
+  display: flex;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
+}
+.list-orders-wrapper .order-body .products-list {
+  width: 100%;
+}
+.list-orders-wrapper .order-body .products-list:empty {
+  display: none;
+}
+.list-orders-wrapper .order-body .products-list .product {
+  display: flex;
+  -moz-column-gap: 30px;
+       column-gap: 30px;
+}
+.list-orders-wrapper .order-body .products-list .product:not(:last-child) {
+  padding-bottom: 5px;
+  border-bottom: 1px solid #fceadf;
+}
+.list-orders-wrapper .order-body .products-list .product:not(:last-child) {
+  margin-bottom: 10px;
+}
+.list-orders-wrapper .order-body .products-list .product-description-wrapper {
+  display: flex;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
+  width: 100%;
+}
+.list-orders-wrapper .order-body .products-list .product-description-wrapper .product-photo {
+  border-radius: 10px;
+  overflow: hidden;
+  flex: none;
+  height: 70px;
+  width: 70px;
+}
+.list-orders-wrapper .order-body .products-list .product-description-wrapper .product-photo img {
+  display: block;
+}
+.list-orders-wrapper .order-body .products-list .product-description-wrapper .product-name {
+  line-height: 1.35em;
+  font-size: 15px;
+  text-decoration: none;
+}
+.list-orders-wrapper .order-body .products-list .product-description-wrapper .product-name .product-sku {
+  margin-top: 5px;
+  font-weight: bold;
+  color: #0384b8;
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper {
+  flex: none;
+  width: 130px;
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper > div {
+  font-weight: bold;
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper > div:before {
+  font-weight: normal;
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper > div:not(:last-child) {
+  margin-bottom: 10px;
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper input {
+  border: none;
+  background: none;
+  padding: 0;
+  font-weight: bold;
+  outline: none;
+  cursor: pointer;
+  color: #0c8c06;
+  width: auto;
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper .product-count:before {
+  content: "Количество: ";
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper .product-price:before {
+  content: "Цена 1 шт: ";
+}
+.list-orders-wrapper .order-body .products-list .product-prices-wrapper .product-total-price:before {
+  content: "Всего: ";
+}
+.list-orders-wrapper .order-body .order-info {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  flex: none;
+  width: 250px;
+  height: 100%;
+  position: sticky;
+  top: 10px;
+  background: #fceadf;
+  padding: 10px;
+  border-radius: 10px;
+}
+.list-orders-wrapper .order-body .order-info > div {
+  font-weight: bold;
+}
+.list-orders-wrapper .order-body .order-info > div:before {
+  font-weight: normal;
+}
+.list-orders-wrapper .order-body .order-info input {
+  border: none;
+  background: none;
+  padding: 0;
+  font-weight: bold;
+  outline: none;
+  cursor: pointer;
+}
+.list-orders-wrapper .order-body .order-info .number-order {
+  color: #c52828;
+}
+.list-orders-wrapper .order-body .order-info .tracking-number {
+  color: #0384b8;
+}
+.list-orders-wrapper .order-body .order-info .count-products:before {
+  content: "Количество: ";
+}
+.list-orders-wrapper .order-body .order-info .price-order:before {
+  content: "Сумма заказа: ";
+}
+.list-orders-wrapper .order-body .order-info .discount-order:before {
+  content: "Скидка: ";
+}
+.list-orders-wrapper .order-body .order-info .delivery-order:before {
+  content: "Доставка: ";
+}
+.list-orders-wrapper .order-body .order-info .total-price-order:before {
+  content: "Итого: ";
+}/*# sourceMappingURL=result.css.map */

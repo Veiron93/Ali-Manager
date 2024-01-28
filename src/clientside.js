@@ -24,25 +24,27 @@ class GetOrders {
 		(async () => {
 			this.init();
 
-			await this.initBtnMoreOrders().then((value) => {
-				this.btnMoreOrders = value;
-			});
+			// await this.initBtnMoreOrders().then((value) => {
+			// 	this.btnMoreOrders = value;
+			// });
 
-			await this.initListOrders().then((value) => this.listOrdersNode.push(...value));
+			// await this.initListOrders().then((value) => this.listOrdersNode.push(...value));
 
-			await this.getOrders();
-			await this.getDataOrders();
-			await this.setOrdersLocalStorage();
+			// await this.getOrders();
+			// await this.getDataOrders();
+			// await this.setOrdersLocalStorage();
 
-			// данные о товаре
-			if (1 == 1) {
-				await this.getOrdersData();
-			}
+			// // данные о товаре
 
-			// трек номер посылки
-			if (2 == 2) {
-				await this.getTrackingNumber();
-			}
+			// // сдесь нужно сделать параметры
+			// if (1 == 1) {
+			// 	await this.getOrdersData();
+			// }
+
+			// // трек номер посылки
+			// if (2 == 2) {
+			// 	await this.getTrackingNumber();
+			// }
 		})();
 	}
 
@@ -85,7 +87,7 @@ class GetOrders {
 					clearInterval(findBtn);
 					resolve(btnMoreOrders);
 				}
-			}, 500);
+			}, 300);
 		});
 	}
 

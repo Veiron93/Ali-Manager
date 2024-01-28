@@ -4,12 +4,9 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 	let dates = document.getElementById("dates");
-	let btnCheckOrders = document.getElementById("btn-check-orders");
 	let btnStart = document.getElementById("start");
 	let btnClearDates = document.getElementById("clear-dates");
-
 	let params = document.querySelectorAll(".params input");
-
 	let lastChecking = document.querySelector(".last-checking");
 
 	// инициализация расширения
@@ -24,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// отслеживание поля ввода даты
 	dates.addEventListener("input", () => {
-		setStorageLocal("dates_am", dates.value);
+		setStorageLocal("dates_am", dates.value.trim());
 
 		if (dates.value && btnStart.classList.contains("disabled")) {
 			btnStart.classList.remove("disabled");
@@ -137,4 +134,21 @@ document.addEventListener("DOMContentLoaded", () => {
 	function clearStorageLocal(key) {
 		chrome.storage.local.remove([key]);
 	}
+
+	// курс доллара
+	// function getDollarExchangeRate() {
+	// 	const testNode = document.querySelector(".test");
+
+	// 	fetch("https://helpix.ru/currency/", {
+	// 		options: {
+	// 			method: "get",
+	// 		},
+	// 	})
+	// 		.then((response) => response.json())
+	// 		.then((response) => {
+	// 			testNode.textContent = response;
+	// 		});
+	// }
+
+	// getDollarExchangeRate();
 });

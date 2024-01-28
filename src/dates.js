@@ -8,10 +8,6 @@ class DatesAliManager {
 
 	minDate = null; // минимальная дата заказа
 
-	constructor() {
-		//this.initDates(this.dates);
-	}
-
 	initDates(dates) {
 		for (const date of dates) {
 			let type = this.typeDate(date);
@@ -39,6 +35,7 @@ class DatesAliManager {
 
 	typeDate(date) {
 		let dateArr = date.split("~");
+
 		let type = "single";
 
 		if (dateArr[1]?.length) {
