@@ -1,5 +1,8 @@
+/**
+ * Данный файл для разработки лучше запускать в консоле с помощью node.js
+ */
+
 class DatesAliManager {
-	//dates = ["12-5-23~", "7-7-23", "5-7-23~", "12-7-23", "8-4-23~18-4-23", "8-6-23~", "6-7-23", "2-7-23~4-7-23"];
 	monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 	datesSingle = []; // конкретные даты
@@ -7,6 +10,7 @@ class DatesAliManager {
 	datesRange = []; // даты от и до
 
 	minDate = null; // минимальная дата заказа
+	maxDate = null; // максимальная дата заказа
 
 	initDates(dates) {
 		for (const date of dates) {
@@ -30,7 +34,9 @@ class DatesAliManager {
 		this.sortDates(this.datesFrom);
 		this.sortDates(this.datesRange, "range");
 
-		this.getMinDate();
+		this.getMinAndMaxDate();
+
+		//console.log(this);
 	}
 
 	typeDate(date) {
@@ -38,13 +44,8 @@ class DatesAliManager {
 
 		let type = "single";
 
-		if (dateArr[1]?.length) {
-			type = "range";
-		}
-
-		if (dateArr[1]?.length == 0) {
-			type = "from";
-		}
+		if (dateArr[1]?.length) type = "range";
+		if (dateArr[1]?.length == 0) type = "from";
 
 		return type;
 	}
@@ -105,7 +106,10 @@ class DatesAliManager {
 
 		// возвращает дату в виде класса
 		function formatClass(dateArr) {
-			return new Date("20" + dateArr[2], dateArr[1] - 1, dateArr[0]);
+			let date = new Date("20" + dateArr[2], dateArr[1] - 1, dateArr[0]);
+			date.setHours(0, 0, 0, 0);
+
+			return date;
 		}
 
 		// возвращает формат даты как на Aliexpress
@@ -133,31 +137,46 @@ class DatesAliManager {
 		return dates;
 	}
 
-	/*
-	находит минимальную дату заказа
-	*/
-	getMinDate() {
+	/**
+	 * находит минимальную и максимальную дату заказа
+	 */
+
+	getMinAndMaxDate() {
 		let dates = [];
 
 		if (this.datesSingle.length) {
-			dates.push({ timestamp: this.datesSingle.at(-1).timestamp });
+			this.datesSingle.forEach((date) => dates.push(date.timestamp));
 		}
 
 		if (this.datesFrom.length) {
-			dates.push({ timestamp: this.datesFrom.at(-1).timestamp });
+			this.datesFrom.forEach((date) => dates.push(date.timestamp));
 		}
 
 		if (this.datesRange.length) {
-			dates.push({ timestamp: this.datesRange.at(-1).date_0.timestamp });
+			this.datesRange.forEach((date) => {
+				dates.push(date.date_0.timestamp);
+				dates.push(date.date_1.timestamp);
+			});
 		}
 
 		if (!dates.length) {
 			return false;
 		}
 
-		let sortingDates = this.sortDates(dates);
+		dates.sort(function (a, b) {
+			return a - b;
+		});
 
-		this.minDate = sortingDates.at(-1).timestamp;
+		this.minDate = dates.at(0);
+
+		// если в списке дат есть дата формата - "все заказы начиная с этого числа",
+		//то максимальную дату нет смысла находить, потому что последняя дата будет равняться последнему заказу
+		if (!this.datesFrom.length) {
+			this.maxDate = dates.at(-1);
+		}
+
+		// console.log(this.minDate);
+		// console.log(this.maxDate);
 	}
 
 	formatingDateAliToRus(dateAli) {
@@ -176,5 +195,18 @@ class DatesAliManager {
 		return dateRus ? dateRus : null;
 	}
 }
+
+// для разработки и вывода в console (после разработки закомментировать)
+// min = 1680872400000 (6.07.23)
+// max = 1689080400000 (12.07.23)
+// Single min - max:
+// 1688562000000 (6.07.23) - 1689080400000 (12.07.23)
+// From min - max:
+// 1683810000000 (12-5-23) - 1688475600000 (5-7-23)
+// Range min - max:
+// 1680872400000 (8-4-23) - 1688389200000 (4-7-23)
+
+// const dates = ["12-5-23~", "7-7-23", "5-7-23~", "12-7-23", "8-4-23~18-4-23", "8-6-23~", "6-7-23", "2-7-23~4-7-23"];
+// new DatesAliManager().initDates(dates);
 
 window.datesAliManager = new DatesAliManager();

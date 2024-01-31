@@ -14,6 +14,7 @@ class GetOrders {
 	datesRange = []; // даты от и до
 
 	minDateOrder = null; // минимальная дата заказка
+	maxDateOrder = null; // максимальная дата заказка
 
 	// список заказов
 	listOrders = [];
@@ -24,27 +25,21 @@ class GetOrders {
 		(async () => {
 			this.init();
 
-			// await this.initBtnMoreOrders().then((value) => {
-			// 	this.btnMoreOrders = value;
-			// });
+			await this.initBtnMoreOrders().then((value) => {
+				this.btnMoreOrders = value;
+			});
 
-			// await this.initListOrders().then((value) => this.listOrdersNode.push(...value));
+			await this.initListOrders().then((value) => this.listOrdersNode.push(...value));
 
-			// await this.getOrders();
-			// await this.getDataOrders();
-			// await this.setOrdersLocalStorage();
+			await this.getOrders();
 
-			// // данные о товаре
+			await this.getDataOrders();
+			await this.setOrdersLocalStorage();
 
-			// // сдесь нужно сделать параметры
-			// if (1 == 1) {
-			// 	await this.getOrdersData();
-			// }
+			//console.log(this.listOrdersNode);
 
-			// // трек номер посылки
-			// if (2 == 2) {
-			// 	await this.getTrackingNumber();
-			// }
+			await this.getOrdersData();
+			await this.getTrackingNumber();
 		})();
 	}
 
@@ -57,6 +52,7 @@ class GetOrders {
 		this.datesFrom = datesAliManager.datesFrom;
 		this.datesRange = datesAliManager.datesRange;
 		this.minDateOrder = datesAliManager.minDate;
+		this.maxDateOrder = datesAliManager.maxDate;
 	}
 
 	/**
@@ -112,31 +108,52 @@ class GetOrders {
 	getOrders() {
 		return new Promise((resolve) => {
 			let idInterval = setInterval(() => {
+				// дата последнего заказа
 				let lastOrderDate = this.getDateInOrder(this.listOrdersNode[this.listOrdersNode.length - 1]);
 
-				if (this.compareDates(lastOrderDate)) {
-					console.log("подгрузка списка");
+				let isLoadingOrders = this.compareDates(lastOrderDate, "min");
 
+				// подгрузить ещё заказы
+				if (isLoadingOrders) {
 					this.btnMoreOrders.click();
 					this.checkLoadingListOrder().then(() => this.setOrders());
-				} else {
-					console.log("подгрузка не нужна");
+				}
+
+				// больше загрузка заказов не нужна
+				if (!isLoadingOrders) {
 					clearInterval(idInterval);
 
-					// удаление лишних заказов
-					// на али некорректно показывается список заказов (напрмер: заказ 13 числа может оказаться между 12-ми числами)
+					// !!! на али некорректно показывается список заказов (напрмер: заказ 13 числа может оказаться между 12-ми числами)
+					// информация была актуально от 1.09.23
+
+					// 1. удаляем заказы которые меньше введеной минимальной даты, начинаем с конца.
+					for (let i = this.listOrdersNode.length - 1; i >= 0; i--) {
+						let dateOrder = this.getDateInOrder(this.listOrdersNode[i]);
+
+						if (!this.compareDates(dateOrder, "min")) {
+							this.listOrdersNode.splice(i, 1);
+						}
+					}
+
+					// 2. удаляем заказы которые больше введеной максимальной даты
+					this.listOrdersNode.reverse();
 
 					for (let i = this.listOrdersNode.length - 1; i >= 0; i--) {
 						let dateOrder = this.getDateInOrder(this.listOrdersNode[i]);
 
-						if (!this.compareDates(dateOrder)) {
+						if (this.compareDates(dateOrder, "max")) {
 							this.listOrdersNode.splice(i, 1);
 						}
-
-						if (i == 0) resolve();
 					}
+
+					this.listOrdersNode.reverse();
+
+					resolve();
+
+					// console.log(this.minDateOrder);
+					// console.log(this.maxDateOrder);
 				}
-			}, 500);
+			}, 300);
 		});
 	}
 
@@ -174,19 +191,28 @@ class GetOrders {
 	}
 
 	/**
-	 * сравнивает даты
+	 * сравнивает дату заказа с минимальной и максимальной датой заказов
 	 * @returns {Boolean}
 	 */
-	compareDates(orderDate) {
+	compareDates(orderDate, type) {
 		let orderDateArr = orderDate.split(" ");
+
+		//console.log(orderDateArr);
 
 		let day = orderDateArr[1].slice(0, -1);
 		let month = datesAliManager.monthNamesShort.indexOf(orderDateArr[0]) + 1;
 		let year = orderDateArr[2];
 
 		let orderDateObject = new Date(year + "-" + month + "-" + day);
+		orderDateObject.setHours(0, 0, 0, 0);
 
-		return this.minDateOrder <= orderDateObject.getTime() ? true : false;
+		if (type == "min") {
+			return this.minDateOrder <= orderDateObject.getTime() ? true : false;
+		}
+
+		if (type == "max") {
+			return this.maxDateOrder < orderDateObject.getTime() ? true : false;
+		}
 	}
 
 	/**
