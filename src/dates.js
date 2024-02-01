@@ -194,6 +194,30 @@ class DatesAliManager {
 
 		return dateRus ? dateRus : null;
 	}
+
+	/**
+	 * Конвертирует дату формата Aliexpress в другие
+	 * @param {*} date ковертируемая дата
+	 * @param {*} format формат который должен вернуться
+	 */
+	convertDateAli(date, format) {
+		let orderDateArr = date.split(" ");
+
+		let day = orderDateArr[1].slice(0, -1);
+		let month = this.monthNamesShort.indexOf(orderDateArr[0]) + 1;
+		let year = orderDateArr[2];
+
+		let orderDateObject = new Date(year + "-" + month + "-" + day);
+		orderDateObject.setHours(0, 0, 0, 0);
+
+		let result = null;
+
+		if (format == "timestamp") {
+			result = orderDateObject.getTime();
+		}
+
+		return result;
+	}
 }
 
 // для разработки и вывода в console (после разработки закомментировать)

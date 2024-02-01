@@ -33,13 +33,13 @@ class GetOrders {
 
 			await this.getOrders();
 
-			await this.getDataOrders();
-			await this.setOrdersLocalStorage();
+			// await this.getDataOrders();
+			// await this.setOrdersLocalStorage();
 
-			//console.log(this.listOrdersNode);
+			//console.log(this.datesSingle);
 
-			await this.getOrdersData();
-			await this.getTrackingNumber();
+			// await this.getOrdersData();
+			// await this.getTrackingNumber();
 		})();
 	}
 
@@ -126,32 +126,75 @@ class GetOrders {
 					// !!! на али некорректно показывается список заказов (напрмер: заказ 13 числа может оказаться между 12-ми числами)
 					// информация была актуально от 1.09.23
 
-					// 1. удаляем заказы которые меньше введеной минимальной даты, начинаем с конца.
 					for (let i = this.listOrdersNode.length - 1; i >= 0; i--) {
 						let dateOrder = this.getDateInOrder(this.listOrdersNode[i]);
 
+						// 1. удаляем заказы которые меньше введеной минимальной даты
 						if (!this.compareDates(dateOrder, "min")) {
 							this.listOrdersNode.splice(i, 1);
 						}
+
+						// вот тут дописать
+
+						// 2. удаляем заказы которые больше введеной максимальной даты
+						// if (this.compareDates(dateOrder, "max")) {
+						// 	this.listOrdersNode.splice(i, 1);
+						// }
 					}
 
-					// 2. удаляем заказы которые больше введеной максимальной даты
-					this.listOrdersNode.reverse();
+					let ordersIndex = [];
+					let rangeDates = [];
 
-					for (let i = this.listOrdersNode.length - 1; i >= 0; i--) {
-						let dateOrder = this.getDateInOrder(this.listOrdersNode[i]);
+					// заказы формата От~До
+					if (this.datesRange) {
+						for (let i = 0; i <= this.datesRange.length - 1; i++) {
+							let date_0 = this.datesRange[i].date_0.timestamp;
+							let date_1 = this.datesRange[i].date_1.timestamp;
 
-						if (this.compareDates(dateOrder, "max")) {
-							this.listOrdersNode.splice(i, 1);
+							while (date_0 <= date_1) {
+								rangeDates.push(date_0);
+								date_0 += 86400000;
+							}
 						}
 					}
 
-					this.listOrdersNode.reverse();
+					for (let i = 0; i <= this.listOrdersNode.length - 1; i++) {
+						let dateOrder = this.getDateInOrder(this.listOrdersNode[i]);
+						let orderTimestamp = datesAliManager.convertDateAli(dateOrder, "timestamp");
+
+						if (this.datesSingle.length > 0) {
+							let index = this.datesSingle.findIndex((date) => date.timestamp == orderTimestamp);
+
+							if (index != -1) {
+								ordersIndex.push(i);
+							}
+						}
+
+						if (this.datesRange.length > 0) {
+							let index = rangeDates.findIndex((date) => date == orderTimestamp);
+
+							if (index != -1) {
+								ordersIndex.push(i);
+							}
+						}
+
+						// вот тут дописать
+						if (this.datesFrom.length > 0) {
+							ordersIndex.push(i);
+						}
+					}
+
+					ordersIndex = [...new Set(ordersIndex)];
+
+					console.log(ordersIndex);
+
+					let orders = [];
+
+					for (let index of ordersIndex) {
+						orders.push(this.listOrdersNode[index]);
+					}
 
 					resolve();
-
-					// console.log(this.minDateOrder);
-					// console.log(this.maxDateOrder);
 				}
 			}, 300);
 		});
