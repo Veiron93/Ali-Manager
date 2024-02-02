@@ -23,26 +23,35 @@ class GetOrders {
 
 	constructor() {
 		(async () => {
-			this.init();
+			// 1. инициализация дат
+			this.initDates();
 
-			await this.initBtnMoreOrders().then((value) => {
-				this.btnMoreOrders = value;
-			});
+			// 2. инициализация кнопки "Больше заказов"
+			await this.initBtnMoreOrders().then((value) => (this.btnMoreOrders = value));
 
-			await this.initListOrders().then((value) => this.listOrdersNode.push(...value));
+			// 3. инициализация списка заказов + (возвращает заказы (nodes) с первой страницы)
+			await this.initListOrders().then((value) => (this.listOrdersNode = value));
+
+			// 4. возвращает список заказов отфильтрованный по датам
 			await this.getNodesOrders().then((value) => (this.listOrdersNode = value));
 
-			// await this.getDataOrders();
-			// await this.setOrdersLocalStorage();
+			// 5. получает базовые данные о заказах (дата, номер)
+			await this.getBaseDataOrders();
 
-			console.log(this.listOrdersNode);
+			// 6. записывает в LocalStorage базовые данные о заказах
+			await this.setOrdersLocalStorage();
 
-			// await this.getOrdersData();
-			// await this.getTrackingNumber();
+			// 7. получает все данные о заказах
+			await this.getDataOrders();
+
+			// 8. получает трек-номера посылок
+			await this.getTrackingNumberOrders();
+
+			// 9. результат
 		})();
 	}
 
-	init() {
+	initDates() {
 		let dates = this.getDates();
 
 		datesAliManager.initDates(dates);
@@ -219,11 +228,11 @@ class GetOrders {
 	}
 
 	/**
-	 * получает данные о заказах
+	 * получает базовые данные о заказах
 	 * @returns Promise
 	 */
 
-	getDataOrders() {
+	getBaseDataOrders() {
 		return new Promise((resolve) => {
 			let countOrders = this.listOrdersNode.length;
 			let i = 0;
@@ -251,6 +260,12 @@ class GetOrders {
 		});
 	}
 
+	/**
+	 * сравнивает дату с мин и макс датой заказов
+	 * @param {*} orderDate дата формата ALi
+	 * @param {*} type тип даты с которой будет сравнение
+	 * @returns boolean
+	 */
 	equalDatesOrderMinMax(orderDate, type) {
 		let dateOrderTimestamp = datesAliManager.convertDateAli(orderDate, "timestamp");
 
@@ -334,7 +349,7 @@ class GetOrders {
 	 * @returns {Promise}
 	 */
 
-	getOrdersData() {
+	getDataOrders() {
 		return new Promise(async (resolve) => {
 			let i = 0;
 
@@ -357,7 +372,7 @@ class GetOrders {
 	 * @returns {Promise}
 	 */
 
-	getTrackingNumber() {
+	getTrackingNumberOrders() {
 		return new Promise(async (resolve) => {
 			let i = 0;
 
