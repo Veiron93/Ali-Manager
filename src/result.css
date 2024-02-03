@@ -2,6 +2,13 @@
 * {
   font-family: sans-serif;
   font-size: 14px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  padding: 20px;
 }
 
 .orders-info {
@@ -9,7 +16,7 @@
   column-gap: 20px;
   max-width: 1200px;
   width: 100%;
-  margin: 20px auto;
+  margin: 0 auto 20px;
   padding: 15px;
   background: #ebebeb;
   border-radius: 10px;
@@ -67,9 +74,8 @@
   align-items: center;
 }
 .list-orders-wrapper .order-header_date {
-  width: 70px;
   font-size: 13px;
-  padding: 5px 0;
+  padding: 5px;
   border-radius: 10px;
   background: #d7f7fc;
   text-align: center;

@@ -1,6 +1,6 @@
-const indexPathName = "/p/order/index.html";
-const orderPathName = "/p/order/detail.html";
-const trackingPathName = "/logisticsdetail.htm";
+const indexPathName = "/p/order/index.html"; // страница списка заказов
+const orderPathName = "/p/order/detail.html"; // страница просмотра заказа
+const trackingPathName = "/logisticsdetail.htm"; // страница отслеживания посылки
 
 const blankPathName = "/p/";
 

@@ -1,5 +1,5 @@
 /**
- * встраиваемый скрипт на сайт
+ * встраиваемый скрипт на главную страницу списка заказов
  */
 
 class GetOrders {
@@ -30,7 +30,7 @@ class GetOrders {
 			await this.initBtnMoreOrders().then((value) => (this.btnMoreOrders = value));
 
 			// 3. инициализация списка заказов + (возвращает заказы (nodes) с первой страницы)
-			await this.initListOrders().then((value) => (this.listOrdersNode = value));
+			await this.initListOrders().then((value) => this.listOrdersNode.push(...value));
 
 			// 4. возвращает список заказов отфильтрованный по датам
 			await this.getNodesOrders().then((value) => (this.listOrdersNode = value));

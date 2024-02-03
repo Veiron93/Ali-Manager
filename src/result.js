@@ -12,7 +12,7 @@ class Result {
 				this.initListOrders();
 			}
 
-			console.log(this.orders);
+			//console.log(this.orders);
 		})();
 	}
 
@@ -269,8 +269,8 @@ class Result {
 
 	/**
 	 * добавление дочерних элементов
-	 * @param {Node} parenElement
 	 * @param {Node || Array} nodes
+	 * @param {Node} parenElement
 	 * @returns {Node}
 	 */
 	appendChild(nodes, parenElement) {

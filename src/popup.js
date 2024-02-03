@@ -134,21 +134,4 @@ document.addEventListener("DOMContentLoaded", () => {
 	function clearStorageLocal(key) {
 		chrome.storage.local.remove([key]);
 	}
-
-	// курс доллара
-	// function getDollarExchangeRate() {
-	// 	const testNode = document.querySelector(".test");
-
-	// 	fetch("https://helpix.ru/currency/", {
-	// 		options: {
-	// 			method: "get",
-	// 		},
-	// 	})
-	// 		.then((response) => response.json())
-	// 		.then((response) => {
-	// 			testNode.textContent = response;
-	// 		});
-	// }
-
-	// getDollarExchangeRate();
 });

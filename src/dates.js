@@ -174,9 +174,6 @@ class DatesAliManager {
 		if (!this.datesFrom.length) {
 			this.maxDate = dates.at(-1);
 		}
-
-		// console.log(this.minDate);
-		// console.log(this.maxDate);
 	}
 
 	formatingDateAliToRus(dateAli) {
