@@ -1,4 +1,6 @@
 class Result {
+	trackingUrl = "/logisticsdetail.htm"; // трекинг посылки
+
 	orders = null;
 
 	constructor() {
@@ -229,8 +231,15 @@ class Result {
 			// итоговая сумма заказа
 			let totalPrice = this.createElement("div", "total-price-order", order.totalPrice);
 
+			// кнопка обновить трек-номер
+			let btnUpdateTrackNumber = this.createElement("div", ["btn", "btn-update-track-number"], "Обновить трек-номер");
+			btnUpdateTrackNumber.addEventListener("click", () => this.updateTrackNumber(order.numberOrder));
+
 			// сборка Информации о заказе
-			this.appendChild([numberOrder, trackingNumber, countProducts, priceOrder, discount, delivery, totalPrice], orderInfo);
+			this.appendChild(
+				[numberOrder, trackingNumber, countProducts, priceOrder, discount, delivery, totalPrice, btnUpdateTrackNumber],
+				orderInfo
+			);
 
 			// СБОРКА ТЕЛА
 			this.appendChild([productsList, orderInfo], body);
@@ -253,7 +262,13 @@ class Result {
 		let element = document.createElement(elementName);
 
 		if (className) {
-			element.classList.add(className);
+			if (Array.isArray(className)) {
+				className.forEach((c) => {
+					element.classList.add(c);
+				});
+			} else {
+				element.classList.add(className);
+			}
 		}
 
 		if (content != null) {
@@ -291,6 +306,16 @@ class Result {
 
 	copyText(element) {
 		element.addEventListener("click", () => document.execCommand("copy", false, element.select()));
+	}
+
+	/**
+	 * обновление трек-номера посылки
+	 * @param {Node} parenElement
+	 * @returns {void}
+	 */
+
+	updateTrackNumber(orderNumber) {
+		window.open("https://www.aliexpress.com" + this.detailUrl + "?alimanager=1&orderId=" + orderNumber, "_blank");
 	}
 }
 

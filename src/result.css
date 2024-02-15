@@ -209,6 +209,24 @@ body {
 .list-orders-wrapper .order-body .order-info .delivery-order:before {
   content: "Доставка: ";
 }
+.list-orders-wrapper .order-body .order-info .total-price-order {
+  margin-bottom: 10px;
+}
 .list-orders-wrapper .order-body .order-info .total-price-order:before {
   content: "Итого: ";
+}
+.list-orders-wrapper .order-body .order-info .btn {
+  border-radius: 4px;
+  height: 36px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  color: #fff;
+  user-select: none;
+  cursor: pointer;
+}
+.list-orders-wrapper .order-body .order-info .btn-update-track-number {
+  background: #0384b8;
 }
