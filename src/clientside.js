@@ -47,7 +47,8 @@ class GetOrders {
 			// 8. получает трек-номера посылок
 			await this.getTrackingNumberOrders();
 
-			// 9. результат
+			// 9. отправка данных на сервер
+			await this.postDataOrders().then((value) => console.log(value));
 		})();
 	}
 
@@ -142,7 +143,7 @@ class GetOrders {
 						let dateOrder = this.getDateInOrder(this.listOrdersNode[i]);
 						let dateOrderTimestamp = datesAliManager.convertDateAli(dateOrder, "timestamp");
 
-						if (dateOrderTimestamp < this.minDateOrder) {
+						if (this.minDateOrder > dateOrderTimestamp) {
 							this.listOrdersNode.splice(i, 1);
 						} else {
 							break;
@@ -221,7 +222,9 @@ class GetOrders {
 					ordersIndex = [...new Set(ordersIndex)];
 
 					for (let i = this.listOrdersNode.length - 1; i == 0; i--) {
-						if (ordersIndex.findIndex((orderIndex) => orderIndex != i)) {
+						let indexOrder = ordersIndex.findIndex((orderIndex) => orderIndex == i);
+
+						if (indexOrder != i) {
 							this.listOrdersNode.splice(i, 1);
 						}
 					}
@@ -389,6 +392,20 @@ class GetOrders {
 				}
 			}, 500);
 		});
+	}
+
+	postDataOrders() {
+		const orders = localStorage.getItem("orders");
+
+		fetch("http://alimanager-server.web/api/v1/orders", {
+			method: "POST",
+			// headers: {
+			// 	"Content-Type": "application/json",
+			// },
+			body: JSON.stringify(orders),
+		});
+
+		console.log("парсинг закончен, отправляем на сервер и удаляем локально");
 	}
 }
 

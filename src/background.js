@@ -90,7 +90,7 @@ chrome.tabs.onCreated.addListener(() => {
 		}
 
 		// запись трек-номера
-		if (getUriParams(tab, "trackingNumber")) {
+		if (getUriParams(tab, "originalTrackingNumber") || getUriParams(tab, "combinedTrackingNumber")) {
 			chrome.scripting.executeScript({
 				target: { tabId: tab.id },
 				files: ["./src/set-tracking-number.js"],

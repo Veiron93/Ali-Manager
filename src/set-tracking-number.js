@@ -12,15 +12,30 @@ class SetTrackingNumber {
 			let orderArr = JSON.parse(orders);
 
 			let orderNumber = this.getUriParams("tradeId");
-			let trackingNumber = this.getUriParams("trackingNumber");
+
+			let trackings = {
+				original: null,
+				combined: null,
+			};
+
+			let originalTrackingNumberValue = this.getUriParams("originalTrackingNumber");
+			let combinedTrackingNumberValue = this.getUriParams("combinedTrackingNumber");
+
+			if (originalTrackingNumberValue != "null") {
+				trackings.original = originalTrackingNumberValue;
+			}
+
+			if (combinedTrackingNumberValue != "null") {
+				trackings.combined = combinedTrackingNumberValue;
+			}
 
 			let indexOrder = orderArr.findIndex((order) => order.orderNumber == orderNumber);
 
-			if (indexOrder == -1 || trackingNumber == null) {
+			if (indexOrder == -1) {
 				resolve();
 			}
 
-			orderArr[indexOrder].trackingNumber = trackingNumber;
+			orderArr[indexOrder].trackings = trackings;
 			orderArr[indexOrder].trackingNumberCompleted = true;
 
 			localStorage.setItem("orders", JSON.stringify(orderArr));

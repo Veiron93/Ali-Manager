@@ -3,7 +3,7 @@ class TrackingNumber {
 		(async () => {
 			// получение трек-номера
 			await this.pageLoaded();
-			this.getTrackingNumber();
+			this.getTrackingNumbers();
 		})();
 	}
 
@@ -26,20 +26,55 @@ class TrackingNumber {
 		});
 	}
 
-	getTrackingNumber() {
-		let trackNumberWrapper = document.querySelector(".tracking-no-de span");
+	getTraking(wrapper) {
+		let tracking = null;
+		let trackingWrapper = document.querySelector(wrapper);
 
-		if (!trackNumberWrapper) {
-			trackNumberWrapper = document.querySelector(".tracking-no span");
+		if (trackingWrapper) {
+			tracking = this.removeCyrillicAndSpaces(trackingWrapper.textContent);
 		}
 
-		let trackNumber = trackNumberWrapper ? trackNumberWrapper.textContent : null;
+		return tracking;
+	}
 
-		window.open(
-			"https://www.aliexpress.com/p/?alimanager=1&trackingNumber=" + trackNumber + "&tradeId=" + this.getUriParams("tradeId"),
-			"_blank"
-		);
+	getTrackingNumbers() {
+		const sections = [".tracking-no span", ".tracking-no-de span"];
+		const trackingsArr = [];
+
+		for (let i = 0; i < sections.length; i++) {
+			let tracknumber = this.getTraking(sections[i]);
+
+			if (tracknumber) {
+				trackingsArr.push(tracknumber);
+			}
+		}
+
+		const trackings = {
+			original: null,
+			combined: null,
+		};
+
+		if (trackingsArr.length == 1) {
+			trackings.original = trackingsArr[0];
+		}
+
+		if (trackingsArr.length == 2) {
+			trackings.original = trackingsArr[1];
+			trackings.combined = trackingsArr[0];
+		}
+
+		// перенаправление на основной домен, потому что разные urls у трекинга и страницы с результатами
+		let url = "https://www.aliexpress.com/p/?alimanager=1";
+		url += "&tradeId=" + this.getUriParams("tradeId");
+		url += "&originalTrackingNumber=" + trackings.original;
+		url += "&combinedTrackingNumber=" + trackings.combined;
+
+		window.open(url, "_blank");
 		window.close();
+	}
+
+	removeCyrillicAndSpaces(str) {
+		return str.replace(/[а-яА-Я\s]/g, "");
 	}
 
 	/**

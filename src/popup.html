@@ -13,23 +13,24 @@
 		<script src="popup.js"></script>
 	</head>
 	<body>
-		<div class="app-wrapper">
+		<div class="popup-wrapper">
 			<header>
 				<a href="https://alimanager.ru" target="_blank">AliManager</a>
-				<span>версия 0.1.0</span>
+				<span>версия 0.0.1</span>
 			</header>
 
-			<div class="license-expired">
-				<div class="title">Закончилась подписка</div>
-				<div class="description">Если Вы хотите и далее пользоваться этим чудесным расширением, продлите подписку!</div>
+			<div class="auth">
+				<form>
+					<input type="text" name="key-auth" maxlength="8" placeholder="Ключ авторизации" />
+					<button type="button" class="btn btn-send-key-auth" disabled>Войти</button>
+				</form>
 
-				<div class="btns">
-					<a href="/fe" class="btn btn--payment">Продлить</a>
-					<a href="/fe" class="btn btn--support">Поддержка</a>
-				</div>
+				<div class="auth-error"></div>
+				<a href="/wd" target="_blank" class="btn btn-payment hidden">Оплатить</a>
+				<div class="auth-help hidden">Введите ключ авторизации, мы его Вам выслали на эл. почту при регистрации.</div>
 			</div>
 
-			<div class="app-content">
+			<div class="app hidden">
 				<div class="dates">
 					<textarea name="dates" id="dates" placeholder="Введите дату заказа"></textarea>
 
@@ -39,20 +40,27 @@
 					</div> -->
 
 					<div class="btns">
-						<a href="https://www.aliexpress.com/p/order/index.html?alimanager=1" id="start" class="disabled" target="_blank">Выполнить</a>
-						<button id="clear-dates">Очистить</button>
+						<a href="https://www.aliexpress.com/p/order/index.html?alimanager=1" id="search" class="btn disabled" target="_blank">
+							Поиск
+						</a>
+
+						<button id="clear-dates" class="btn">Очистить</button>
+
+						<a
+							href="https://www.aliexpress.com/p/?alimanager=1"
+							target="_blank"
+							id="last-search"
+							class="btn hidden"
+							title="Последняя проверка заказов"
+						></a>
 					</div>
 				</div>
 
-				<a href="https://www.aliexpress.com/p/?alimanager=1" target="_blank" class="last-checking"
-					>Последняя проверка заказов: <span></span
-				></a>
-
 				<div class="documentation">
-					<div class="documentation-title">Инструкция</div>
+					<!-- <div class="documentation-title">Инструкция</div> -->
 					<div class="documentation-content" data-farmatted-text>
 						<ul>
-							<li><b>д-м-г</b> - для нескольких дат, используйте перенос строки</li>
+							<li><b>д-м-г</b> - заказы за конкретное число</li>
 							<li><b>д-м-г~</b> - все заказы начиная с этого числа</li>
 							<li><b>д-м-г~д-м-г</b> - диапазон дат</li>
 						</ul>
@@ -61,13 +69,18 @@
 							<li>Формат даты: <b>20-7-23</b>, и никак иначе!!!</li>
 							<li>Вы должны быть авторизованны на <a href="https://www.aliexpress.ru/" target="_blank">aliexpress.ru</a></li>
 						</ol>
+
+						<div class="info">
+							<p>Для нескольких дат, используйте перенос строки</p>
+							<p>Возможно использовать разные форматы дат в одном поиске</p>
+						</div>
 					</div>
 				</div>
 			</div>
 
-			<footer>
+			<!-- <footer>
 				<p class="copyright">Разработал <a href="https://vk.com/veiron93" target="_blank">Дмитрий Юдин</a></p>
-			</footer>
+			</footer> -->
 		</div>
 	</body>
 </html>

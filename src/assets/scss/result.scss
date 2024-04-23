@@ -28,10 +28,9 @@ body {
 		display: flex;
 		align-items: center;
 		font-size: 16px;
-		font-weight: bold;
 
 		&:before {
-			margin-right: 10px;
+			margin-right: 5px;
 		}
 	}
 
@@ -65,6 +64,18 @@ body {
 		&:before {
 			content: "Доставка:";
 		}
+	}
+
+	.update-track-number-all-orders {
+		margin-left: auto;
+		user-select: none;
+		cursor: pointer;
+		font-size: 14px;
+		font-weight: normal;
+		background: $color1;
+		color: #fff;
+		padding: 10px;
+		border-radius: 10px;
 	}
 }
 
@@ -250,10 +261,36 @@ body {
 
 				.number-order {
 					color: $color;
+					font-size: 18px;
 				}
 
-				.tracking-number {
-					color: $color1;
+				.tracking-wrapper {
+					padding: 10px;
+					background: #fff;
+					border-radius: 10px;
+
+					label {
+						font-size: 14px;
+						font-weight: normal;
+						display: block;
+						margin-bottom: 5px;
+					}
+
+					input {
+						background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgY2xhc3M9ImZlYXRoZXIgZmVhdGhlci1jb3B5IiBmaWxsPSJub25lIiBoZWlnaHQ9IjI0IiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiIgd2lkdGg9IjEzIiB4PSI5IiB5PSI5Ii8+PHBhdGggZD0iTTUgMTVINGEyIDIgMCAwIDEtMi0yVjRhMiAyIDAgMCAxIDItMmg5YTIgMiAwIDAgMSAyIDJ2MSIvPjwvc3ZnPg==);
+						background-repeat: no-repeat;
+						background-position: center right 5px;
+						background-size: auto 90%;
+						width: 100%;
+					}
+
+					.original {
+						color: $color1;
+					}
+
+					.combined {
+						color: $color2;
+					}
 				}
 
 				.count-products {

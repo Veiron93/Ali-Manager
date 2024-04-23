@@ -17,23 +17,37 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: 14px;
   font-size: 14px;
   border: none;
   cursor: pointer;
   user-select: none;
   background: #000;
 }
+.btn[disabled], .btn.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+input {
+  border-radius: 14px;
+  border: 1px solid #c5c5c5;
+  padding: 10px;
+  width: 100%;
+  font-size: 16px;
+  height: 40px;
+}
+
+.hidden {
+  display: none;
+}
 
 *[data-farmatted-text] > * {
   line-height: 1.35em;
 }
-*[data-farmatted-text] p {
-  margin-bottom: 10px;
-}
 *[data-farmatted-text] ul,
 *[data-farmatted-text] ol {
-  margin-left: 25px;
+  margin-left: 18px;
 }
 *[data-farmatted-text] ul li,
 *[data-farmatted-text] ol li {
@@ -44,14 +58,14 @@ a {
   margin-bottom: 5px;
 }
 
-.app-wrapper {
+.popup-wrapper {
   position: relative;
   width: 350px;
   padding: 55px 10px 10px;
   background: #fff;
   border: 2px solid #ca2709;
 }
-.app-wrapper header {
+.popup-wrapper header {
   display: flex;
   align-items: center;
   position: absolute;
@@ -61,102 +75,95 @@ a {
   padding: 10px;
   background: #ca2709;
 }
-.app-wrapper header a,
-.app-wrapper header span {
+.popup-wrapper header a,
+.popup-wrapper header span {
   color: #fff;
 }
-.app-wrapper header a {
+.popup-wrapper header a {
   font-size: 20px;
 }
-.app-wrapper header span {
+.popup-wrapper header span {
   font-size: 14px;
   margin-left: auto;
 }
-.app-wrapper footer {
+.popup-wrapper footer {
   margin-top: 25px;
 }
-.app-wrapper footer .copyright {
+.popup-wrapper footer .copyright {
   font-size: 14px;
 }
-.app-wrapper .license-expired {
-  display: none;
-}
-.app-wrapper .license-expired .title {
-  font-weight: bold;
-  font-size: 20px;
-}
-.app-wrapper .license-expired .description {
-  margin-top: 7px;
-  font-size: 18px;
-}
-.app-wrapper .license-expired .btns {
-  margin-top: 20px;
+.popup-wrapper .auth form {
   display: flex;
-  column-gap: 15px;
+  column-gap: 5px;
 }
-.app-wrapper .license-expired .btns .btn--payment {
+.popup-wrapper .auth button {
   background: #0d9822;
   color: #fff;
 }
-.app-wrapper .license-expired .btns .btn--support {
+.popup-wrapper .auth-error {
+  font-weight: bold;
+  font-size: 14px;
+  color: #ca2709;
+  margin-top: 10px;
+}
+.popup-wrapper .auth-error:empty {
+  display: none;
+}
+.popup-wrapper .auth .btn-payment {
+  margin-top: 10px;
   background: #fc9500;
   color: #fff;
 }
-.app-wrapper .app-content .dates textarea {
+.popup-wrapper .auth-help {
+  padding: 10px;
+  margin-top: 10px;
+  background: #dadada;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.popup-wrapper .app .dates textarea {
   border: 1px solid #c5c5c5;
   padding: 10px;
   width: 100%;
   min-height: 80px;
   overflow: auto;
   resize: vertical;
-  border-radius: 4px;
+  border-radius: 14px;
   font-size: 16px;
 }
-.app-wrapper .app-content .dates .params {
+.popup-wrapper .app .dates .params {
   margin-top: 10px;
 }
-.app-wrapper .app-content .dates .params label {
+.popup-wrapper .app .dates .params label {
   display: flex;
   align-items: center;
   column-gap: 5px;
   user-select: none;
   font-size: 16px;
 }
-.app-wrapper .app-content .dates .params label:not(:last-child) {
+.popup-wrapper .app .dates .params label:not(:last-child) {
   margin-bottom: 5px;
 }
-.app-wrapper .app-content .dates .btns {
+.popup-wrapper .app .dates .btns {
   display: flex;
   align-items: center;
-  column-gap: 10px;
+  column-gap: 5px;
   margin-top: 10px;
 }
-.app-wrapper .app-content .dates .btns > * {
-  height: 40px;
-  width: 110px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  font-size: 14px;
-  border: none;
-  cursor: pointer;
-  user-select: none;
-}
-.app-wrapper .app-content .dates .btns #start {
+.popup-wrapper .app .dates .btns #search {
   background: #ca2709;
   color: #fff;
 }
-.app-wrapper .app-content .dates .btns #start.disabled {
-  pointer-events: none;
-  background: #eaeaea;
-  color: #777;
-}
-.app-wrapper .app-content .dates .btns #clear-dates {
+.popup-wrapper .app .dates .btns #clear-dates {
   background: #fc9500;
   color: #fff;
 }
-.app-wrapper .app-content #btn-check-orders {
+.popup-wrapper .app .dates .btns #last-search {
+  background: #0d9822;
+  color: #fff;
+}
+.popup-wrapper .app #btn-check-orders {
   border-radius: 4px;
   background: #ca2709;
   border: none;
@@ -166,42 +173,38 @@ a {
   margin-top: 5px;
   cursor: pointer;
 }
-.app-wrapper .app-content .last-checking {
-  margin-top: 10px;
+.popup-wrapper .app .documentation {
+  margin-top: 15px;
+  background: #eaeaea;
   padding: 10px;
-  border-radius: 4px;
-  color: #fff;
-  display: flex;
-  column-gap: 5px;
-  background-color: #0d9822;
-  background-image: url(data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzIgMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTIyIDlhMSAxIDAgMCAwIDAgMS40Mmw0LjYgNC42SDMuMDZhMSAxIDAgMSAwIDAgMmgyMy41MkwyMiAyMS41OUExIDEgMCAwIDAgMjIgMjNhMSAxIDAgMCAwIDEuNDEgMGw2LjM2LTYuMzZhLjg4Ljg4IDAgMCAwIDAtMS4yN0wyMy40MiA5QTEgMSAwIDAgMCAyMiA5WiIgZGF0YS1uYW1lPSJMYXllciAyIiBmaWxsPSIjZmZmZmZmIiBjbGFzcz0iZmlsbC0wMDAwMDAiPjwvcGF0aD48L3N2Zz4=);
-  background-position: center right 10px;
-  background-size: 22px;
-  background-repeat: no-repeat;
-  font-size: 13px;
+  border-radius: 14px;
 }
-.app-wrapper .app-content .last-checking span {
-  font-weight: 500;
-}
-.app-wrapper .app-content .documentation {
-  margin-top: 20px;
-  font-size: 14px;
-}
-.app-wrapper .app-content .documentation-title {
+.popup-wrapper .app .documentation-title {
   font-weight: bold;
   margin-bottom: 8px;
   font-size: 18px;
 }
-.app-wrapper .app-content .documentation-content > * {
+.popup-wrapper .app .documentation-content > * {
   font-size: 14px;
 }
-.app-wrapper .app-content .documentation-content ol {
+.popup-wrapper .app .documentation-content .info {
   margin-top: 15px;
 }
-.app-wrapper .app-content .documentation-content ol li {
+.popup-wrapper .app .documentation-content .info p {
+  margin: 0;
+  font-size: 14px;
   font-weight: 500;
 }
-.app-wrapper .app-content .documentation-content ol a {
+.popup-wrapper .app .documentation-content .info p:not(:last-child) {
+  margin-bottom: 5px;
+}
+.popup-wrapper .app .documentation-content ol {
+  margin-top: 15px;
+}
+.popup-wrapper .app .documentation-content ol li {
+  font-weight: 500;
+}
+.popup-wrapper .app .documentation-content ol a {
   color: #0d9822;
   border-bottom: 1px dashed;
 }

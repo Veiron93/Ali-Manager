@@ -1,5 +1,6 @@
 class Result {
 	trackingUrl = "/logisticsdetail.htm"; // трекинг посылки
+	detailUrl = "/p/order/detail.html"; // информация о заказе
 
 	orders = null;
 
@@ -84,6 +85,14 @@ class Result {
 		let totalDeliveryWrapper = this.createElement("div", "total-delivery");
 		let totalDelivery = 0;
 
+		// кнопка обновитть трек-код у всех заказов
+		let btnUpdateTrackNumberAllOrders = this.createElement("div", "update-track-number-all-orders", "Обновить трек-код всех заказов");
+		btnUpdateTrackNumberAllOrders.addEventListener("click", () =>
+			this.updateTrackNumbersAllOrders().then(() => {
+				console.log("конец промиса");
+			})
+		);
+
 		let i = 0;
 
 		totalCountOrders = this.orders.length;
@@ -104,7 +113,14 @@ class Result {
 				totalDeliveryWrapper.textContent = totalDelivery;
 
 				this.appendChild(
-					[totalPriceWrapper, totalDiscountWrapper, totalDeliveryWrapper, totalCountOrdersWrapper, totalCountProductsWrapper],
+					[
+						totalPriceWrapper,
+						totalDiscountWrapper,
+						totalDeliveryWrapper,
+						totalCountOrdersWrapper,
+						totalCountProductsWrapper,
+						btnUpdateTrackNumberAllOrders,
+					],
 					ordersInfoWrapper
 				);
 				document.body.appendChild(ordersInfoWrapper);
@@ -212,9 +228,32 @@ class Result {
 			let numberOrder = this.createElement("input", "number-order", order.orderNumber);
 			this.copyText(numberOrder);
 
-			// трек номер посылки
-			let trackingNumber = this.createElement("input", "tracking-number", order.trackingNumber);
-			this.copyText(trackingNumber);
+			// трек номера посылки
+			let originalTrackingNumberWrapper = this.createElement("div", "tracking-wrapper");
+			let originalTrackingNumberLabel = this.createElement("label", "title", "Трек-код");
+
+			let originalTrackingNumber = this.createElement(
+				"input",
+				"original",
+				order.trackings && order.trackings.original && order.trackings.original != null ? order.trackings.original : "Данные отсутствуют"
+			);
+
+			this.copyText(originalTrackingNumber);
+
+			this.appendChild([originalTrackingNumberLabel, originalTrackingNumber], originalTrackingNumberWrapper);
+
+			let combinedTrackingNumberWrapper = this.createElement("div", "tracking-wrapper");
+			let combinedTrackingNumberLabel = this.createElement("label", "title", "Трек-код общей посылки");
+
+			let combinedTrackingNumber = this.createElement(
+				"input",
+				"combined",
+				order.trackings && order.trackings.combined && order.trackings.combined != null ? order.trackings.combined : "Данные отсутствуют"
+			);
+
+			this.copyText(combinedTrackingNumber);
+
+			this.appendChild([combinedTrackingNumberLabel, combinedTrackingNumber], combinedTrackingNumberWrapper);
 
 			// количество товара
 			let countProducts = this.createElement("div", "count-products", order.countProducts);
@@ -232,12 +271,22 @@ class Result {
 			let totalPrice = this.createElement("div", "total-price-order", order.totalPrice);
 
 			// кнопка обновить трек-номер
-			let btnUpdateTrackNumber = this.createElement("div", ["btn", "btn-update-track-number"], "Обновить трек-номер");
-			btnUpdateTrackNumber.addEventListener("click", () => this.updateTrackNumber(order.numberOrder));
+			let btnUpdateTrackNumber = this.createElement("div", ["btn", "btn-update-track-number"], "Обновить трек-код");
+			btnUpdateTrackNumber.addEventListener("click", () => this.updateTrackNumbers(order.orderNumber));
 
 			// сборка Информации о заказе
 			this.appendChild(
-				[numberOrder, trackingNumber, countProducts, priceOrder, discount, delivery, totalPrice, btnUpdateTrackNumber],
+				[
+					numberOrder,
+					originalTrackingNumberWrapper,
+					combinedTrackingNumberWrapper,
+					countProducts,
+					priceOrder,
+					discount,
+					delivery,
+					totalPrice,
+					btnUpdateTrackNumber,
+				],
 				orderInfo
 			);
 
@@ -310,12 +359,58 @@ class Result {
 
 	/**
 	 * обновление трек-номера посылки
+	 * @param {string} orderNumber
+	 * @returns {void}
+	 */
+
+	updateTrackNumbers(orderNumber) {
+		window.open("https://track.aliexpress.com" + this.trackingUrl + "?alimanager=1&tradeId=" + orderNumber, "_blank");
+	}
+
+	updateTrackNumbersAllOrders() {
+		return new Promise(async (resolve) => {
+			for (let i = 0; this.orders.length > i; i++) {
+				this.orders[i].trackingNumberCompleted = false;
+				localStorage.setItem("orders", JSON.stringify(this.orders));
+
+				this.updateTrackNumbers(this.orders[i].orderNumber);
+
+				await this.checkComplete(this.orders[i], "trackingNumberCompleted");
+
+				if (i == this.orders.length - 1) {
+					resolve();
+				}
+			}
+		});
+	}
+
+	checkComplete(order, flagName) {
+		return new Promise((resolve) => {
+			let idIntarval = setInterval(() => {
+				let orders = JSON.parse(localStorage.getItem("orders"));
+				let actualOrder = orders.find((item) => item.orderNumber == order.orderNumber);
+
+				if (actualOrder[flagName] == true) {
+					clearInterval(idIntarval);
+					resolve();
+				}
+			}, 200);
+		});
+	}
+
+	/**
+	 * обновление трек-номера посылки
 	 * @param {Node} parenElement
 	 * @returns {void}
 	 */
 
-	updateTrackNumber(orderNumber) {
-		window.open("https://www.aliexpress.com" + this.detailUrl + "?alimanager=1&orderId=" + orderNumber, "_blank");
+	resetCompletedOrderData() {
+		let orders = JSON.parse(localStorage.getItem("orders"));
+
+		orders.forEach((order) => {
+			order.dataCompleted = false;
+			order.trackingNumber = false;
+		});
 	}
 }
 

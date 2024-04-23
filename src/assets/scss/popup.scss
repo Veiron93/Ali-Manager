@@ -4,6 +4,8 @@ $color2: #fc9500;
 $color3: #eaeaea;
 $color4: #0d9822;
 
+$brs: 14px;
+
 * {
 	box-sizing: border-box;
 	font-family: sans-serif;
@@ -23,12 +25,31 @@ a {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: 4px;
+	border-radius: $brs;
 	font-size: 14px;
 	border: none;
 	cursor: pointer;
 	user-select: none;
 	background: #000;
+
+	&[disabled],
+	&.disabled {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+}
+
+input {
+	border-radius: $brs;
+	border: 1px solid $color1;
+	padding: 10px;
+	width: 100%;
+	font-size: 16px;
+	height: 40px;
+}
+
+.hidden {
+	display: none;
 }
 
 *[data-farmatted-text] {
@@ -36,14 +57,9 @@ a {
 		line-height: 1.35em;
 	}
 
-	p {
-		margin-bottom: 10px;
-	}
-
 	ul,
 	ol {
-		margin-left: 25px;
-
+		margin-left: 18px;
 		li {
 			font-size: 14px;
 
@@ -54,7 +70,7 @@ a {
 	}
 }
 
-.app-wrapper {
+.popup-wrapper {
 	position: relative;
 	width: 350px;
 	padding: 55px 10px 10px;
@@ -97,39 +113,44 @@ a {
 		}
 	}
 
-	.license-expired {
-		display: none;
-
-		.title {
-			font-weight: bold;
-			font-size: 20px;
-		}
-
-		.description {
-			margin-top: 7px;
-			font-size: 18px;
-		}
-
-		.btns {
-			margin-top: 20px;
+	.auth {
+		form {
 			display: flex;
-			column-gap: 15px;
+			column-gap: 5px;
+		}
 
-			.btn--payment {
-				background: $color4;
-				color: #fff;
-			}
+		button {
+			background: $color4;
+			color: #fff;
+		}
 
-			.btn--support {
-				background: $color2;
-				color: #fff;
+		&-error {
+			font-weight: bold;
+			font-size: 14px;
+			color: $color;
+			margin-top: 10px;
+			&:empty {
+				display: none;
 			}
+		}
+
+		.btn-payment {
+			margin-top: 10px;
+			background: $color2;
+			color: #fff;
+		}
+
+		&-help {
+			padding: 10px;
+			margin-top: 10px;
+			background: #dadada;
+			border-radius: $brs;
+			font-size: 14px;
+			font-weight: 500;
 		}
 	}
 
-	.app-content {
-		//display: none;
-
+	.app {
 		.dates {
 			textarea {
 				border: 1px solid $color1;
@@ -138,7 +159,7 @@ a {
 				min-height: 80px;
 				overflow: auto;
 				resize: vertical;
-				border-radius: 4px;
+				border-radius: $brs;
 				font-size: 16px;
 			}
 
@@ -161,35 +182,21 @@ a {
 			.btns {
 				display: flex;
 				align-items: center;
-				column-gap: 10px;
+				column-gap: 5px;
 				margin-top: 10px;
 
-				> * {
-					height: 40px;
-					width: 110px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					border-radius: 4px;
-					font-size: 14px;
-					border: none;
-					cursor: pointer;
-					user-select: none;
-				}
-
-				#start {
+				#search {
 					background: $color;
 					color: #fff;
-
-					&.disabled {
-						pointer-events: none;
-						background: $color3;
-						color: #777;
-					}
 				}
 
 				#clear-dates {
 					background: $color2;
+					color: #fff;
+				}
+
+				#last-search {
+					background: $color4;
 					color: #fff;
 				}
 			}
@@ -206,28 +213,12 @@ a {
 			cursor: pointer;
 		}
 
-		.last-checking {
-			margin-top: 10px;
-			padding: 10px;
-			border-radius: 4px;
-			color: #fff;
-			display: flex;
-			column-gap: 5px;
-			background-color: $color4;
-			background-image: url(data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzIgMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTIyIDlhMSAxIDAgMCAwIDAgMS40Mmw0LjYgNC42SDMuMDZhMSAxIDAgMSAwIDAgMmgyMy41MkwyMiAyMS41OUExIDEgMCAwIDAgMjIgMjNhMSAxIDAgMCAwIDEuNDEgMGw2LjM2LTYuMzZhLjg4Ljg4IDAgMCAwIDAtMS4yN0wyMy40MiA5QTEgMSAwIDAgMCAyMiA5WiIgZGF0YS1uYW1lPSJMYXllciAyIiBmaWxsPSIjZmZmZmZmIiBjbGFzcz0iZmlsbC0wMDAwMDAiPjwvcGF0aD48L3N2Zz4=);
-			background-position: center right 10px;
-			background-size: 22px;
-			background-repeat: no-repeat;
-			font-size: 13px;
-
-			span {
-				font-weight: 500;
-			}
-		}
-
 		.documentation {
-			margin-top: 20px;
-			font-size: 14px;
+			margin-top: 15px;
+
+			background: $color3;
+			padding: 10px;
+			border-radius: $brs;
 
 			&-title {
 				font-weight: bold;
@@ -240,7 +231,18 @@ a {
 					font-size: 14px;
 				}
 
-				ul {
+				.info {
+					margin-top: 15px;
+
+					p {
+						margin: 0;
+						font-size: 14px;
+						font-weight: 500;
+
+						&:not(:last-child) {
+							margin-bottom: 5px;
+						}
+					}
 				}
 
 				ol {
