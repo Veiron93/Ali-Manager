@@ -1,5 +1,6 @@
 const indexPathName = "/p/order/index.html"; // страница списка заказов
-const orderPathName = "/p/order/detail.html"; // страница просмотра заказа
+//const orderPathName = "/p/order/detail.html"; // страница просмотра заказа
+const orderPathName = "order-list"; // страница просмотра заказа
 const trackingPathName = "/logisticsdetail.htm"; // страница отслеживания посылки
 
 const blankPathName = "/p/";
@@ -62,7 +63,76 @@ chrome.tabs.onActivated.addListener(async () => {
 				files: ["./src/result.css"],
 			});
 		}
+
+		// if (getPageNameRu(tab) == orderPathName) {
+		// 	console.log(tab);
+
+		// }
 	});
+});
+
+let scriptInjectedOrderData = false;
+
+chrome.tabs.onUpdated.addListener(() => {
+	chrome.tabs.query({ active: true }).then((currenTab) => {
+		//console.log(currenTab[0]);
+		//&& currenTab[0].status == "complete"
+
+		//console.log(9999);
+
+		let tab = currenTab[0];
+
+		if (getPageNameRu(currenTab[0]) == orderPathName) {
+			if (!scriptInjectedOrderData) {
+				scriptInjectedOrderData = true;
+
+				//console.log(tab);
+
+				console.log(111);
+
+				chrome.scripting.executeScript({
+					target: { tabId: currenTab[0].id },
+					files: ["./src/order-data-ru.js"],
+				});
+			}
+		}
+	});
+});
+
+// chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+// 	if (message.scriptInjected) {
+// 		// Скрипт был встроен
+// 		console.log("Скрипт был встроен");
+// 	} else {
+// 		// Скрипт не был встроен
+// 		console.log("Скрипт не был встроен");
+// 	}
+// });
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+	if (request.orderDataComplete) {
+		console.log(request.orderDataComplete);
+	}
+
+	// if (request.scriptInjectedPage) {
+	// 	scriptInjectedOrderData = false;
+
+	// 	console.log(scriptInjectedOrderData);
+	// }
+
+	// if (request.stopLoadPage) {
+	// 	chrome.tabs.query({ active: true }).then((currenTab) => {
+	// 		chrome.tabs.update(currenTab[0].id, { url: "" }, function (tab) {
+	// 			// Tab loading stopped
+	// 			console.log("страница остановлена");
+	// 		});
+	// 	});
+	// }
+
+	//console.log(request);
+	//console.log("Received message from content script:", request);
+	// Handle the message and send a response if necessary
+	//sendResponse({ message: "Response from background script" });
 });
 
 chrome.tabs.onCreated.addListener(() => {
@@ -74,12 +144,19 @@ chrome.tabs.onCreated.addListener(() => {
 		}
 
 		// страница информации о заказе
-		if (getPathNameTab(tab) == orderPathName) {
-			chrome.scripting.executeScript({
-				target: { tabId: tab.id },
-				files: ["./src/order-data.js"],
-			});
-		}
+		// if (getPageNameRu(tab) == orderPathName) {
+		// 	console.log(tab);
+
+		// 	chrome.scripting.executeScript({
+		// 		target: { tabId: tab.id },
+		// 		files: ["./src/order-data-ru.js"],
+		// 	});
+		// }
+
+		// chrome.scripting.executeScript({
+		// 	target: { tabId: tab.id },
+		// 	files: ["./src/order-data-ru.js"],
+		// });
 
 		// трек-номер
 		if (getPathNameTab(tab) == trackingPathName) {
@@ -115,6 +192,21 @@ function getPathNameTab(tab) {
 	let url = new URL(urlString);
 
 	return url ? url.pathname : false;
+}
+
+function getPageNameRu(tab) {
+	let urlString = tab.url;
+
+	if (!urlString) {
+		return false;
+	}
+
+	let url = new URL(urlString);
+	let pathname = url.pathname;
+
+	let pathnameArr = pathname.split("/");
+
+	return pathnameArr[1];
 }
 
 /**

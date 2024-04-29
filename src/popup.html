@@ -16,7 +16,8 @@
 		<div class="popup-wrapper">
 			<header>
 				<a href="https://alimanager.ru" target="_blank">AliManager</a>
-				<span>версия 0.0.1</span>
+				<span>0.0.1</span>
+				<div class="btn-logout hidden">выйти</div>
 			</header>
 
 			<div class="auth">
@@ -57,24 +58,29 @@
 				</div>
 
 				<div class="documentation">
-					<!-- <div class="documentation-title">Инструкция</div> -->
-					<div class="documentation-content" data-farmatted-text>
-						<ul>
-							<li><b>д-м-г</b> - заказы за конкретное число</li>
-							<li><b>д-м-г~</b> - все заказы начиная с этого числа</li>
-							<li><b>д-м-г~д-м-г</b> - диапазон дат</li>
+					<div class="documentation_content" data-farmatted-text>
+						<ul class="formatted-dates">
+							<li><span>д-м-г</span> - за конкретное число</li>
+							<li><span>д-м-г~</span> - начиная с этого числа</li>
+							<li><span>д-м-г~д-м-г</span> - диапазон дат</li>
 						</ul>
 
 						<ol>
 							<li>Формат даты: <b>20-7-23</b>, и никак иначе!!!</li>
 							<li>Вы должны быть авторизованны на <a href="https://www.aliexpress.ru/" target="_blank">aliexpress.ru</a></li>
+							<li>Для нескольких дат, используйте перенос строки</li>
+							<li>Возможно использовать разные форматы дат в одном поиске</li>
 						</ol>
+					</div>
 
+					<div class="documentation_btn-more"></div>
+
+					<!-- <div class="documentation-content" >
 						<div class="info">
 							<p>Для нескольких дат, используйте перенос строки</p>
 							<p>Возможно использовать разные форматы дат в одном поиске</p>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 

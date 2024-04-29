@@ -5,7 +5,6 @@
 class Popup {
 	api = "https://alimanager-server.web/api/v1";
 	keyLicense = null;
-	isAuth = false;
 
 	errorAuth = {
 		code: null,
@@ -15,6 +14,7 @@ class Popup {
 	// Elements
 	// popup
 	popupContainer = null;
+	btnLogoutElement = null;
 
 	// auth
 	authContainer = null;
@@ -31,6 +31,8 @@ class Popup {
 	btnClearDatesAppElement = null;
 	btnLastSearchAppElement = null;
 	paramsSearchAppElement = null;
+	documentationAppElement = null;
+	btnDocumentationMoreAppElement = null;
 
 	constructor() {
 		(async () => {
@@ -38,8 +40,11 @@ class Popup {
 
 			await this.checkAuth();
 
+			this.initEventsPopup();
 			this.initEventsAuth();
 			this.initEventsApp();
+
+			this.initPopup();
 			this.initAuth();
 			this.initApp();
 		})();
@@ -57,15 +62,37 @@ class Popup {
 
 	initElementsPopup() {
 		return new Promise((resolve) => {
-			this.popupContainer = document.querySelector(".popup-wrapper");
+			document.addEventListener("DOMContentLoaded", () => {
+				this.popupContainer = document.querySelector(".popup-wrapper");
+				this.btnLogoutElement = this.popupContainer.querySelector(".btn-logout");
 
-			resolve();
+				resolve();
+			});
 		});
+	}
+
+	initEventsPopup() {
+		// очистка поля ввода даты
+		this.btnLogoutElement.addEventListener("click", () => this.onLogout());
+	}
+
+	initPopup() {
+		if (this.getStorageLocal("isAuthAlimanager")) {
+			this.stateClassElement(true, this.btnLogoutElement);
+		}
+	}
+
+	onLogout() {
+		console.log(777);
+		this.clearStorageLocal("isAuthAlimanager");
+		this.appContainer.remove();
+		this.popupContainer.append(this.authContainer);
+		this.stateClassElement(false, this.btnLogoutElement);
 	}
 
 	async checkAuth() {
 		if (this.keyLicense) {
-			this.isAuth = true;
+			this.setStorageLocal("isAuthAlimanager", true);
 
 			this.stateApp(true);
 
@@ -151,7 +178,7 @@ class Popup {
 			this.stateBtnSendKey(true);
 		}
 
-		if (this.isAuth) {
+		if (this.getStorageLocal("isAuthAlimanager")) {
 			this.authContainer.remove();
 		}
 	}
@@ -165,7 +192,7 @@ class Popup {
 	}
 
 	onErrorAuth(error) {
-		this.isAuth = false;
+		this.clearStorageLocal("isAuthAlimanager");
 
 		this.errorAuth.code = error.code;
 		this.errorAuth.text = error.text;
@@ -205,12 +232,13 @@ class Popup {
 		return new Promise((resolve) => {
 			document.addEventListener("DOMContentLoaded", () => {
 				this.appContainer = document.querySelector(".app");
-
 				this.inputDatesAppElement = this.appContainer.querySelector("#dates");
 				this.btnSearchAppElement = this.appContainer.querySelector("#search");
 				this.btnClearDatesAppElement = this.appContainer.querySelector("#clear-dates");
 				this.btnLastSearchAppElement = this.appContainer.querySelector("#last-search");
 				this.paramsSearchAppElement = this.appContainer.querySelectorAll(".params input");
+				this.documentationAppElement = this.appContainer.querySelector(".documentation");
+				this.btnDocumentationMoreAppElement = this.documentationAppElement.querySelector(".documentation_btn-more");
 
 				resolve();
 			});
@@ -223,6 +251,9 @@ class Popup {
 
 		// отслеживание поля ввода даты
 		this.inputDatesAppElement.addEventListener("input", () => this.onChangeDatesApp());
+
+		// документация
+		this.btnDocumentationMoreAppElement.addEventListener("click", () => this.stateDocumentationApp());
 	}
 
 	stateApp(state) {
@@ -242,6 +273,10 @@ class Popup {
 		this.stateBtnSearchApp(false);
 	}
 
+	validationDatesApp() {
+		this.inputDatesAppElement.value = this.inputDatesAppElement.value.replace(/[^0-9~\-\s\n]/g, "");
+	}
+
 	stateBtnSearchApp(state) {
 		if (state) {
 			this.btnSearchAppElement.classList.remove("disabled");
@@ -251,7 +286,8 @@ class Popup {
 	}
 
 	onChangeDatesApp() {
-		this.setStorageLocal("dates_am", this.inputDatesAppElement.value.trim());
+		this.validationDatesApp();
+		this.setStorageLocal("dates_am", this.inputDatesAppElement.value);
 
 		if (this.inputDatesAppElement.value && this.btnSearchAppElement.classList.contains("disabled")) {
 			this.stateBtnSearchApp(true);
@@ -268,6 +304,10 @@ class Popup {
 		} else {
 			this.btnLastSearchAppElement.classList.add("hidden");
 		}
+	}
+
+	stateDocumentationApp() {
+		this.documentationAppElement.classList.toggle("active");
 	}
 
 	initApp() {
@@ -287,7 +327,6 @@ class Popup {
 	}
 
 	// other
-
 	setStorageLocal(key, value) {
 		chrome.storage.local.set({ [key]: value });
 	}
@@ -304,6 +343,14 @@ class Popup {
 
 	clearStorageLocal(key) {
 		chrome.storage.local.remove([key]);
+	}
+
+	stateClassElement(state, element) {
+		if (state) {
+			element.classList.remove("hidden");
+		} else {
+			element.classList.add("hidden");
+		}
 	}
 }
 

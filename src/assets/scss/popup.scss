@@ -60,11 +60,12 @@ input {
 	ul,
 	ol {
 		margin-left: 18px;
+
 		li {
 			font-size: 14px;
 
 			&:not(:last-child) {
-				margin-bottom: 5px;
+				margin-bottom: 7px;
 			}
 		}
 	}
@@ -102,6 +103,17 @@ input {
 		span {
 			font-size: 14px;
 			margin-left: auto;
+		}
+
+		.btn-logout {
+			padding: 6px 10px;
+			border-radius: 10px;
+			background: #000;
+			margin-left: 15px;
+			color: #fff;
+			cursor: pointer;
+			user-select: none;
+			background: #830303;
 		}
 	}
 
@@ -215,47 +227,78 @@ input {
 
 		.documentation {
 			margin-top: 15px;
-
-			background: $color3;
+			background: #f3f3f3;
 			padding: 10px;
 			border-radius: $brs;
+			overflow: hidden;
 
-			&-title {
-				font-weight: bold;
-				margin-bottom: 8px;
-				font-size: 18px;
-			}
-
-			&-content {
-				> * {
-					font-size: 14px;
+			&.active {
+				ol {
+					display: block;
 				}
 
-				.info {
-					margin-top: 15px;
+				.documentation_btn-more {
+					&:before {
+						content: "Свернуть";
+					}
+				}
+			}
 
-					p {
-						margin: 0;
-						font-size: 14px;
-						font-weight: 500;
+			&_content {
+				.formatted-dates {
+					list-style-type: none;
+					margin-left: 0;
 
+					li {
 						&:not(:last-child) {
 							margin-bottom: 5px;
+						}
+
+						span {
+							padding: 7px 12px;
+							background: #fbd49d;
+							border-radius: 10px;
+
+							display: inline-block;
+							font-weight: 500;
+							font-size: 16px;
 						}
 					}
 				}
 
 				ol {
 					margin-top: 15px;
+					display: none;
 
 					li {
-						font-weight: 500;
+						a {
+							color: $color;
+						}
 					}
+				}
+			}
 
-					a {
-						color: $color4;
-						border-bottom: 1px dashed;
-					}
+			&_btn-more {
+				margin-top: 20px;
+				cursor: pointer;
+				user-select: none;
+				text-align: center;
+
+				padding: 8px 0;
+				margin-top: 10px;
+				border-radius: 10px;
+				transition: background 0.2s;
+				background: #dedede;
+
+				&:before {
+					content: "Подробнее";
+					font-size: 14px;
+					font-weight: 500;
+					display: inline;
+				}
+
+				&:hover {
+					background: #d6d6d6;
 				}
 			}
 		}

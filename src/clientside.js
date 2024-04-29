@@ -5,7 +5,9 @@
 class GetOrders {
 	// сслылки на страницы для парсинга
 	indexUrl = "/p/order/index.html"; // список заказов
-	detailUrl = "/p/order/detail.html"; // информация о заказе
+	//detailUrl = "/p/order/detail.html"; // информация о заказе
+	detailUrl = "/order-list/";
+
 	trackingUrl = "/logisticsdetail.htm"; // трекинг посылки
 
 	// даты
@@ -45,10 +47,10 @@ class GetOrders {
 			await this.getDataOrders();
 
 			// 8. получает трек-номера посылок
-			await this.getTrackingNumberOrders();
+			// await this.getTrackingNumberOrders();
 
-			// 9. отправка данных на сервер
-			await this.postDataOrders().then((value) => console.log(value));
+			// // 9. отправка данных на сервер
+			// await this.postDataOrders().then((value) => console.log(value));
 		})();
 	}
 
@@ -344,7 +346,9 @@ class GetOrders {
 			let i = 0;
 
 			for (const order of this.listOrders) {
-				window.open("https://www.aliexpress.com" + this.detailUrl + "?alimanager=1&orderId=" + order.orderNumber, "_blank");
+				// window.open("https://www.aliexpress.com" + this.detailUrl + "?alimanager=1&orderId=" + order.orderNumber, "_blank");
+				//window.open("https://aliexpress.ru" + this.detailUrl + "?alimanager=1&orderId=" + order.orderNumber, "_blank");
+				window.open("https://aliexpress.ru" + this.detailUrl + order.orderNumber + "?alimanager=1", "_blank");
 
 				await this.checkComplete(order, "dataCompleted");
 

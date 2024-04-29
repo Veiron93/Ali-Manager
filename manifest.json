@@ -1,16 +1,21 @@
 {
-	"name": "Ali Manager",
+	"name": "AliManager",
 	"description": "description test",
-	"version": "0.1",
+	"version": "0.0.1",
 	"manifest_version": 3,
 	"icons": {},
 	"action": {
-		"default_title": "Ali Manager",
+		"default_title": "AliManager",
 		"default_popup": "src/popup.html"
 	},
 
 	"permissions": ["scripting", "activeTab", "storage", "tabs"],
-	"host_permissions": ["https://www.aliexpress.com/*", "https://track.aliexpress.com/*"],
+	"host_permissions": [
+		"https://www.aliexpress.com/*",
+		"https://track.aliexpress.com/*",
+		"https://aliexpress.ru/*",
+		"https://login.aliexpress.ru/*"
+	],
 	"optional_host_permissions": ["https://*/*", "http://*/*"],
 	"background": {
 		"service_worker": "src/background.js",
