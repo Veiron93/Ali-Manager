@@ -1,12 +1,8 @@
-//console.log(222);
+console.log("скрипт встроен");
 
-// setTimeout(() => {
-// 	chrome.runtime.sendMessage({ scriptInjectedPage: true });
-// }, 7000);
+//console.time("myScript");
 
-console.time("myScript");
-
-class OrderDataRu {
+class OrderRu {
 	elementsOrder = new Map([
 		["productsList", ".RedOrderDetailsProducts_RedOrderDetailsProducts__box__17lnl"],
 		["paymentWrapper", ".RedOrderDetailsProducts_Summary__totalWrapper__fewhe"],
@@ -27,8 +23,7 @@ class OrderDataRu {
 		["productAmount", ".RedOrderDetailsProducts_Product__priceDesktop__1tmn5 > div:nth-child(2)"],
 	]);
 
-	// order main data
-	orderNumber = null;
+	order = null;
 
 	// products
 	productsElements = null;
@@ -42,8 +37,6 @@ class OrderDataRu {
 	deliveryFactor = 0;
 
 	constructor() {
-		this.getOrderNumber();
-
 		(async () => {
 			// 1. проверка загружена ли страница
 			await this.checkPageLoaded();
@@ -60,15 +53,11 @@ class OrderDataRu {
 			// 5. собираем все данные о заказе
 			await this.orderInit();
 
-			// 6. отправка данных на background.js для записи в store
-			//await this.sendDataOrder();
+			// 6. возвращает собранные данные о заказе в background.js
+			await this.sendOrderData();
 
-			console.timeEnd("myScript");
+			//console.timeEnd("myScript");
 		})();
-	}
-
-	getOrderNumber() {
-		this.orderNumber = window.location.pathname.split("/").pop();
 	}
 
 	/**
@@ -230,7 +219,7 @@ class OrderDataRu {
 
 	orderInit() {
 		return new Promise((resolve) => {
-			const order = {
+			this.order = {
 				products: this.orderProductsData,
 				payment: {
 					totalPriceOrder: this.totalPriceOrder,
@@ -240,10 +229,12 @@ class OrderDataRu {
 				},
 			};
 
-			chrome.runtime.sendMessage({ orderDataComplete: order });
-
 			resolve();
 		});
+	}
+
+	async sendOrderData() {
+		await chrome.runtime.sendMessage({ orderData: this.order });
 	}
 
 	/**
@@ -269,4 +260,4 @@ class OrderDataRu {
 	}
 }
 
-new OrderDataRu();
+new OrderRu();

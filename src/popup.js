@@ -11,7 +11,7 @@ class Popup {
 		text: null,
 	};
 
-	// Elements
+	// ELEMENTS
 	// popup
 	popupContainer = null;
 	btnLogoutElement = null;
@@ -51,12 +51,12 @@ class Popup {
 	}
 
 	async getKeyAuth() {
-		await chrome.storage.local.get(["alimanagerKey"]).then((result) => {
-			if (!result["alimanagerKey"]) {
+		await chrome.storage.local.get(["keyAuth"]).then((result) => {
+			if (!result["keyAuth"]) {
 				return false;
 			}
 
-			this.keyLicense = result["alimanagerKey"];
+			this.keyLicense = result["keyAuth"];
 		});
 	}
 
@@ -77,14 +77,13 @@ class Popup {
 	}
 
 	initPopup() {
-		if (this.getStorageLocal("isAuthAlimanager")) {
+		if (this.getStorageLocal("isAuth")) {
 			this.stateClassElement(true, this.btnLogoutElement);
 		}
 	}
 
 	onLogout() {
-		console.log(777);
-		this.clearStorageLocal("isAuthAlimanager");
+		this.clearStorageLocal("isAuth");
 		this.appContainer.remove();
 		this.popupContainer.append(this.authContainer);
 		this.stateClassElement(false, this.btnLogoutElement);
@@ -92,7 +91,7 @@ class Popup {
 
 	async checkAuth() {
 		if (this.keyLicense) {
-			this.setStorageLocal("isAuthAlimanager", true);
+			await this.setStorageLocal("isAuth", true);
 
 			this.stateApp(true);
 
@@ -166,7 +165,7 @@ class Popup {
 
 			if (!key) return false;
 
-			chrome.storage.local.set({ ["alimanagerKey"]: key });
+			chrome.storage.local.set({ ["keyAuth"]: key });
 
 			this.checkAuth();
 		});
@@ -178,7 +177,7 @@ class Popup {
 			this.stateBtnSendKey(true);
 		}
 
-		if (this.getStorageLocal("isAuthAlimanager")) {
+		if (this.getStorageLocal("isAuth")) {
 			this.authContainer.remove();
 		}
 	}
@@ -192,7 +191,7 @@ class Popup {
 	}
 
 	onErrorAuth(error) {
-		this.clearStorageLocal("isAuthAlimanager");
+		this.clearStorageLocal("isAuth");
 
 		this.errorAuth.code = error.code;
 		this.errorAuth.text = error.text;
@@ -246,6 +245,9 @@ class Popup {
 	}
 
 	initEventsApp() {
+		// поиск
+		this.btnSearchAppElement.addEventListener("click", () => this.sendStartSearchApp());
+
 		// очистка поля ввода даты
 		this.btnClearDatesAppElement.addEventListener("click", () => this.onClearDatesApp());
 
@@ -266,8 +268,12 @@ class Popup {
 		}
 	}
 
+	sendStartSearchApp() {
+		chrome.runtime.sendMessage({ startSearch: true });
+	}
+
 	onClearDatesApp() {
-		this.clearStorageLocal("dates_am");
+		this.clearStorageLocal("datesSearch");
 		this.inputDatesAppElement.value = "";
 
 		this.stateBtnSearchApp(false);
@@ -279,17 +285,17 @@ class Popup {
 
 	stateBtnSearchApp(state) {
 		if (state) {
-			this.btnSearchAppElement.classList.remove("disabled");
+			this.btnSearchAppElement.removeAttribute("disabled");
 		} else {
-			this.btnSearchAppElement.classList.add("disabled");
+			this.btnSearchAppElement.setAttribute("disabled", true);
 		}
 	}
 
 	onChangeDatesApp() {
 		this.validationDatesApp();
-		this.setStorageLocal("dates_am", this.inputDatesAppElement.value);
+		this.setStorageLocal("datesSearch", this.inputDatesAppElement.value.split("\n"));
 
-		if (this.inputDatesAppElement.value && this.btnSearchAppElement.classList.contains("disabled")) {
+		if (this.inputDatesAppElement.value && this.btnSearchAppElement.hasAttribute("disabled")) {
 			this.stateBtnSearchApp(true);
 		}
 
@@ -312,23 +318,23 @@ class Popup {
 
 	initApp() {
 		// дата
-		this.getStorageLocal("dates_am").then((result) => {
+		this.getStorageLocal("datesSearch").then((result) => {
 			if (result) {
-				this.inputDatesAppElement.value = result;
+				this.inputDatesAppElement.value = result.join("\n");
 				this.stateBtnSearchApp(true);
 			}
 		});
 
 		// дата последней проверки заказа
-		chrome.storage.local.get(["last_checked_ali_manager"]).then((result) => {
-			this.btnLastSearchAppElement.textContent = result["last_checked_ali_manager"];
+		chrome.storage.local.get(["lastSearchOrders"]).then((result) => {
+			this.btnLastSearchAppElement.textContent = result["lastSearchOrders"];
 			this.stateLastChecking(true);
 		});
 	}
 
 	// other
-	setStorageLocal(key, value) {
-		chrome.storage.local.set({ [key]: value });
+	async setStorageLocal(key, value) {
+		await chrome.storage.local.set({ [key]: value });
 	}
 
 	async getStorageLocal(key) {
@@ -410,8 +416,8 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 
 		// дата последней проверки заказа
-		chrome.storage.local.get(["last_checked_ali_manager"]).then((result) => {
-			lastChecking.querySelector("span").textContent = result["last_checked_ali_manager"];
+		chrome.storage.local.get(["lastSearchOrders"]).then((result) => {
+			lastChecking.querySelector("span").textContent = result["lastSearchOrders"];
 		});
 	}
 

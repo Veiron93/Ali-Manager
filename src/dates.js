@@ -35,8 +35,6 @@ class DatesAliManager {
 		this.sortDates(this.datesRange, "range");
 
 		this.getMinAndMaxDate();
-
-		//console.log(this);
 	}
 
 	typeDate(date) {

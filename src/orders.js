@@ -2,13 +2,13 @@
  * встраиваемый скрипт на главную страницу списка заказов
  */
 
-class GetOrders {
+class Orders {
 	// сслылки на страницы для парсинга
-	indexUrl = "/p/order/index.html"; // список заказов
+	//indexUrl = "/p/order/index.html"; // список заказов
 	//detailUrl = "/p/order/detail.html"; // информация о заказе
-	detailUrl = "/order-list/";
+	//detailUrl = "/order-list/";
 
-	trackingUrl = "/logisticsdetail.htm"; // трекинг посылки
+	//trackingUrl = "/logisticsdetail.htm"; // трекинг посылки
 
 	// даты
 	datesSingle = []; // конкретные даты
@@ -26,7 +26,7 @@ class GetOrders {
 	constructor() {
 		(async () => {
 			// 1. инициализация дат
-			this.initDates();
+			await this.initDates();
 
 			// 2. инициализация кнопки "Больше заказов"
 			await this.initBtnMoreOrders().then((value) => (this.btnMoreOrders = value));
@@ -40,11 +40,20 @@ class GetOrders {
 			// 5. получает базовые данные о заказах (дата, номер)
 			await this.getBaseDataOrders();
 
+			// 6. записывает в storage базовые данные о заказах
+			await this.setStorage("orders", this.listOrders);
+			//await this.setBaseDataOrdersStorage();
+
+			// 7. сообщает что все заказы найдены
+			await this.sendOrdersComplete();
+
+			//chrome.runtime.sendMessage({ startOrderData: this.listOrders });
+
 			// 6. записывает в LocalStorage базовые данные о заказах
-			await this.setOrdersLocalStorage();
+			//await this.setOrdersLocalStorage();
 
 			// 7. получает все данные о заказах
-			await this.getDataOrders();
+			//await this.getDataOrders();
 
 			// 8. получает трек-номера посылок
 			// await this.getTrackingNumberOrders();
@@ -54,16 +63,23 @@ class GetOrders {
 		})();
 	}
 
-	initDates() {
-		let dates = this.getDates();
+	async initDates() {
+		// let datesL = this.getDates();
+		// console.log(datesL);
 
-		datesAliManager.initDates(dates);
+		return new Promise(async (resolve) => {
+			let dates = await this.getStorage("datesSearch");
 
-		this.datesSingle = datesAliManager.datesSingle;
-		this.datesFrom = datesAliManager.datesFrom;
-		this.datesRange = datesAliManager.datesRange;
-		this.minDateOrder = datesAliManager.minDate;
-		this.maxDateOrder = datesAliManager.maxDate;
+			datesAliManager.initDates(dates);
+
+			this.datesSingle = datesAliManager.datesSingle;
+			this.datesFrom = datesAliManager.datesFrom;
+			this.datesRange = datesAliManager.datesRange;
+			this.minDateOrder = datesAliManager.minDate;
+			this.maxDateOrder = datesAliManager.maxDate;
+
+			resolve();
+		});
 	}
 
 	/**
@@ -72,7 +88,7 @@ class GetOrders {
 	 */
 
 	getDates() {
-		let dates = localStorage.getItem("dates_am");
+		let dates = localStorage.getItem("datesSearch");
 		return dates ? JSON.parse(dates) : null;
 	}
 
@@ -94,7 +110,7 @@ class GetOrders {
 					clearInterval(findBtn);
 					resolve(btnMoreOrders);
 				}
-			}, 300);
+			}, 100);
 		});
 	}
 
@@ -295,7 +311,7 @@ class GetOrders {
 					clearInterval(idInterval);
 					resolve();
 				}
-			}, 300);
+			}, 100);
 		});
 	}
 
@@ -312,28 +328,61 @@ class GetOrders {
 		this.listOrdersNode.push(...orders);
 	}
 
+	// setOrdersLocalStorage() {
+	// 	return new Promise((resolve) => {
+	// 		let orders = [];
+
+	// 		this.listOrders.forEach((order) => {
+	// 			orders.push({
+	// 				orderNumber: order.orderNumber,
+	// 				dateOrder: order.dateOrder,
+	// 				trackingNumber: "",
+	// 			});
+
+	// 			if (orders.length == this.listOrders.length) {
+	// 				localStorage.setItem("orders", JSON.stringify(orders));
+	// 				resolve();
+	// 			}
+	// 		});
+	// 	});
+	// }
+
 	/**
-	 * запись заказов в LocalStorage
+	 * запись заказов в Storage
 	 * @returns {Promise}
 	 */
 
-	setOrdersLocalStorage() {
-		return new Promise((resolve) => {
-			let orders = [];
+	// setBaseDataOrdersStorage() {
+	// 	return new Promise((resolve) => {
+	// 		let orders = [];
+	// 		this.listOrders.forEach((order) => {
+	// 			orders.push({
+	// 				orderNumber: order.orderNumber,
+	// 				dateOrder: order.dateOrder,
+	// 			});
+	// 			if (orders.length === this.listOrders.length) {
+	// 				//chrome.storage.local.set({ ["orders"]: orders }).then(() => resolve());
+	// 			}
+	// 		});
+	// 	});
+	// }
 
-			this.listOrders.forEach((order) => {
-				orders.push({
-					orderNumber: order.orderNumber,
-					dateOrder: order.dateOrder,
-					trackingNumber: "",
-				});
-
-				if (orders.length == this.listOrders.length) {
-					localStorage.setItem("orders", JSON.stringify(orders));
-					resolve();
-				}
-			});
+	async sendOrdersComplete() {
+		await chrome.runtime.sendMessage({ ordersComplete: true }, () => {
+			//window.close();
 		});
+	}
+
+	async getStorage(key) {
+		let value = null;
+
+		await chrome.storage.local.get([key]).then((result) => (value = result[key]));
+
+		return value;
+	}
+
+	async setStorage(key, value) {
+		await chrome.storage.local.set({ [key]: value });
 	}
 
 	/**
@@ -341,76 +390,76 @@ class GetOrders {
 	 * @returns {Promise}
 	 */
 
-	getDataOrders() {
-		return new Promise(async (resolve) => {
-			let i = 0;
+	// getDataOrders() {
+	// 	return new Promise(async (resolve) => {
+	// 		let i = 0;
 
-			for (const order of this.listOrders) {
-				// window.open("https://www.aliexpress.com" + this.detailUrl + "?alimanager=1&orderId=" + order.orderNumber, "_blank");
-				//window.open("https://aliexpress.ru" + this.detailUrl + "?alimanager=1&orderId=" + order.orderNumber, "_blank");
-				window.open("https://aliexpress.ru" + this.detailUrl + order.orderNumber + "?alimanager=1", "_blank");
+	// 		for (const order of this.listOrders) {
+	// 			// window.open("https://www.aliexpress.com" + this.detailUrl + "?alimanager=1&orderId=" + order.orderNumber, "_blank");
+	// 			//window.open("https://aliexpress.ru" + this.detailUrl + "?alimanager=1&orderId=" + order.orderNumber, "_blank");
+	// 			window.open("https://aliexpress.ru" + this.detailUrl + order.orderNumber + "?alimanager=order", "_blank");
 
-				await this.checkComplete(order, "dataCompleted");
+	// 			await this.checkComplete(order, "dataCompleted");
 
-				i++;
+	// 			i++;
 
-				if (i == this.listOrders.length) {
-					resolve();
-				}
-			}
-		});
-	}
+	// 			if (i == this.listOrders.length) {
+	// 				resolve();
+	// 			}
+	// 		}
+	// 	});
+	// }
 
 	/**
 	 * получает трек-номер заказа
 	 * @returns {Promise}
 	 */
 
-	getTrackingNumberOrders() {
-		return new Promise(async (resolve) => {
-			let i = 0;
+	// getTrackingNumberOrders() {
+	// 	return new Promise(async (resolve) => {
+	// 		let i = 0;
 
-			for (const order of this.listOrders) {
-				window.open("https://track.aliexpress.com" + this.trackingUrl + "?alimanager=1&tradeId=" + order.orderNumber, "_blank");
+	// 		for (const order of this.listOrders) {
+	// 			window.open("https://track.aliexpress.com" + this.trackingUrl + "?alimanager=1&tradeId=" + order.orderNumber, "_blank");
 
-				await this.checkComplete(order, "trackingNumberCompleted");
+	// 			await this.checkComplete(order, "trackingNumberCompleted");
 
-				i++;
+	// 			i++;
 
-				if (i == this.listOrders.length) {
-					resolve();
-				}
-			}
-		});
-	}
+	// 			if (i == this.listOrders.length) {
+	// 				resolve();
+	// 			}
+	// 		}
+	// 	});
+	// }
 
-	checkComplete(order, flagName) {
-		return new Promise((resolve) => {
-			let idIntarval = setInterval(() => {
-				let orders = JSON.parse(localStorage.getItem("orders"));
-				let actualOrder = orders.find((item) => item.orderNumber == order.orderNumber);
+	// checkComplete(order, flagName) {
+	// 	return new Promise((resolve) => {
+	// 		let idIntarval = setInterval(() => {
+	// 			let orders = JSON.parse(localStorage.getItem("orders"));
+	// 			let actualOrder = orders.find((item) => item.orderNumber == order.orderNumber);
 
-				if (actualOrder[flagName] == true) {
-					clearInterval(idIntarval);
-					resolve();
-				}
-			}, 500);
-		});
-	}
+	// 			if (actualOrder[flagName] == true) {
+	// 				clearInterval(idIntarval);
+	// 				resolve();
+	// 			}
+	// 		}, 500);
+	// 	});
+	// }
 
-	postDataOrders() {
-		const orders = localStorage.getItem("orders");
+	// postDataOrders() {
+	// 	const orders = localStorage.getItem("orders");
 
-		fetch("http://alimanager-server.web/api/v1/orders", {
-			method: "POST",
-			// headers: {
-			// 	"Content-Type": "application/json",
-			// },
-			body: JSON.stringify(orders),
-		});
+	// 	fetch("http://alimanager-server.web/api/v1/orders", {
+	// 		method: "POST",
+	// 		// headers: {
+	// 		// 	"Content-Type": "application/json",
+	// 		// },
+	// 		body: JSON.stringify(orders),
+	// 	});
 
-		console.log("парсинг закончен, отправляем на сервер и удаляем локально");
-	}
+	// 	console.log("парсинг закончен, отправляем на сервер и удаляем локально");
+	// }
 }
 
-new GetOrders();
+new Orders();
