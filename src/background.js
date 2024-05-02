@@ -1,6 +1,7 @@
-const indexPathName = "/p/order/index.html"; // страница списка заказов
-const trackingPathName = "/logisticsdetail.htm"; // страница отслеживания посылки
-const blankPathName = "/p/";
+//const indexPathName = "/p/order/index.html"; // страница списка заказов
+//const blankPathName = "/p/";
+
+//https://www.aliexpress.com/p/tracking/index.html?spm=a2g0o.order_detail.order_detail_item.2.1043f19cjO8JHB&_addShare=no&_login=yes&tradeOrderId=5354579456413465
 
 //const orderPathName = "/p/order/detail.html"; // страница просмотра заказа
 //const orderPathName = "/order-list/"; // страница просмотра заказа
@@ -67,11 +68,16 @@ const blankPathName = "/p/";
 // 	});
 // });
 
+// страница отслеживания посылки
+const trackUrl = "https://www.aliexpress.com/p/tracking/index.html?alimanager=track-number&tradeOrderId=";
+
 let activeTab = null;
 let orders = null;
 let ordersData = [];
 let indexOrder = 0;
-let stopScriptInjectedOrderData = false;
+const trackings = new Map();
+
+//let stopScriptInjectedOrderData = false;
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 	// запуск поиска
@@ -82,13 +88,15 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 			})
 			.then((tab) => (activeTab = tab));
 
-		await chrome.scripting.executeScript({
-			target: { tabId: activeTab.id },
-			files: ["./src/dates.js", "./src/orders.js"],
-		});
+		await addFilesTab(activeTab, ["./src/dates.js", "./src/orders.js"]);
 
 		// записываем дату поиска
 		setDateSearch();
+
+		// await chrome.scripting.executeScript({
+		// 	target: { tabId: activeTab.id },
+		// 	files: ["./src/dates.js", "./src/orders.js"],
+		// });
 
 		//let datesSearch = null;
 		//await chrome.storage.local.get(["datesSearch"]).then((result) => (datesSearch = result["datesSearch"]));
@@ -145,46 +153,89 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 		}
 	}
 
-	// данные о заказе
-	if (request.orderData) {
-		ordersData.push(request.orderData);
-		stopScriptInjectedOrderData = false;
+	// возвращает данные о заказе
+	if (request.orderDataComplete) {
+		ordersData.push(request.orderDataComplete);
+		//stopScriptInjectedOrderData = false;
 
-		if (indexOrder == orders.length - 1) {
+		if (indexOrder === orders.length - 1) {
+			// 1. закрываем активную вкладку после получения данных о заказах
 			chrome.tabs.remove(activeTab.id, () => {
-				//console.log("все данные о заказах получены");
-
 				activeTab = null;
 				indexOrder = 0;
 				setStorage("ordersData", ordersData);
 			});
 
-			return null;
+			// 2. запуск сбор трек-кодов отслеживания посылок
+			startGetOrdersTrackNumbers();
+		} else {
+			indexOrder++;
+			getOrderData();
 		}
+	}
 
-		indexOrder++;
-		getOrderData();
+	// возращает трек-коды отслеживания посылок
+	if (request.orderTrackingNumbersComplete) {
+		let result = request.orderTrackingNumbersComplete;
+
+		trackings.set(orders[indexOrder].orderNumber, {
+			original: result.original,
+		});
+
+		if (indexOrder === orders.length - 1) {
+			chrome.tabs.remove(activeTab.id, () => {
+				activeTab = null;
+				indexOrder = 0;
+				console.log(trackings);
+				//setStorage("ordersData", ordersData);
+			});
+		} else {
+			indexOrder++;
+			getOrderTrackNumbers();
+		}
 	}
 });
 
 chrome.tabs.onUpdated.addListener(async () => {
+	// обновение данных активной вкладки
 	await chrome.tabs.query({ active: true }).then((tabs) => (activeTab = tabs[0]));
 
-	console.log(activeTab);
+	// страница данных о заказе - RU версия
+	if (getUriParams(activeTab, "alimanager") === "order" && activeTab.status === "complete") {
+		addFilesTab(activeTab, ["./src/order-ru.js"]);
+		// chrome.scripting.executeScript({
+		// 	target: { tabId: activeTab.id },
+		// 	files: ["./src/order-ru.js"],
+		// });
 
-	if (getUriParams(activeTab, "alimanager") === "order") {
-		if (stopScriptInjectedOrderData) {
-			return null;
-		}
+		// if (stopScriptInjectedOrderData) {
+		// 	return null;
+		// }
 
-		stopScriptInjectedOrderData = true;
+		// stopScriptInjectedOrderData = true;
+	}
 
-		chrome.scripting.executeScript({
-			target: { tabId: activeTab.id },
-			files: ["./src/order-ru.js"],
-		});
+	// страница трек-кода посылки
+	if (getUriParams(activeTab, "alimanager") === "track-number" && activeTab.status === "complete") {
+		addFilesTab(activeTab, ["./src/tracking-number.js"]);
+		//console.log(activeTab);
 	}
 });
+
+/**
+ * Выполняет скрипт из указанной вкладки.
+ *
+ * @param {Object} tab - Объект вкладки, в которой будет выполнен скрипт.
+ * @param {Array} files - Массив путей к файлам скриптов для выполнения.
+ * @return {Promise}
+ */
+
+function addFilesTab(tab, files) {
+	return chrome.scripting.executeScript({
+		target: { tabId: tab.id },
+		files: files,
+	});
+}
 
 function setDateSearch() {
 	let dateNow = new Date();
@@ -195,6 +246,16 @@ function setDateSearch() {
 
 function getOrderData() {
 	chrome.tabs.update(activeTab.id, { url: "https://aliexpress.ru/order-list/" + orders[indexOrder].orderNumber + "?alimanager=order" });
+}
+
+function startGetOrdersTrackNumbers() {
+	chrome.tabs.create({
+		url: trackUrl + orders[0].orderNumber,
+	});
+}
+
+function getOrderTrackNumbers() {
+	chrome.tabs.update(activeTab.id, { url: trackUrl + orders[indexOrder].orderNumber });
 }
 
 async function setStorage(key, value) {
@@ -209,46 +270,46 @@ async function getStorage(key) {
 	return value;
 }
 
-chrome.tabs.onCreated.addListener(() => {
-	chrome.tabs.query({ active: true, lastFocusedWindow: true }).then((currenTab) => {
-		let tab = currenTab[0];
+// chrome.tabs.onCreated.addListener(() => {
+// 	chrome.tabs.query({ active: true, lastFocusedWindow: true }).then((currenTab) => {
+// 		let tab = currenTab[0];
 
-		if (!getUriParams(tab, "alimanager")) {
-			return false;
-		}
+// 		if (!getUriParams(tab, "alimanager")) {
+// 			return false;
+// 		}
 
-		// страница информации о заказе
-		// if (getPageNameRu(tab) == orderPathName) {
-		// 	console.log(tab);
+// 		// страница информации о заказе
+// 		// if (getPageNameRu(tab) == orderPathName) {
+// 		// 	console.log(tab);
 
-		// 	chrome.scripting.executeScript({
-		// 		target: { tabId: tab.id },
-		// 		files: ["./src/order-data-ru.js"],
-		// 	});
-		// }
+// 		// 	chrome.scripting.executeScript({
+// 		// 		target: { tabId: tab.id },
+// 		// 		files: ["./src/order-data-ru.js"],
+// 		// 	});
+// 		// }
 
-		// chrome.scripting.executeScript({
-		// 	target: { tabId: tab.id },
-		// 	files: ["./src/order-data-ru.js"],
-		// });
+// 		// chrome.scripting.executeScript({
+// 		// 	target: { tabId: tab.id },
+// 		// 	files: ["./src/order-data-ru.js"],
+// 		// });
 
-		// трек-номер
-		if (getPathNameTab(tab) == trackingPathName) {
-			chrome.scripting.executeScript({
-				target: { tabId: tab.id },
-				files: ["./src/tracking-number.js"],
-			});
-		}
+// 		// трек-номер
+// 		if (getPathNameTab(tab) == trackingPathName) {
+// 			chrome.scripting.executeScript({
+// 				target: { tabId: tab.id },
+// 				files: ["./src/tracking-number.js"],
+// 			});
+// 		}
 
-		// запись трек-номера
-		if (getUriParams(tab, "originalTrackingNumber") || getUriParams(tab, "combinedTrackingNumber")) {
-			chrome.scripting.executeScript({
-				target: { tabId: tab.id },
-				files: ["./src/set-tracking-number.js"],
-			});
-		}
-	});
-});
+// 		// запись трек-номера
+// 		if (getUriParams(tab, "originalTrackingNumber") || getUriParams(tab, "combinedTrackingNumber")) {
+// 			chrome.scripting.executeScript({
+// 				target: { tabId: tab.id },
+// 				files: ["./src/set-tracking-number.js"],
+// 			});
+// 		}
+// 	});
+// });
 
 /**
  * pathname tab
@@ -256,17 +317,17 @@ chrome.tabs.onCreated.addListener(() => {
  * @returns {String, Boolean}
  */
 
-function getPathNameTab(tab) {
-	let urlString = tab.pendingUrl;
+// function getPathNameTab(tab) {
+// 	let urlString = tab.pendingUrl;
 
-	if (!urlString) {
-		return false;
-	}
+// 	if (!urlString) {
+// 		return false;
+// 	}
 
-	let url = new URL(urlString);
+// 	let url = new URL(urlString);
 
-	return url ? url.pathname : false;
-}
+// 	return url ? url.pathname : false;
+// }
 
 /**
  * возвращает значение get параметра

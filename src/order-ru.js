@@ -1,4 +1,4 @@
-console.log("скрипт встроен");
+//console.log("скрипт встроен");
 
 //console.time("myScript");
 
@@ -23,6 +23,7 @@ class OrderRu {
 		["productAmount", ".RedOrderDetailsProducts_Product__priceDesktop__1tmn5 > div:nth-child(2)"],
 	]);
 
+	orderNumber = null;
 	order = null;
 
 	// products
@@ -37,6 +38,8 @@ class OrderRu {
 	deliveryFactor = 0;
 
 	constructor() {
+		this.orderNumber = this.getOrderNumber();
+
 		(async () => {
 			// 1. проверка загружена ли страница
 			await this.checkPageLoaded();
@@ -73,7 +76,7 @@ class OrderRu {
 					clearInterval(loadedIntervalId);
 					resolve();
 				}
-			}, 50);
+			}, 100);
 		});
 	}
 
@@ -220,6 +223,7 @@ class OrderRu {
 	orderInit() {
 		return new Promise((resolve) => {
 			this.order = {
+				number: this.orderNumber,
 				products: this.orderProductsData,
 				payment: {
 					totalPriceOrder: this.totalPriceOrder,
@@ -234,7 +238,17 @@ class OrderRu {
 	}
 
 	async sendOrderData() {
-		await chrome.runtime.sendMessage({ orderData: this.order });
+		// генерируем рандомное число для того что бы не обновлять страницу слишком часто
+		// иначе будет подозрение на парсинг и заблокируют доступ к сайту
+		let time = Math.floor(Math.random() * (5 - 3 + 1)) + 3;
+
+		setTimeout(async () => {
+			await chrome.runtime.sendMessage({ orderDataComplete: this.order });
+		}, time * 1000);
+	}
+
+	getOrderNumber() {
+		return window.location.pathname.split("/").pop();
 	}
 
 	/**
