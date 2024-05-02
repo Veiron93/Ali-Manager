@@ -186,8 +186,8 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 			chrome.tabs.remove(activeTab.id, () => {
 				activeTab = null;
 				indexOrder = 0;
-				console.log(trackings);
-				//setStorage("ordersData", ordersData);
+				addTrackingsToOrders();
+				//console.log(trackings);
 			});
 		} else {
 			indexOrder++;
@@ -256,6 +256,28 @@ function startGetOrdersTrackNumbers() {
 
 function getOrderTrackNumbers() {
 	chrome.tabs.update(activeTab.id, { url: trackUrl + orders[indexOrder].orderNumber });
+}
+
+function addTrackingsToOrders() {
+	return new Promise((resolve) => {
+		if (!ordersData) {
+			resolve();
+			return false;
+		}
+
+		let i = 0;
+
+		ordersData.forEach((order) => {
+			i++;
+
+			order.trackings = trackings.get(order.number);
+
+			if (ordersData.length == i) {
+				setStorage("ordersData", ordersData);
+				resolve();
+			}
+		});
+	});
 }
 
 async function setStorage(key, value) {
