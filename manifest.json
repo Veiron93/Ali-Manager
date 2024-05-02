@@ -3,7 +3,11 @@
 	"description": "description test",
 	"version": "0.0.1",
 	"manifest_version": 3,
-	"icons": {},
+	"icons": {
+		"16": "src/assets/img/icon-16.png",
+		"48": "src/assets/img/icon-48.png",
+		"128": "src/assets/img/icon-128.png"
+	},
 	"action": {
 		"default_title": "AliManager",
 		"default_popup": "src/popup.html"
