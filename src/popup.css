@@ -13,7 +13,7 @@ a {
 }
 
 .btn {
-  height: 40px;
+  height: 36px;
   width: 110px;
   display: flex;
   align-items: center;
@@ -40,7 +40,7 @@ input {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 *[data-farmatted-text] > * {
@@ -103,9 +103,29 @@ input {
 .popup-wrapper footer .copyright {
   font-size: 14px;
 }
-.popup-wrapper .auth form {
+.popup-wrapper .auth-login, .popup-wrapper .auth-confirmation-code {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.popup-wrapper .auth-login .helper, .popup-wrapper .auth-confirmation-code .helper {
+  padding: 10px;
+  background: #eaeaea;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.popup-wrapper .auth-login .btns, .popup-wrapper .auth-confirmation-code .btns {
   display: flex;
   column-gap: 5px;
+}
+.popup-wrapper .auth-confirmation-code .specified-email {
+  font-size: 14px;
+  font-weight: 500;
+}
+.popup-wrapper .auth-confirmation-code .btn-cancel-confirmation-code {
+  background: #fc9500;
 }
 .popup-wrapper .auth button {
   background: #0d9822;
@@ -119,19 +139,6 @@ input {
 }
 .popup-wrapper .auth-error:empty {
   display: none;
-}
-.popup-wrapper .auth .btn-payment {
-  margin-top: 10px;
-  background: #fc9500;
-  color: #fff;
-}
-.popup-wrapper .auth-help {
-  padding: 10px;
-  margin-top: 10px;
-  background: #dadada;
-  border-radius: 14px;
-  font-size: 14px;
-  font-weight: 500;
 }
 .popup-wrapper .app .dates textarea {
   border: 1px solid #c5c5c5;
@@ -170,9 +177,15 @@ input {
   background: #fc9500;
   color: #fff;
 }
-.popup-wrapper .app .dates .btns #last-search {
+.popup-wrapper .app .dates .btns #link-cabinet {
   background: #0d9822;
   color: #fff;
+}
+.popup-wrapper .app .dates #last-search {
+  margin-top: 15px;
+}
+.popup-wrapper .app .dates #last-search:empty {
+  display: none;
 }
 .popup-wrapper .app #btn-check-orders {
   border-radius: 4px;

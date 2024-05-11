@@ -20,15 +20,31 @@
 				<div class="btn-logout hidden">выйти</div>
 			</header>
 
-			<div class="auth">
-				<form>
-					<input type="text" name="key-auth" maxlength="8" placeholder="Ключ авторизации" />
-					<button type="button" class="btn btn-send-key-auth" disabled>Войти</button>
-				</form>
+			<div class="auth hidden">
+				<div class="auth-login hidden">
+					<div class="helper">Если не регистрировались ранее, то на указанный адрес электронной почты вы получите код подтверждения.</div>
+					<input type="text" name="email" placeholder="Эл. почта" />
+					<input type="password" name="password" placeholder="Пароль" />
+					<button type="button" class="btn btn-send-auth" disabled>Войти</button>
+				</div>
+
+				<div class="auth-confirmation-code hidden">
+					<div class="helper">Введите код подтверждения регистрации, полученный на указанный адрес электронной почты.</div>
+					<div class="specified-email"></div>
+					<input type="text" name="confirmation-code" maxlength="4" placeholder="Код подтверждения" />
+					<div class="btns">
+						<button type="button" class="btn btn-send-confirmation-code" disabled>Войти</button>
+						<button type="button" class="btn btn-cancel-confirmation-code">Отмена</button>
+					</div>
+				</div>
 
 				<div class="auth-error"></div>
-				<a href="/wd" target="_blank" class="btn btn-payment hidden">Оплатить</a>
-				<div class="auth-help hidden">Введите ключ авторизации, мы его Вам выслали на эл. почту при регистрации.</div>
+
+				<!-- <form >
+					<input type="text" name="key-auth" maxlength="8" placeholder="Ключ авторизации" />
+				</form> -->
+
+				<!-- <a href="/wd" target="_blank" class="btn btn-payment hidden">Оплатить</a> -->
 			</div>
 
 			<div class="app hidden">
@@ -41,22 +57,14 @@
 					</div> -->
 
 					<div class="btns">
-						<button class="btn" id="search" disabled>Поиск</button>
-
-						<!-- <a href="https://www.aliexpress.com/p/order/index.html?alimanager=1" id="search"  target="_blank">
-							Поиск
-						</a> -->
-
+						<button id="search" class="btn" disabled>Поиск</button>
 						<button id="clear-dates" class="btn">Очистить</button>
-
-						<a
-							href="https://www.aliexpress.com/p/?alimanager=1"
-							target="_blank"
-							id="last-search"
-							class="btn hidden"
-							title="Последняя проверка заказов"
-						></a>
+						<a id="link-cabinet" class="btn" href="https://alimanager.ru" target="_blank">Кабинет</a>
 					</div>
+
+					<div id="last-search"></div>
+
+					<button id="send">Отправить</button>
 				</div>
 
 				<div class="documentation">

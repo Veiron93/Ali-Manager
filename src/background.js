@@ -1,73 +1,3 @@
-//const indexPathName = "/p/order/index.html"; // страница списка заказов
-//const blankPathName = "/p/";
-
-//https://www.aliexpress.com/p/tracking/index.html?spm=a2g0o.order_detail.order_detail_item.2.1043f19cjO8JHB&_addShare=no&_login=yes&tradeOrderId=5354579456413465
-
-//const orderPathName = "/p/order/detail.html"; // страница просмотра заказа
-//const orderPathName = "/order-list/"; // страница просмотра заказа
-
-// chrome.tabs.onActivated.addListener(async () => {
-// 	await chrome.tabs.query({ active: true, lastFocusedWindow: true }).then((currenTab) => {
-// 		let tab = currenTab[0];
-
-// 		if (!getUriParams(tab, "alimanager")) {
-// 			return false;
-// 		}
-
-// 		// список заказов
-// 		// if (getPathNameTab(tab) == indexPathName) {
-// 		// 	(async () => {
-// 		// 		let dates = null;
-
-// 		// 		await chrome.storage.local.get(["datesSearch"]).then((result) => {
-// 		// 			dates = result["datesSearch"];
-// 		// 		});
-
-// 		// 		// это можно удлаить после перехода на storage
-// 		// 		await chrome.scripting.executeScript({
-// 		// 			target: { tabId: tab.id },
-// 		// 			func: (dates) => {
-// 		// 				localStorage.setItem("datesSearch", dates);
-// 		// 			},
-// 		// 			args: [JSON.stringify(dates.split("\n"))],
-// 		// 		});
-// 		// 		// --
-
-// 		// 		await chrome.scripting.executeScript({
-// 		// 			target: { tabId: tab.id },
-// 		// 			files: ["./src/dates.js"],
-// 		// 		});
-
-// 		// 		await chrome.scripting.executeScript({
-// 		// 			target: { tabId: tab.id },
-// 		// 			files: ["./src/orders.js"],
-// 		// 		});
-
-// 		// 		// дата проверки
-// 		// 		let dateNow = new Date();
-
-// 		// 		chrome.storage.local.set({
-// 		// 			["lastSearchOrders"]: dateNow.getDate() + "-" + (dateNow.getMonth() + 1) + "-" + dateNow.getFullYear(),
-// 		// 		});
-// 		// 	})();
-// 		// }
-
-// 		// страница результата -- вскоре убрать при переходе на свой сайт
-// 		if (getPathNameTab(tab) == blankPathName) {
-// 			chrome.scripting.executeScript({
-// 				target: { tabId: tab.id },
-// 				files: ["./src/result.js"],
-// 			});
-
-// 			chrome.scripting.insertCSS({
-// 				target: { tabId: tab.id },
-// 				files: ["./src/result.css"],
-// 			});
-// 		}
-// 		// --
-// 	});
-// });
-
 // страница отслеживания посылки
 const trackUrl = "https://www.aliexpress.com/p/tracking/index.html?alimanager=track-number&tradeOrderId=";
 
@@ -76,8 +6,6 @@ let orders = null;
 let ordersData = [];
 let indexOrder = 0;
 const trackings = new Map();
-
-//let stopScriptInjectedOrderData = false;
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 	// запуск поиска
@@ -92,29 +20,6 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
 		// записываем дату поиска
 		setDateSearch();
-
-		// await chrome.scripting.executeScript({
-		// 	target: { tabId: activeTab.id },
-		// 	files: ["./src/dates.js", "./src/orders.js"],
-		// });
-
-		//let datesSearch = null;
-		//await chrome.storage.local.get(["datesSearch"]).then((result) => (datesSearch = result["datesSearch"]));
-
-		//let datesSearch = await getStorage("datesSearch");
-		//await setStorage("datesSearch", datesSearch.split("\n"));
-
-		//await setStorage("datesSearch", );
-
-		// это можно удалить после перехода на storage
-		// await chrome.scripting.executeScript({
-		// 	target: { tabId: activeTab.id },
-		// 	func: (dates) => {
-		// 		localStorage.setItem("datesSearch", datesSearch);
-		// 	},
-		// 	args: [JSON.stringify(dates.split("\n"))],
-		// });
-		// --
 	}
 
 	// получает список заказов и запускает сбор данных
@@ -129,34 +34,12 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 					orders[0].orderNumber +
 					"%3Falimanager%3Dorder",
 			});
-
-			// .then(() => {
-			// 	let i = false;
-			// 	let idInterval = setInterval(() => {
-			// 		chrome.tabs.query({ active: true }).then((tabs) => {
-			// 			//console.log(tabs[0]);
-			// 			if (tabs[0].status == "complete" && i) {
-			// 				i = true;
-			// 				clearInterval(idInterval);
-			// 				activeTab.stepAlimanager = "orderData";
-			// 			}
-			// 		});
-			// 	}, 10);
-			// });
-
-			// chrome.tabs.create({
-			// 	url:
-			// 		"https://login.aliexpress.ru/?flag=1&return_url=https%3A%2F%2Faliexpress.ru%2Forder-list%2F" +
-			// 		orders[0].orderNumber +
-			// 		"%3Falimanager%3Dorder",
-			// });
 		}
 	}
 
 	// возвращает данные о заказе
 	if (request.orderDataComplete) {
 		ordersData.push(request.orderDataComplete);
-		//stopScriptInjectedOrderData = false;
 
 		if (indexOrder === orders.length - 1) {
 			// 1. закрываем активную вкладку после получения данных о заказах
@@ -183,16 +66,21 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 		});
 
 		if (indexOrder === orders.length - 1) {
-			chrome.tabs.remove(activeTab.id, () => {
+			chrome.tabs.remove(activeTab.id, async () => {
 				activeTab = null;
 				indexOrder = 0;
-				addTrackingsToOrders();
-				//console.log(trackings);
+
+				await addTrackingsToOrders();
+				await sendResult();
 			});
 		} else {
 			indexOrder++;
 			getOrderTrackNumbers();
 		}
+	}
+
+	if (request.send) {
+		await sendResult();
 	}
 });
 
@@ -200,27 +88,43 @@ chrome.tabs.onUpdated.addListener(async () => {
 	// обновение данных активной вкладки
 	await chrome.tabs.query({ active: true }).then((tabs) => (activeTab = tabs[0]));
 
+	let page = getUriParams(activeTab, "alimanager");
+	let pageStatus = activeTab.status;
+
 	// страница данных о заказе - RU версия
-	if (getUriParams(activeTab, "alimanager") === "order" && activeTab.status === "complete") {
+	if (page === "order" && pageStatus === "complete") {
 		addFilesTab(activeTab, ["./src/order-ru.js"]);
-		// chrome.scripting.executeScript({
-		// 	target: { tabId: activeTab.id },
-		// 	files: ["./src/order-ru.js"],
-		// });
-
-		// if (stopScriptInjectedOrderData) {
-		// 	return null;
-		// }
-
-		// stopScriptInjectedOrderData = true;
 	}
 
 	// страница трек-кода посылки
-	if (getUriParams(activeTab, "alimanager") === "track-number" && activeTab.status === "complete") {
+	if (page === "track-number" && pageStatus === "complete") {
 		addFilesTab(activeTab, ["./src/tracking-number.js"]);
-		//console.log(activeTab);
 	}
 });
+
+function sendResult() {
+	return new Promise(async (resolve) => {
+		const orders = await getStorage("ordersData");
+
+		fetch("http://alimanager-server.web/v1/result", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + (await getStorage("auth-token")),
+			},
+			body: JSON.stringify(orders),
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				console.log("Response:", data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+
+		resolve();
+	});
+}
 
 /**
  * Выполняет скрипт из указанной вкладки.

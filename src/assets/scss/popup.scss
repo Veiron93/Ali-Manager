@@ -20,7 +20,7 @@ a {
 }
 
 .btn {
-	height: 40px;
+	height: 36px;
 	width: 110px;
 	display: flex;
 	align-items: center;
@@ -49,7 +49,7 @@ input {
 }
 
 .hidden {
-	display: none;
+	display: none !important;
 }
 
 *[data-farmatted-text] {
@@ -126,9 +126,36 @@ input {
 	}
 
 	.auth {
-		form {
+		&-login,
+		&-confirmation-code {
 			display: flex;
-			column-gap: 5px;
+			flex-direction: column;
+			gap: 7px;
+
+			.helper {
+				padding: 10px;
+				background: #eaeaea;
+				border-radius: $brs;
+				font-size: 14px;
+				font-weight: 500;
+				margin-bottom: 5px;
+			}
+
+			.btns {
+				display: flex;
+				column-gap: 5px;
+			}
+		}
+
+		&-confirmation-code {
+			.specified-email {
+				font-size: 14px;
+				font-weight: 500;
+			}
+
+			.btn-cancel-confirmation-code {
+				background: $color2;
+			}
 		}
 
 		button {
@@ -144,21 +171,6 @@ input {
 			&:empty {
 				display: none;
 			}
-		}
-
-		.btn-payment {
-			margin-top: 10px;
-			background: $color2;
-			color: #fff;
-		}
-
-		&-help {
-			padding: 10px;
-			margin-top: 10px;
-			background: #dadada;
-			border-radius: $brs;
-			font-size: 14px;
-			font-weight: 500;
 		}
 	}
 
@@ -207,9 +219,17 @@ input {
 					color: #fff;
 				}
 
-				#last-search {
+				#link-cabinet {
 					background: $color4;
 					color: #fff;
+				}
+			}
+
+			#last-search {
+				margin-top: 15px;
+
+				&:empty {
+					display: none;
 				}
 			}
 		}
