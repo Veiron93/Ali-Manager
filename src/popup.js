@@ -12,11 +12,6 @@ class Popup {
 
 	waitingConfirmReg = false;
 
-	errorAuth = {
-		code: null,
-		text: null,
-	};
-
 	// ELEMENTS
 	// Popup
 	popupContainer = null;
@@ -39,11 +34,6 @@ class Popup {
 	btnSendConfirmationCodeAuthElement = null;
 	btnCancelConfirmationCodeAuthElement = null;
 
-	// del
-	inputKeyAuthElement = null;
-	btnSendKeyAuthElement = null;
-	btnPaymentAuthElement = null;
-
 	// App
 	appContainer = null;
 	inputDatesAppElement = null;
@@ -56,6 +46,8 @@ class Popup {
 
 	constructor() {
 		(async () => {
+			chrome.action.setPopup({ popup: "/src/popup2.html" });
+
 			await Promise.all([this.onIsAuth(), this.initElementsPopup(), this.initElementsAuth(), this.initElementsApp()]);
 
 			this.initEventsPopup();
@@ -67,14 +59,16 @@ class Popup {
 			this.initApp();
 
 			///////// это для тестов
-			this.btnSend = document.getElementById("send");
+			// this.btnSend = document.getElementById("send");
 
-			this.btnSend.addEventListener("click", () => {
-				chrome.runtime.sendMessage({ send: true });
-			});
+			// this.btnSend.addEventListener("click", () => {
+			// 	chrome.runtime.sendMessage({ send: true });
+			// });
 		})();
 	}
 
+	// INIT ELEMENTS
+	// popup
 	initElementsPopup() {
 		return new Promise((resolve) => {
 			document.addEventListener("DOMContentLoaded", () => {
@@ -86,123 +80,11 @@ class Popup {
 		});
 	}
 
-	initEventsPopup() {
-		// очистка поля ввода даты
-		this.btnLogoutElement.addEventListener("click", () => this.onLogout());
-	}
-
-	initPopup() {
-		if (this.isAuth) {
-			this.stateClassElement(true, this.btnLogoutElement);
-		}
-	}
-
-	onLogout() {
-		this.clearStorageLocal("isAuth");
-		this.appContainer.remove();
-		this.popupContainer.append(this.authContainer);
-		this.stateClassElement(false, this.btnLogoutElement);
-	}
-
-	async onAuth() {
-		// сделать прелоадер отправки данных
-
-		fetch(this.api + "/auth", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				email: this.inputEmailAuthElement.value,
-				password: this.inputPasswordAuthElement.value,
-			}),
-		})
-			.then((response) => response.json())
-			.then((response) => {
-				if (response.type == 1) {
-					this.newUser(response.user);
-				}
-
-				if (response.type == 2) {
-				}
-
-				console.log(response);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}
-
-	async newUser(userData) {
-		return new Promise((resolve) => {
-			const user = {
-				email: userData.email,
-			};
-
-			this.setStorageLocal("user", user);
-			this.setStorageLocal("waitingConfirmReg", true);
-			this.specifiedEmailAuthElement.textContent = user.email;
-
-			this.stateClassElement(false, this.loginWrapperAuthElement);
-			this.stateClassElement(true, this.confirmationCodeWrapperAuthElement);
-
-			resolve();
-		});
-	}
-
-	async onIsAuth() {
-		this.authToken = this.getStorageLocal("auth-token");
-
-		if (!this.authToken) {
-			return false;
-		}
-
-		this.isAuth = false;
-
-		this.setStorageLocal("isAuth", this.isAuth);
-	}
-
-	// удалить
-	// async checkAuth() {
-	// 	if (this.keyLicense) {
-	// 		await this.setStorageLocal("isAuth", true);
-
-	// 		this.stateApp(true);
-
-	// 		return false;
-	// 		// let error = {
-	// 		// 	code: 1,
-	// 		// 	text: "Закончилась подписка",
-	// 		// };
-
-	// 		let error = {
-	// 			code: 0,
-	// 			text: "Ключ недействителен",
-	// 		};
-
-	// 		this.onErrorAuth(error);
-	// 		//this.stateAuthHelp(false);
-	// 	} else {
-	// 		//this.stateAuthHelp(true);
-	// 	}
-
-	// 	// return fetch(this.api + "/auth-extansion/", {
-	// 	// 	method: "POST",
-	// 	// 	headers: {
-	// 	// 		key: this.keyLicense,
-	// 	// 	},
-	// 	// })
-	// 	// 	.then((response) => response.json())
-	// 	// 	.then((result) => {
-	// 	// 		console.log(result);
-	// 	// 	});
-	// }
-
+	// auth
 	initElementsAuth() {
 		return new Promise((resolve) => {
 			document.addEventListener("DOMContentLoaded", () => {
 				this.authContainer = document.querySelector(".auth");
-				//this.helpAuthElement = this.authContainer.querySelector(".auth-help");
 				this.errorAuthElement = this.authContainer.querySelector(".auth-error");
 
 				// login
@@ -218,23 +100,37 @@ class Popup {
 				this.btnSendConfirmationCodeAuthElement = this.confirmationCodeWrapperAuthElement.querySelector(".btn-send-confirmation-code");
 				this.btnCancelConfirmationCodeAuthElement = this.confirmationCodeWrapperAuthElement.querySelector(".btn-cancel-confirmation-code");
 
-				//this.btnPaymentAuthElement = this.authContainer.querySelector(".btn-payment");
+				resolve();
+			});
+		});
+	}
 
-				// loginWrapperAuthElement = null;
-				// inputEmailAuthElement = null;
-				// inputPasswordAuthElement = null;
-				// btnSendAuthElement = null;
-
-				// // confirmation code
-				// confirmationCodeWrapperAuthElement = null;
-				// inputConfirmationCodeAuthElement = null;
-				// btnSendConfirmationCodeAuthElement = null;
+	// app
+	initElementsApp() {
+		return new Promise((resolve) => {
+			document.addEventListener("DOMContentLoaded", () => {
+				this.appContainer = document.querySelector(".app");
+				this.inputDatesAppElement = this.appContainer.querySelector("#dates");
+				this.btnSearchAppElement = this.appContainer.querySelector("#search");
+				this.btnClearDatesAppElement = this.appContainer.querySelector("#clear-dates");
+				this.lastSearchAppElement = this.appContainer.querySelector("#last-search");
+				this.paramsSearchAppElement = this.appContainer.querySelectorAll(".params input");
+				this.documentationAppElement = this.appContainer.querySelector(".documentation");
+				this.btnDocumentationMoreAppElement = this.documentationAppElement.querySelector(".documentation_btn-more");
 
 				resolve();
 			});
 		});
 	}
 
+	// INIT EVENTS
+	// popup
+	initEventsPopup() {
+		// очистка поля ввода даты
+		this.btnLogoutElement.addEventListener("click", () => this.onLogout());
+	}
+
+	// auth
 	initEventsAuth() {
 		// login
 		this.inputEmailAuthElement.addEventListener("input", () => this.stateBthAuth());
@@ -246,10 +142,7 @@ class Popup {
 			if (this.validationEmail(this.inputEmailAuthElement.value)) {
 				this.onAuth();
 			} else {
-				this.onErrorAuth({
-					code: 3,
-					text: "Некорректный формат электронной почты",
-				});
+				this.onErrorAuth("Некорректный формат электронной почты");
 			}
 		});
 
@@ -266,50 +159,198 @@ class Popup {
 
 		// кнопка отправки кода подтверждения
 		this.btnSendConfirmationCodeAuthElement.addEventListener("click", () => this.confirmRegistration());
-
-		// поле ввода ключа
-		// this.inputKeyAuthElement.addEventListener("input", () => {
-		// 	this.inputKeyAuthElement.value = this.inputKeyAuthElement.value.replace(/\s/g, "");
-		// 	let stateBtnSendKey = false;
-		// 	if (this.inputKeyAuthElement.value.length == 8) {
-		// 		stateBtnSendKey = true;
-		// 	} else {
-		// 		this.clearErrorAuth();
-		// 	}
-		// 	if (!this.inputKeyAuthElement.value.length) {
-		// 		this.stateAuthHelp(true);
-		// 	}
-		// 	this.stateBtnSendKey(stateBtnSendKey);
-		// });
-		// кнопка отправки ключа
-		// this.btnSendKeyAuthElement.addEventListener("click", () => {
-		// 	let key = this.inputKeyAuthElement.value;
-		// 	if (!key) return false;
-		// 	chrome.storage.local.set({ ["keyAuth"]: key });
-		// 	this.checkAuth();
-		// });
 	}
 
+	// app
+	initEventsApp() {
+		// поиск
+		this.btnSearchAppElement.addEventListener("click", () => this.sendStartSearchApp());
+
+		// очистка поля ввода даты
+		this.btnClearDatesAppElement.addEventListener("click", () => this.onClearDatesApp());
+
+		// отслеживание поля ввода даты
+		this.inputDatesAppElement.addEventListener("input", () => this.onChangeDatesApp());
+
+		// документация
+		this.btnDocumentationMoreAppElement.addEventListener("click", () => this.stateDocumentationApp());
+	}
+
+	// INIT
+	// popup
+	initPopup() {
+		if (this.isAuth) {
+			this.stateClassElement(true, this.btnLogoutElement);
+		}
+	}
+
+	// auth
 	async initAuth() {
+		// console.log("2");
+
 		this.user = await this.getStorageLocal("user");
 		this.waitingConfirmReg = await this.getStorageLocal("waitingConfirmReg");
 
 		this.stateClassElement(this.isAuth ? false : true, this.authContainer);
+
+		// форма авторизации/регистрации
+		if (!this.isAuth && !this.waitingConfirmReg) {
+			this.stateClassElement(true, this.loginWrapperAuthElement);
+
+			if (this.user.email) {
+				this.inputEmailAuthElement.value = this.user.email;
+			}
+		}
 
 		// форма подтверждения регистрации
 		if (!this.isAuth && this.waitingConfirmReg) {
 			this.specifiedEmailAuthElement.textContent = this.user.email;
 			this.stateClassElement(true, this.confirmationCodeWrapperAuthElement);
 		}
+	}
 
-		// форма авторизации/регистрации
-		if (!this.isAuth && !this.waitingConfirmReg) {
-			this.stateClassElement(true, this.loginWrapperAuthElement);
+	// app
+	initApp() {
+		if (this.isAuth) {
+			this.stateClassElement(true, this.appContainer);
+		}
+
+		// дата
+		this.getStorageLocal("datesSearch").then((result) => {
+			if (result) {
+				this.inputDatesAppElement.value = result.join("\n");
+				this.stateBtnSearchApp(true);
+			}
+		});
+
+		this.onLastSearch();
+	}
+
+	onLogout() {
+		this.clearStorageLocal("isAuth");
+		this.appContainer.remove();
+		this.popupContainer.append(this.authContainer);
+		this.stateClassElement(false, this.btnLogoutElement);
+	}
+
+	async onAuth() {
+		// сделать прелоадер отправки данных
+		fetch(this.api + "/auth", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				email: this.inputEmailAuthElement.value,
+				password: this.inputPasswordAuthElement.value,
+			}),
+		})
+			.then(async (response) => {
+				if (!response.ok) {
+					return response.text().then((data) => {
+						throw new Error(data);
+					});
+				}
+
+				return response.json();
+			})
+			.then((response) => {
+				if (response.type == 1) {
+					this.newUser(response.user);
+				}
+
+				if (response.type == 2) {
+					this.stateApp(true);
+					this.stateClassElement(false, this.loginWrapperAuthElement);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
+	stateApp(state) {
+		this.waitingConfirmReg = false;
+		this.clearStorageLocal("waitingConfirmReg");
+
+		if (state) {
+			this.isAuth = true;
+
+			this.setStorageLocal("isAuth", true);
+			this.setStorageLocal("authToken", response.token);
+
+			this.stateClassElement(true, this.appContainer);
+		} else {
+			this.isAuth = false;
+
+			this.setStorageLocal("isAuth", false);
+			this.clearStorageLocal("authToken");
+
+			this.stateClassElement(false, this.appContainer);
 		}
 	}
 
+	async newUser(userData) {
+		return new Promise((resolve) => {
+			this.user = userData;
+
+			this.setStorageLocal("user", userData);
+			this.setStorageLocal("waitingConfirmReg", true);
+			this.specifiedEmailAuthElement.textContent = userData.email;
+
+			this.stateClassElement(false, this.loginWrapperAuthElement);
+			this.stateClassElement(true, this.confirmationCodeWrapperAuthElement);
+
+			resolve();
+		});
+	}
+
+	async onIsAuth() {
+		return new Promise(async (resolve) => {
+			//console.log(1);
+
+			this.authToken = await this.getStorageLocal("authToken");
+			this.user = await this.getStorageLocal("user");
+
+			if (!this.authToken) {
+				resolve();
+				return false;
+			}
+
+			fetch(this.api + "/is-auth", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + this.authToken,
+				},
+				body: JSON.stringify({ email: this.user.email }),
+			})
+				.then(async (response) => {
+					if (!response.ok) {
+						return response.text().then((data) => {
+							throw new Error(data);
+						});
+					}
+
+					return response.json();
+				})
+				.then((response) => {
+					//this.stateApp(true);
+
+					this.isAuth = true;
+					this.setStorageLocal("isAuth", true);
+
+					resolve();
+				})
+				.catch((error) => {
+					console.log(error);
+					resolve();
+				});
+		});
+	}
+
 	cancelRegistration() {
-		this.clearErrorAuth();
+		this.onErrorAuth();
 		this.user = false;
 		this.clearStorageLocal("user");
 		this.clearStorageLocal("waitingConfirmReg");
@@ -340,22 +381,26 @@ class Popup {
 				code: this.inputConfirmationCodeAuthElement.value,
 			}),
 		})
-			.then((response) => response.json())
+			.then(async (response) => {
+				if (!response.ok) {
+					return response.text().then((data) => {
+						throw new Error(data);
+					});
+				}
+
+				return response.json();
+			})
 			.then((response) => {
 				if (response.token) {
-					this.isAuth = true;
-					this.waitingConfirmReg = false;
-
-					this.setStorageLocal("user", this.user);
-					this.clearStorageLocal("waitingConfirmReg");
-					this.setStorageLocal("authToken", response.authToken);
-
+					this.setStorageLocal("authToken", response.token);
 					this.stateClassElement(false, this.confirmationCodeWrapperAuthElement);
-					this.stateClassElement(true, this.appContainer);
+					this.stateApp(true);
+					this.onErrorAuth();
 				}
 			})
 			.catch((error) => {
-				console.log(error);
+				this.onErrorAuth(error);
+				//console.log(error);
 			});
 	}
 
@@ -374,66 +419,11 @@ class Popup {
 		return true;
 	}
 
-	onErrorAuth(error) {
-		this.clearStorageLocal("isAuth");
-
-		this.errorAuth.code = error.code;
-		this.errorAuth.text = error.text;
-
-		this.errorAuthElement.textContent = error.text;
-
-		if (error.code == 1) {
-			this.stateBtnPaymentAuth(true);
-		}
-	}
-
-	clearErrorAuth() {
-		this.errorAuth.code = null;
-		this.errorAuth.text = null;
-
-		this.errorAuthElement.textContent = "";
-	}
-
-	stateBtnPaymentAuth(state) {
-		if (state) {
-			this.btnPaymentAuthElement.classList.remove("hidden");
-		} else {
-			this.btnPaymentAuthElement.classList.add("hidden");
-		}
+	onErrorAuth(errorText = "") {
+		this.errorAuthElement.textContent = errorText;
 	}
 
 	// APP
-	initElementsApp() {
-		return new Promise((resolve) => {
-			document.addEventListener("DOMContentLoaded", () => {
-				this.appContainer = document.querySelector(".app");
-				this.inputDatesAppElement = this.appContainer.querySelector("#dates");
-				this.btnSearchAppElement = this.appContainer.querySelector("#search");
-				this.btnClearDatesAppElement = this.appContainer.querySelector("#clear-dates");
-				this.lastSearchAppElement = this.appContainer.querySelector("#last-search");
-				this.paramsSearchAppElement = this.appContainer.querySelectorAll(".params input");
-				this.documentationAppElement = this.appContainer.querySelector(".documentation");
-				this.btnDocumentationMoreAppElement = this.documentationAppElement.querySelector(".documentation_btn-more");
-
-				resolve();
-			});
-		});
-	}
-
-	initEventsApp() {
-		// поиск
-		this.btnSearchAppElement.addEventListener("click", () => this.sendStartSearchApp());
-
-		// очистка поля ввода даты
-		this.btnClearDatesAppElement.addEventListener("click", () => this.onClearDatesApp());
-
-		// отслеживание поля ввода даты
-		this.inputDatesAppElement.addEventListener("input", () => this.onChangeDatesApp());
-
-		// документация
-		this.btnDocumentationMoreAppElement.addEventListener("click", () => this.stateDocumentationApp());
-	}
-
 	stateApp(state) {
 		if (state) {
 			this.appContainer.classList.remove("hidden");
@@ -482,22 +472,6 @@ class Popup {
 
 	stateDocumentationApp() {
 		this.documentationAppElement.classList.toggle("active");
-	}
-
-	initApp() {
-		if (this.isAuth) {
-			this.stateClassElement(true, this.appContainer);
-		}
-
-		// дата
-		this.getStorageLocal("datesSearch").then((result) => {
-			if (result) {
-				this.inputDatesAppElement.value = result.join("\n");
-				this.stateBtnSearchApp(true);
-			}
-		});
-
-		this.onLastSearch();
 	}
 
 	// дата последней проверки заказа
