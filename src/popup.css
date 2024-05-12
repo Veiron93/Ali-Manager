@@ -24,10 +24,22 @@ a {
   cursor: pointer;
   user-select: none;
   background: #000;
+  color: #fff;
 }
 .btn[disabled], .btn.disabled {
   opacity: 0.5;
   pointer-events: none;
+  box-shadow: none;
+}
+.btn--red {
+  box-shadow: 2px 2px 5px 0px rgba(182, 31, 5, 0.4);
+  background: linear-gradient(135deg, rgb(230, 42, 14) 0%, #b61f05 100%);
+  color: #fff;
+}
+.btn--green {
+  box-shadow: 2px 2px 5px 0px rgba(13, 152, 34, 0.5);
+  background: linear-gradient(135deg, rgb(44, 199, 67) 0%, #0d9822 100%);
+  color: #fff;
 }
 
 input {
@@ -59,12 +71,86 @@ input {
   margin-bottom: 7px;
 }
 
+.popup {
+  position: relative;
+  width: 350px;
+  padding: 55px 10px 10px;
+  background: transparent;
+  border: 2px solid #b61f05;
+}
+.popup header {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  background: #b61f05;
+}
+.popup header a,
+.popup header span {
+  color: #fff;
+}
+.popup header a {
+  display: flex;
+  column-gap: 7px;
+}
+.popup header a .header-name {
+  font-size: 18px;
+  font-weight: 500;
+}
+.popup header a .header-version {
+  font-size: 13px;
+  display: flex;
+  column-gap: 4px;
+}
+.popup header span {
+  font-size: 14px;
+  margin-left: auto;
+}
+.popup header .btn-logout {
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: #000;
+  margin-left: auto;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  background: #830303;
+}
+.popup .helper {
+  padding: 10px;
+  background: #eaeaea;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.auth-login {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.subscription {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eaeaea;
+}
+.subscription-status {
+  font-size: 15px;
+  font-weight: 500;
+}
 .popup-wrapper {
   position: relative;
   width: 350px;
   padding: 55px 10px 10px;
   background: #fff;
-  border: 2px solid #ca2709;
+  border: 2px solid #b61f05;
 }
 .popup-wrapper header {
   display: flex;
@@ -74,7 +160,7 @@ input {
   left: 0;
   width: 100%;
   padding: 10px;
-  background: #ca2709;
+  background: #b61f05;
 }
 .popup-wrapper header a,
 .popup-wrapper header span {
@@ -134,7 +220,7 @@ input {
 .popup-wrapper .auth-error {
   font-weight: bold;
   font-size: 14px;
-  color: #ca2709;
+  color: #b61f05;
   margin-top: 10px;
 }
 .popup-wrapper .auth-error:empty {
@@ -170,7 +256,7 @@ input {
   margin-top: 10px;
 }
 .popup-wrapper .app .dates .btns #search {
-  background: #ca2709;
+  background: #b61f05;
   color: #fff;
 }
 .popup-wrapper .app .dates .btns #clear-dates {
@@ -189,7 +275,7 @@ input {
 }
 .popup-wrapper .app #btn-check-orders {
   border-radius: 4px;
-  background: #ca2709;
+  background: #b61f05;
   border: none;
   color: #fff;
   padding: 10px 20px;
@@ -230,7 +316,7 @@ input {
   display: none;
 }
 .popup-wrapper .app .documentation_content ol li a {
-  color: #ca2709;
+  color: #b61f05;
 }
 .popup-wrapper .app .documentation_btn-more {
   margin-top: 20px;

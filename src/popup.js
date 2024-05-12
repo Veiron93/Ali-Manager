@@ -2,6 +2,8 @@
  * расширение для браузера
  */
 
+//chrome.action.setPopup({ popup: "/src/popup2.html" });
+
 class Popup {
 	api = "http://alimanager-server.web/api/app/v1";
 
@@ -46,8 +48,6 @@ class Popup {
 
 	constructor() {
 		(async () => {
-			chrome.action.setPopup({ popup: "/src/popup2.html" });
-
 			await Promise.all([this.onIsAuth(), this.initElementsPopup(), this.initElementsAuth(), this.initElementsApp()]);
 
 			this.initEventsPopup();
