@@ -4,6 +4,8 @@
 
 //chrome.action.setPopup({ popup: "/src/popup2.html" });
 
+return false;
+
 class Popup {
 	api = "http://alimanager-server.web/api/app/v1";
 

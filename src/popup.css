@@ -18,7 +18,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
+  border-radius: 8px;
   font-size: 14px;
   border: none;
   cursor: pointer;
@@ -41,9 +41,14 @@ a {
   background: linear-gradient(135deg, rgb(44, 199, 67) 0%, #0d9822 100%);
   color: #fff;
 }
+.btn--orange {
+  box-shadow: 2px 2px 5px 0px rgba(252, 149, 0, 0.5);
+  background: linear-gradient(135deg, rgb(250, 208, 0) 0%, #fc9500 100%);
+  color: #fff;
+}
 
 input {
-  border-radius: 14px;
+  border-radius: 8px;
   border: 1px solid #c5c5c5;
   padding: 10px;
   width: 100%;
@@ -122,15 +127,29 @@ input {
 .popup .helper {
   padding: 10px;
   background: #eaeaea;
-  border-radius: 14px;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
 }
 
-.auth-login {
+.auth-login,
+.confirmation {
   display: flex;
   flex-direction: column;
   gap: 7px;
+}
+.auth-login .btns,
+.confirmation .btns {
+  display: flex;
+  column-gap: 5px;
+}
+
+.confirmation .user-email {
+  font-size: 14px;
+  font-weight: 500;
+}
+.confirmation .user-email:empty {
+  display: none;
 }
 
 .subscription {
@@ -197,7 +216,7 @@ input {
 .popup-wrapper .auth-login .helper, .popup-wrapper .auth-confirmation-code .helper {
   padding: 10px;
   background: #eaeaea;
-  border-radius: 14px;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 5px;
@@ -233,7 +252,7 @@ input {
   min-height: 80px;
   overflow: auto;
   resize: vertical;
-  border-radius: 14px;
+  border-radius: 8px;
   font-size: 16px;
 }
 .popup-wrapper .app .dates .params {
@@ -287,7 +306,7 @@ input {
   margin-top: 15px;
   background: #f3f3f3;
   padding: 10px;
-  border-radius: 14px;
+  border-radius: 8px;
   overflow: hidden;
 }
 .popup-wrapper .app .documentation.active ol {

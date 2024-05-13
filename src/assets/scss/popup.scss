@@ -4,7 +4,7 @@ $color2: #fc9500;
 $color3: #eaeaea;
 $color4: #0d9822;
 
-$brs: 14px;
+$brs: 8px;
 
 * {
 	box-sizing: border-box;
@@ -49,6 +49,12 @@ a {
 	&--green {
 		box-shadow: 2px 2px 5px 0px rgba($color4, 0.5);
 		background: linear-gradient(135deg, rgba(44, 199, 67, 1) 0%, rgba($color4, 1) 100%);
+		color: #fff;
+	}
+
+	&--orange {
+		box-shadow: 2px 2px 5px 0px rgba($color2, 0.5);
+		background: linear-gradient(135deg, rgba(250, 208, 0, 1) 0%, rgba($color2, 1) 100%);
 		color: #fff;
 	}
 }
@@ -152,10 +158,27 @@ input {
 	}
 }
 
-.auth-login {
+.auth-login,
+.confirmation {
 	display: flex;
 	flex-direction: column;
 	gap: 7px;
+
+	.btns {
+		display: flex;
+		column-gap: 5px;
+	}
+}
+
+.confirmation {
+	.user-email {
+		font-size: 14px;
+		font-weight: 500;
+
+		&:empty {
+			display: none;
+		}
+	}
 }
 
 .subscription {

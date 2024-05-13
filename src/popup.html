@@ -10,7 +10,11 @@
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet" />
 
 		<link rel="stylesheet" href="popup.css" />
-		<script src="popup.js"></script>
+		<!-- <script src="popup.js"></script> -->
+		<script src="./popup/HelpersPopup.js"></script>
+		<script src="./popup/AuthLoginPopup.js"></script>
+		<script src="./popup/ConfirmationPopup.js"></script>
+		<script src="./popup/Popup.js"></script>
 	</head>
 	<body>
 		<div class="popup">
@@ -25,24 +29,35 @@
 				<div class="btn-logout hidden">выйти</div>
 			</header>
 
+			<!-- Лоадер -->
+			<div class="loader hidden">Подождите...</div>
+
 			<!-- Авторизация / Регистрация  -->
-			<div class="auth-login">
+			<div class="auth-login hidden">
 				<div class="helper">Если Вы не зарегистрированы, то на Email придет код подтверждения.</div>
 				<input type="text" name="email" placeholder="Email" />
 				<input type="password" name="password" placeholder="Пароль" />
-				<button type="button" class="btn btn--red btn-login btn-send-auth" disabled>Войти</button>
-
-				<!-- disabled -->
+				<div class="btns">
+					<button type="button" class="btn btn--red btn-login btn-send-auth" disabled>Войти</button>
+				</div>
 			</div>
 
 			<!-- Подтверждение -->
-			<div class="auth-confirmation"></div>
+			<div class="confirmation hidden">
+				<div class="helper">Введите код подтверждения, мы его отправили на Ваш Email.</div>
+				<div class="user-email"></div>
+				<input type="text" name="confirmation-code" maxlength="4" placeholder="Код подтверждения" />
+				<div class="btns">
+					<button type="button" class="btn btn--red btn-send-confirmation-code" disabled>Войти</button>
+					<button type="button" class="btn btn--orange btn-cancel-confirmation-code">Отмена</button>
+				</div>
+			</div>
 
 			<!-- Поиск -->
-			<div class="search-orders"></div>
+			<div class="search-orders hidden"></div>
 
 			<!-- Подписка -->
-			<div class="subscription">
+			<div class="subscription hidden">
 				<div class="subscription-status">Подписка до 10.12.2024</div>
 				<a class="subscription-pay btn btn--green" href="https://alimanager.ru" target="_blank">Оплатить</a>
 			</div>
