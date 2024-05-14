@@ -5,6 +5,7 @@ class Popup extends HelpersPopup {
 		super();
 
 		(async () => {
+			window.loader = new LoaderPopup();
 			window.login = new AuthLoginPopup();
 			window.confirmation = new ConfirmationPopup();
 
@@ -17,14 +18,12 @@ class Popup extends HelpersPopup {
 	initElements() {
 		return new Promise((resolve) => {
 			this.container = document.querySelector(".auth-login");
-			console.log(this.container);
 			resolve();
 		});
 	}
 
 	async onAuth() {
-		await this.setStorageLocal("isAuth", false);
-		//await this.setStorageLocal("waitingConfirmation", true);
+		await this.setStorageLocal("isAuth", true);
 	}
 
 	async init() {
@@ -39,6 +38,7 @@ class Popup extends HelpersPopup {
 
 		if (isAuth) {
 			// поиск
+			console.log("открыть приложение");
 		}
 
 		if (waitingConfirmation) {

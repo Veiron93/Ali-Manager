@@ -12,6 +12,7 @@
 		<link rel="stylesheet" href="popup.css" />
 		<!-- <script src="popup.js"></script> -->
 		<script src="./popup/HelpersPopup.js"></script>
+		<script src="./popup/LoaderPopup.js"></script>
 		<script src="./popup/AuthLoginPopup.js"></script>
 		<script src="./popup/ConfirmationPopup.js"></script>
 		<script src="./popup/Popup.js"></script>
@@ -30,7 +31,10 @@
 			</header>
 
 			<!-- Лоадер -->
-			<div class="loader hidden">Подождите...</div>
+			<!-- hidden -->
+			<div class="loader hidden">
+				<div class="animation"></div>
+			</div>
 
 			<!-- Авторизация / Регистрация  -->
 			<div class="auth-login hidden">
@@ -40,6 +44,7 @@
 				<div class="btns">
 					<button type="button" class="btn btn--red btn-login btn-send-auth" disabled>Войти</button>
 				</div>
+				<div class="error"></div>
 			</div>
 
 			<!-- Подтверждение -->
@@ -48,9 +53,10 @@
 				<div class="user-email"></div>
 				<input type="text" name="confirmation-code" maxlength="4" placeholder="Код подтверждения" />
 				<div class="btns">
-					<button type="button" class="btn btn--red btn-send-confirmation-code" disabled>Войти</button>
-					<button type="button" class="btn btn--orange btn-cancel-confirmation-code">Отмена</button>
+					<button type="button" class="btn btn--red btn-send-code" disabled>Войти</button>
+					<button type="button" class="btn btn--orange btn-cancel">Отмена</button>
 				</div>
+				<div class="error"></div>
 			</div>
 
 			<!-- Поиск -->
