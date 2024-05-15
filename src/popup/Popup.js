@@ -8,6 +8,7 @@ class Popup extends HelpersPopup {
 			window.loader = new LoaderPopup();
 			window.login = new AuthLoginPopup();
 			window.confirmation = new ConfirmationPopup();
+			window.searchOrders = new SearchOrdersPopup();
 
 			await this.onAuth();
 			await this.initElements();
@@ -37,8 +38,7 @@ class Popup extends HelpersPopup {
 		}
 
 		if (isAuth) {
-			// поиск
-			console.log("открыть приложение");
+			showContainer = window.searchOrders.container;
 		}
 
 		if (waitingConfirmation) {

@@ -8,7 +8,6 @@
 }
 
 a {
-  color: #fc9500;
   text-decoration: none;
 }
 
@@ -34,25 +33,37 @@ a {
 .btn--red {
   box-shadow: 2px 2px 5px 0px rgba(182, 31, 5, 0.4);
   background: linear-gradient(135deg, rgb(230, 42, 14) 0%, #b61f05 100%);
-  color: #fff;
 }
 .btn--green {
   box-shadow: 2px 2px 5px 0px rgba(13, 152, 34, 0.5);
   background: linear-gradient(135deg, rgb(44, 199, 67) 0%, #0d9822 100%);
-  color: #fff;
 }
 .btn--orange {
   box-shadow: 2px 2px 5px 0px rgba(252, 149, 0, 0.5);
   background: linear-gradient(135deg, rgb(250, 208, 0) 0%, #fc9500 100%);
-  color: #fff;
+}
+.btn--blue {
+  box-shadow: 2px 2px 5px 0px rgba(13, 130, 152, 0.5);
+  background: linear-gradient(135deg, rgb(250, 208, 0) 0%, #0d8298 100%);
+  background: linear-gradient(135deg, rgb(49, 172, 194) 0%, rgb(13, 131, 152) 100%);
 }
 
+textarea,
 input {
   border-radius: 8px;
-  border: 1px solid #c5c5c5;
+  border: 1px solid #dadada;
   padding: 10px;
   width: 100%;
   font-size: 16px;
+  outline: none;
+}
+
+textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+input {
   height: 40px;
 }
 
@@ -73,7 +84,7 @@ input {
 }
 *[data-farmatted-text] ul li:not(:last-child),
 *[data-farmatted-text] ol li:not(:last-child) {
-  margin-bottom: 7px;
+  margin-bottom: 5px;
 }
 
 .popup {
@@ -141,7 +152,7 @@ input {
 .auth-login .btns,
 .confirmation .btns {
   display: flex;
-  column-gap: 5px;
+  column-gap: 7px;
 }
 .auth-login .error,
 .confirmation .error {
@@ -163,6 +174,77 @@ input {
   display: none;
 }
 
+.search-orders .search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.search-orders .search-form .btns {
+  display: flex;
+  column-gap: 7px;
+}
+.search-orders .last-search {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  width: 100%;
+}
+.search-orders .documentation {
+  margin-top: 15px;
+  background: #f3f3f3;
+  padding: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.search-orders .documentation.active ol {
+  display: block;
+}
+.search-orders .documentation.active .documentation_btn-more:before {
+  content: "Свернуть";
+}
+.search-orders .documentation_content .formatted-dates {
+  list-style-type: none;
+  margin-left: 0;
+}
+.search-orders .documentation_content .formatted-dates li:not(:last-child) {
+  margin-bottom: 5px;
+}
+.search-orders .documentation_content .formatted-dates li span {
+  padding: 7px 12px;
+  background: #fbd49d;
+  border-radius: 8px;
+  display: inline-block;
+  font-weight: 500;
+  font-size: 16px;
+}
+.search-orders .documentation_content ol {
+  margin-top: 15px;
+  display: none;
+}
+.search-orders .documentation_content ol li a {
+  color: #b61f05;
+}
+.search-orders .documentation_btn-more {
+  margin-top: 20px;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  padding: 8px 0;
+  margin-top: 10px;
+  border-radius: 8px;
+  transition: background 0.2s;
+  background: #dedede;
+}
+.search-orders .documentation_btn-more:before {
+  content: "Подробнее";
+  font-size: 14px;
+  font-weight: 500;
+  display: inline;
+}
+.search-orders .documentation_btn-more:hover {
+  background: #d6d6d6;
+}
+
 .subscription {
   display: flex;
   align-items: center;
@@ -171,9 +253,8 @@ input {
   padding-top: 10px;
   border-top: 1px solid #eaeaea;
 }
-.subscription-status {
-  font-size: 15px;
-  font-weight: 500;
+.subscription_status {
+  font-size: 14px;
 }
 .loader {
   position: absolute;
@@ -316,7 +397,7 @@ input {
   display: none;
 }
 .popup-wrapper .app .dates textarea {
-  border: 1px solid #c5c5c5;
+  border: 1px solid #dadada;
   padding: 10px;
   width: 100%;
   min-height: 80px;

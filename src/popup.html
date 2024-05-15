@@ -10,12 +10,15 @@
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet" />
 
 		<link rel="stylesheet" href="popup.css" />
-		<!-- <script src="popup.js"></script> -->
+
 		<script src="./popup/HelpersPopup.js"></script>
 		<script src="./popup/LoaderPopup.js"></script>
 		<script src="./popup/AuthLoginPopup.js"></script>
 		<script src="./popup/ConfirmationPopup.js"></script>
+		<script src="./popup/SearchOrdersPopup.js"></script>
 		<script src="./popup/Popup.js"></script>
+
+		<!-- <script src="./popup/Tests.js"></script> -->
 	</head>
 	<body>
 		<div class="popup">
@@ -31,7 +34,6 @@
 			</header>
 
 			<!-- Лоадер -->
-			<!-- hidden -->
 			<div class="loader hidden">
 				<div class="animation"></div>
 			</div>
@@ -60,68 +62,24 @@
 			</div>
 
 			<!-- Поиск -->
-			<div class="search-orders hidden"></div>
+			<div class="search-orders hidden">
+				<div class="search-form">
+					<textarea name="search-orders-dates" placeholder="Введите дату заказа"></textarea>
 
-			<!-- Подписка -->
-			<div class="subscription hidden">
-				<div class="subscription-status">Подписка до 10.12.2024</div>
-				<a class="subscription-pay btn btn--green" href="https://alimanager.ru" target="_blank">Оплатить</a>
-			</div>
-		</div>
-
-		<div class="popup-wrapper hidden">
-			<header>
-				<a href="https://alimanager.ru" target="_blank">AliManager</a>
-				<span>0.0.1</span>
-				<div class="btn-logout hidden">выйти</div>
-			</header>
-
-			<div class="auth hidden">
-				<div class="auth-login hidden">
-					<div class="helper">Если не регистрировались ранее, то на указанный адрес электронной почты вы получите код подтверждения.</div>
-					<input type="text" name="email" placeholder="Эл. почта" />
-					<input type="password" name="password" placeholder="Пароль" />
-					<button type="button" class="btn btn-send-auth" disabled>Войти</button>
-				</div>
-
-				<div class="auth-confirmation-code hidden">
-					<div class="helper">Введите код подтверждения регистрации, полученный на указанный адрес электронной почты.</div>
-					<div class="specified-email"></div>
-					<input type="text" name="confirmation-code" maxlength="4" placeholder="Код подтверждения" />
 					<div class="btns">
-						<button type="button" class="btn btn-send-confirmation-code" disabled>Войти</button>
-						<button type="button" class="btn btn-cancel-confirmation-code">Отмена</button>
+						<button class="btn btn--red btn-search" disabled>Поиск</button>
+						<button class="btn btn--orange btn-clear" disabled>Очистить</button>
 					</div>
 				</div>
 
-				<div class="auth-error"></div>
+				<a class="last-search btn btn--green hidden" href="https://alimanager.ru" target="_blank">
+					<span>Результат за <span class="last-search_date">20.2.2024</span></span>
+				</a>
 
-				<!-- <form >
-					<input type="text" name="key-auth" maxlength="8" placeholder="Ключ авторизации" />
-				</form> -->
-
-				<!-- <a href="/wd" target="_blank" class="btn btn-payment hidden">Оплатить</a> -->
-			</div>
-
-			<div class="app hidden">
-				<div class="dates">
-					<textarea name="dates" id="dates" placeholder="Введите дату заказа"></textarea>
-
-					<!-- <div class="params">
+				<!-- <div class="params">
 						<label><input type="checkbox" name="info" checked /> Информация о заказах</label>
 						<label><input type="checkbox" name="param1" /> Трек-номер посылок</label>
 					</div> -->
-
-					<div class="btns">
-						<button id="search" class="btn" disabled>Поиск</button>
-						<button id="clear-dates" class="btn">Очистить</button>
-						<a id="link-cabinet" class="btn" href="https://alimanager.ru" target="_blank">Кабинет</a>
-					</div>
-
-					<div id="last-search"></div>
-
-					<button id="send">Отправить</button>
-				</div>
 
 				<div class="documentation">
 					<div class="documentation_content" data-farmatted-text>
@@ -140,19 +98,16 @@
 					</div>
 
 					<div class="documentation_btn-more"></div>
-
-					<!-- <div class="documentation-content" >
-						<div class="info">
-							<p>Для нескольких дат, используйте перенос строки</p>
-							<p>Возможно использовать разные форматы дат в одном поиске</p>
-						</div>
-					</div> -->
 				</div>
 			</div>
 
-			<!-- <footer>
-				<p class="copyright">Разработал <a href="https://vk.com/veiron93" target="_blank">Дмитрий Юдин</a></p>
-			</footer> -->
+			<!-- <button class="test-tracking">тест</button> -->
+
+			<!-- Подписка -->
+			<div class="subscription">
+				<div class="subscription_status">Оплачено до <span class="subscription_date">10.12.2024</span></div>
+				<a class="btn btn--blue subscription_pay" href="https://alimanager.ru" target="_blank">Продлить</a>
+			</div>
 		</div>
 	</body>
 </html>

@@ -240,7 +240,7 @@ class OrderRu {
 	async sendOrderData() {
 		// генерируем рандомное число для того что бы не обновлять страницу слишком часто
 		// иначе будет подозрение на парсинг и заблокируют доступ к сайту
-		let time = Math.floor(Math.random() * (5 - 3 + 1)) + 3;
+		let time = Math.floor(Math.random() * (4 - 3 + 1)) + 3;
 
 		setTimeout(async () => {
 			await chrome.runtime.sendMessage({ orderDataComplete: this.order });

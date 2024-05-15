@@ -1,3 +1,7 @@
+/**
+ * @deprecated не используется из за разной цены у заказов в ру и китай версии
+ */
+
 class OrderData {
 	orderNumber = null;
 	products = null; // список товаров в заказе

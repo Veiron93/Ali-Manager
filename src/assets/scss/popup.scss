@@ -1,8 +1,9 @@
 $color: #b61f05;
-$color1: #c5c5c5;
+$color1: #dadada;
 $color2: #fc9500;
 $color3: #eaeaea;
 $color4: #0d9822;
+$color5: #0d8298;
 
 $brs: 8px;
 
@@ -15,7 +16,6 @@ $brs: 8px;
 }
 
 a {
-	color: $color2;
 	text-decoration: none;
 }
 
@@ -43,28 +43,41 @@ a {
 	&--red {
 		box-shadow: 2px 2px 5px 0px rgba($color, 0.4);
 		background: linear-gradient(135deg, rgba(230, 42, 14, 1) 0%, rgba($color, 1) 100%);
-		color: #fff;
 	}
 
 	&--green {
 		box-shadow: 2px 2px 5px 0px rgba($color4, 0.5);
 		background: linear-gradient(135deg, rgba(44, 199, 67, 1) 0%, rgba($color4, 1) 100%);
-		color: #fff;
 	}
 
 	&--orange {
 		box-shadow: 2px 2px 5px 0px rgba($color2, 0.5);
 		background: linear-gradient(135deg, rgba(250, 208, 0, 1) 0%, rgba($color2, 1) 100%);
-		color: #fff;
+	}
+
+	&--blue {
+		box-shadow: 2px 2px 5px 0px rgba($color5, 0.5);
+		background: linear-gradient(135deg, rgba(250, 208, 0, 1) 0%, rgba($color5, 1) 100%);
+		background: linear-gradient(135deg, rgba(49, 172, 194, 1) 0%, rgba(13, 131, 152, 1) 100%);
 	}
 }
 
+textarea,
 input {
 	border-radius: $brs;
 	border: 1px solid $color1;
 	padding: 10px;
 	width: 100%;
 	font-size: 16px;
+	outline: none;
+}
+
+textarea {
+	min-height: 60px;
+	resize: vertical;
+}
+
+input {
 	height: 40px;
 }
 
@@ -85,7 +98,7 @@ input {
 			font-size: 14px;
 
 			&:not(:last-child) {
-				margin-bottom: 7px;
+				margin-bottom: 5px;
 			}
 		}
 	}
@@ -166,7 +179,7 @@ input {
 
 	.btns {
 		display: flex;
-		column-gap: 5px;
+		column-gap: 7px;
 	}
 
 	.error {
@@ -192,6 +205,104 @@ input {
 	}
 }
 
+.search-orders {
+	.search-form {
+		display: flex;
+		flex-direction: column;
+		gap: 7px;
+
+		.btns {
+			display: flex;
+			column-gap: 7px;
+		}
+	}
+
+	.last-search {
+		margin-top: 10px;
+		font-size: 14px;
+		font-weight: 500;
+		width: 100%;
+	}
+
+	.documentation {
+		margin-top: 15px;
+		background: #f3f3f3;
+		padding: 10px;
+		border-radius: $brs;
+		overflow: hidden;
+
+		&.active {
+			ol {
+				display: block;
+			}
+
+			.documentation_btn-more {
+				&:before {
+					content: "Свернуть";
+				}
+			}
+		}
+
+		&_content {
+			.formatted-dates {
+				list-style-type: none;
+				margin-left: 0;
+
+				li {
+					&:not(:last-child) {
+						margin-bottom: 5px;
+					}
+
+					span {
+						padding: 7px 12px;
+						background: #fbd49d;
+						border-radius: $brs;
+
+						display: inline-block;
+						font-weight: 500;
+						font-size: 16px;
+					}
+				}
+			}
+
+			ol {
+				margin-top: 15px;
+				display: none;
+
+				li {
+					a {
+						color: $color;
+					}
+				}
+			}
+		}
+
+		&_btn-more {
+			margin-top: 20px;
+			cursor: pointer;
+			user-select: none;
+			text-align: center;
+
+			padding: 8px 0;
+			margin-top: 10px;
+			border-radius: $brs;
+			transition: background 0.2s;
+			background: #dedede;
+
+			&:before {
+				content: "Подробнее";
+				font-size: 14px;
+				font-weight: 500;
+				display: inline;
+			}
+
+			&:hover {
+				background: #d6d6d6;
+			}
+		}
+	}
+}
+
 .subscription {
 	display: flex;
 	align-items: center;
@@ -201,13 +312,11 @@ input {
 	padding-top: 10px;
 	border-top: 1px solid $color3;
 
-	&-status {
-		font-size: 15px;
-		font-weight: 500;
+	&_status {
+		font-size: 14px;
 	}
 
-	&-pay {
-		//background: $color4;
+	&_pay {
 	}
 }
 

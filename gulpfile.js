@@ -13,7 +13,7 @@ import zip from "gulp-zip";
 
 let gs = gulpSass(sass);
 
-let styleFiles = ["popup", "result"];
+let styleFiles = ["popup"];
 
 gulp.task("browser-sync-start", function (done) {
 	browserSync.init({

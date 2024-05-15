@@ -1,8 +1,4 @@
-/**
- * расширение для браузера
- */
-
-//chrome.action.setPopup({ popup: "/src/popup2.html" });
+// удалить
 
 return false;
 
@@ -637,23 +633,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// Методы для работы с хранилищем Chrome
 	// запись в хранилище
-	function setStorageLocal(key, value) {
-		chrome.storage.local.set({ [key]: value });
-	}
+	// function setStorageLocal(key, value) {
+	// 	chrome.storage.local.set({ [key]: value });
+	// }
 
 	// получение данных их хранилища
-	async function getStorageLocal(key) {
-		let value = null;
+	// async function getStorageLocal(key) {
+	// 	let value = null;
 
-		await chrome.storage.local.get([key]).then((result) => {
-			value = result[key];
-		});
+	// 	await chrome.storage.local.get([key]).then((result) => {
+	// 		value = result[key];
+	// 	});
 
-		return value;
-	}
+	// 	return value;
+	// }
 
 	// удаление данных из хранилища
-	function clearStorageLocal(key) {
-		chrome.storage.local.remove([key]);
-	}
+	// function clearStorageLocal(key) {
+	// 	chrome.storage.local.remove([key]);
+	// }
 });

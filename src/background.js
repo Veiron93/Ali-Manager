@@ -37,7 +37,10 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 		}
 	}
 
-	// возвращает данные о заказе
+	// Получает данные о заказе
+	// все заказы записываем в массив
+	// когда получены все заказы, то записываем в storage и закрываем активную вкладку
+	// а так же запускаем сбор трек-кодов посылок
 	if (request.orderDataComplete) {
 		ordersData.push(request.orderDataComplete);
 
@@ -49,6 +52,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 				setStorage("ordersData", ordersData);
 			});
 
+			// !!! - можно сделать опционально
 			// 2. запуск сбор трек-кодов отслеживания посылок
 			startGetOrdersTrackNumbers();
 		} else {
@@ -57,7 +61,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 		}
 	}
 
-	// возращает трек-коды отслеживания посылок
+	// получает трек-коды отслеживания посылок
 	if (request.orderTrackingNumbersComplete) {
 		let result = request.orderTrackingNumbersComplete;
 
@@ -71,7 +75,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 				indexOrder = 0;
 
 				await addTrackingsToOrders();
-				await sendResult();
+				//await sendResult();
 			});
 		} else {
 			indexOrder++;
@@ -79,6 +83,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 		}
 	}
 
+	// темка для тестирования - удалить
 	if (request.send) {
 		await sendResult();
 	}
@@ -143,7 +148,8 @@ function addFilesTab(tab, files) {
 
 function setDateSearch() {
 	let dateNow = new Date();
-	let dateLastSearch = dateNow.getDate() + "-" + (dateNow.getMonth() + 1) + "-" + dateNow.getFullYear();
+	let dateLastSearch =
+		dateNow.getDate() + "." + (dateNow.getMonth() + 1) + "." + dateNow.getFullYear() + " " + dateNow.getHours() + ":" + dateNow.getMinutes();
 
 	setStorage("lastSearchOrders", dateLastSearch);
 }

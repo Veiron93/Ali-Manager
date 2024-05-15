@@ -3,13 +3,6 @@
  */
 
 class Orders {
-	// сслылки на страницы для парсинга
-	//indexUrl = "/p/order/index.html"; // список заказов
-	//detailUrl = "/p/order/detail.html"; // информация о заказе
-	//detailUrl = "/order-list/";
-
-	//trackingUrl = "/logisticsdetail.htm"; // трекинг посылки
-
 	// даты
 	datesSingle = []; // конкретные даты
 	datesFrom = []; // даты от
@@ -42,31 +35,13 @@ class Orders {
 
 			// 6. записывает в storage базовые данные о заказах
 			await this.setStorage("orders", this.listOrders);
-			//await this.setBaseDataOrdersStorage();
 
 			// 7. сообщает что все заказы найдены
 			await this.sendOrdersComplete();
-
-			//chrome.runtime.sendMessage({ startOrderData: this.listOrders });
-
-			// 6. записывает в LocalStorage базовые данные о заказах
-			//await this.setOrdersLocalStorage();
-
-			// 7. получает все данные о заказах
-			//await this.getDataOrders();
-
-			// 8. получает трек-номера посылок
-			// await this.getTrackingNumberOrders();
-
-			// // 9. отправка данных на сервер
-			// await this.postDataOrders().then((value) => console.log(value));
 		})();
 	}
 
 	async initDates() {
-		// let datesL = this.getDates();
-		// console.log(datesL);
-
 		return new Promise(async (resolve) => {
 			let dates = await this.getStorage("datesSearch");
 
@@ -328,49 +303,8 @@ class Orders {
 		this.listOrdersNode.push(...orders);
 	}
 
-	// setOrdersLocalStorage() {
-	// 	return new Promise((resolve) => {
-	// 		let orders = [];
-
-	// 		this.listOrders.forEach((order) => {
-	// 			orders.push({
-	// 				orderNumber: order.orderNumber,
-	// 				dateOrder: order.dateOrder,
-	// 				trackingNumber: "",
-	// 			});
-
-	// 			if (orders.length == this.listOrders.length) {
-	// 				localStorage.setItem("orders", JSON.stringify(orders));
-	// 				resolve();
-	// 			}
-	// 		});
-	// 	});
-	// }
-
-	/**
-	 * запись заказов в Storage
-	 * @returns {Promise}
-	 */
-
-	// setBaseDataOrdersStorage() {
-	// 	return new Promise((resolve) => {
-	// 		let orders = [];
-	// 		this.listOrders.forEach((order) => {
-	// 			orders.push({
-	// 				orderNumber: order.orderNumber,
-	// 				dateOrder: order.dateOrder,
-	// 			});
-	// 			if (orders.length === this.listOrders.length) {
-	// 				//chrome.storage.local.set({ ["orders"]: orders }).then(() => resolve());
-	// 			}
-	// 		});
-	// 	});
-	// }
-
 	async sendOrdersComplete() {
-		await chrome.runtime.sendMessage({ ordersComplete: true }, () => {
-			//window.close();
-		});
+		await chrome.runtime.sendMessage({ ordersComplete: true });
 	}
 
 	async getStorage(key) {
@@ -384,82 +318,6 @@ class Orders {
 	async setStorage(key, value) {
 		await chrome.storage.local.set({ [key]: value });
 	}
-
-	/**
-	 * получает информацию о заказе
-	 * @returns {Promise}
-	 */
-
-	// getDataOrders() {
-	// 	return new Promise(async (resolve) => {
-	// 		let i = 0;
-
-	// 		for (const order of this.listOrders) {
-	// 			// window.open("https://www.aliexpress.com" + this.detailUrl + "?alimanager=1&orderId=" + order.orderNumber, "_blank");
-	// 			//window.open("https://aliexpress.ru" + this.detailUrl + "?alimanager=1&orderId=" + order.orderNumber, "_blank");
-	// 			window.open("https://aliexpress.ru" + this.detailUrl + order.orderNumber + "?alimanager=order", "_blank");
-
-	// 			await this.checkComplete(order, "dataCompleted");
-
-	// 			i++;
-
-	// 			if (i == this.listOrders.length) {
-	// 				resolve();
-	// 			}
-	// 		}
-	// 	});
-	// }
-
-	/**
-	 * получает трек-номер заказа
-	 * @returns {Promise}
-	 */
-
-	// getTrackingNumberOrders() {
-	// 	return new Promise(async (resolve) => {
-	// 		let i = 0;
-
-	// 		for (const order of this.listOrders) {
-	// 			window.open("https://track.aliexpress.com" + this.trackingUrl + "?alimanager=1&tradeId=" + order.orderNumber, "_blank");
-
-	// 			await this.checkComplete(order, "trackingNumberCompleted");
-
-	// 			i++;
-
-	// 			if (i == this.listOrders.length) {
-	// 				resolve();
-	// 			}
-	// 		}
-	// 	});
-	// }
-
-	// checkComplete(order, flagName) {
-	// 	return new Promise((resolve) => {
-	// 		let idIntarval = setInterval(() => {
-	// 			let orders = JSON.parse(localStorage.getItem("orders"));
-	// 			let actualOrder = orders.find((item) => item.orderNumber == order.orderNumber);
-
-	// 			if (actualOrder[flagName] == true) {
-	// 				clearInterval(idIntarval);
-	// 				resolve();
-	// 			}
-	// 		}, 500);
-	// 	});
-	// }
-
-	// postDataOrders() {
-	// 	const orders = localStorage.getItem("orders");
-
-	// 	fetch("http://alimanager-server.web/api/v1/orders", {
-	// 		method: "POST",
-	// 		// headers: {
-	// 		// 	"Content-Type": "application/json",
-	// 		// },
-	// 		body: JSON.stringify(orders),
-	// 	});
-
-	// 	console.log("парсинг закончен, отправляем на сервер и удаляем локально");
-	// }
 }
 
 new Orders();
