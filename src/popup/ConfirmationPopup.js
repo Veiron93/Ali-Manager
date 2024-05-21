@@ -71,7 +71,7 @@ class ConfirmationPopup extends HelpersPopup {
 	}
 
 	async onSend(email) {
-		fetch(this.api + "/confirm-registration", {
+		fetch(this.DEV_API_HOST + this.API_v1 + "/confirm-registration", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

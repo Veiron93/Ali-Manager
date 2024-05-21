@@ -1,29 +1,28 @@
 {
 	"name": "ali-manager",
 	"version": "0.0.1",
-	"description": "",
-	"main": "index.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
+	"description": "Менеджер заказов Алиэкспресс",
 	"author": "Dmitry Yudin",
 	"license": "ISC",
 	"type": "module",
 	"dependencies": {
+		"basic-ftp": "^5.0.5",
+		"gulp-util": "^3.0.8"
+	},
+	"devDependencies": {
 		"browser-sync": "^2.29.3",
-		"del": "^7.0.0",
+		"del": "^7.1.0",
 		"gulp": "^4.0.2",
 		"gulp-autoprefixer": "^8.0.0",
 		"gulp-concat": "^2.6.1",
 		"gulp-notify": "^4.0.0",
 		"gulp-plumber": "^1.2.1",
 		"gulp-rename": "^2.0.0",
+		"gulp-replace": "^1.1.4",
 		"gulp-sass": "^5.1.0",
+		"gulp-uglify": "^3.0.2",
 		"gulp-watch": "^5.0.1",
-		"sass": "^1.64.0",
-		"uglify-js": "^3.17.4"
-	},
-	"devDependencies": {
-		"gulp-zip": "^6.0.0"
+		"gulp-zip": "^6.0.0",
+		"sass": "^1.64.0"
 	}
 }

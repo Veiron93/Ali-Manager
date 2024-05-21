@@ -1,7 +1,8 @@
 class HelpersPopup {
-	api = "http://alimanager-server.web/api/app/v1";
+	PUBLIC_API_HOST = "https://api.alimanager.ru";
+	DEV_API_HOST = "http://alimanager-server.web";
 
-	constructor() {}
+	API_v1 = "/api/cabinet/v1";
 
 	// Storage
 	async getStorageLocal(key) {

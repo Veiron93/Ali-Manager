@@ -1,3 +1,9 @@
+const api = new Map();
+
+api.set("PUBLIC_API_HOST", "https://api.alimanager.ru");
+api.set("DEV_API_HOST", "http://alimanager-server.web");
+api.set("API_v1", "/api/cabinet/v1");
+
 // страница отслеживания посылки
 const trackUrl = "https://www.aliexpress.com/p/tracking/index.html?alimanager=track-number&tradeOrderId=";
 
@@ -5,6 +11,7 @@ let activeTab = null;
 let orders = null;
 let ordersData = [];
 let indexOrder = 0;
+
 const trackings = new Map();
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
@@ -16,7 +23,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 			})
 			.then((tab) => (activeTab = tab));
 
-		await addFilesTab(activeTab, ["./src/dates.js", "./src/orders.js"]);
+		await addFilesTab(activeTab, ["dates.js", "orders.js"]);
 
 		// записываем дату поиска
 		setDateSearch();
@@ -98,30 +105,44 @@ chrome.tabs.onUpdated.addListener(async () => {
 
 	// страница данных о заказе - RU версия
 	if (page === "order" && pageStatus === "complete") {
-		addFilesTab(activeTab, ["./src/order-ru.js"]);
+		addFilesTab(activeTab, ["order-ru.js"]);
 	}
 
 	// страница трек-кода посылки
 	if (page === "track-number" && pageStatus === "complete") {
-		addFilesTab(activeTab, ["./src/tracking-number.js"]);
+		addFilesTab(activeTab, ["tracking-number.js"]);
 	}
 });
 
 function sendResult() {
 	return new Promise(async (resolve) => {
 		const orders = await getStorage("ordersData");
+		const authToken = await getStorage("authToken");
+		const user = await getStorage("user");
 
-		fetch("http://alimanager-server.web/v1/result", {
+		if (!authToken || !user || !user.email || !orders) {
+			return false;
+		}
+
+		const data = {
+			orders: orders,
+			email: user.email,
+		};
+
+		fetch(api.get("DEV_API_HOST") + api.get("API_v1") + "/result-search-orders", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: "Bearer " + (await getStorage("auth-token")),
+				Authorization: "Bearer " + authToken,
 			},
-			body: JSON.stringify(orders),
+			body: JSON.stringify(data),
 		})
-			.then((response) => response.json())
+			.then((response) => response.text())
 			.then((data) => {
-				console.log("Response:", data);
+				if (!data) {
+					throw new Exception();
+				}
+				setStorage("codeResultSearchOrders", data);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -202,78 +223,11 @@ async function getStorage(key) {
 	return value;
 }
 
-// chrome.tabs.onCreated.addListener(() => {
-// 	chrome.tabs.query({ active: true, lastFocusedWindow: true }).then((currenTab) => {
-// 		let tab = currenTab[0];
-
-// 		if (!getUriParams(tab, "alimanager")) {
-// 			return false;
-// 		}
-
-// 		// страница информации о заказе
-// 		// if (getPageNameRu(tab) == orderPathName) {
-// 		// 	console.log(tab);
-
-// 		// 	chrome.scripting.executeScript({
-// 		// 		target: { tabId: tab.id },
-// 		// 		files: ["./src/order-data-ru.js"],
-// 		// 	});
-// 		// }
-
-// 		// chrome.scripting.executeScript({
-// 		// 	target: { tabId: tab.id },
-// 		// 	files: ["./src/order-data-ru.js"],
-// 		// });
-
-// 		// трек-номер
-// 		if (getPathNameTab(tab) == trackingPathName) {
-// 			chrome.scripting.executeScript({
-// 				target: { tabId: tab.id },
-// 				files: ["./src/tracking-number.js"],
-// 			});
-// 		}
-
-// 		// запись трек-номера
-// 		if (getUriParams(tab, "originalTrackingNumber") || getUriParams(tab, "combinedTrackingNumber")) {
-// 			chrome.scripting.executeScript({
-// 				target: { tabId: tab.id },
-// 				files: ["./src/set-tracking-number.js"],
-// 			});
-// 		}
-// 	});
-// });
-
-/**
- * pathname tab
- * @param {Object} tab
- * @returns {String, Boolean}
- */
-
-// function getPathNameTab(tab) {
-// 	let urlString = tab.pendingUrl;
-
-// 	if (!urlString) {
-// 		return false;
-// 	}
-
-// 	let url = new URL(urlString);
-
-// 	return url ? url.pathname : false;
-// }
-
-/**
- * возвращает значение get параметра
- * @param {String} param заказы
- * @returns {String | Number}
- */
-
 function getUriParams(tab, param) {
 	let url = null;
 
 	if (tab.url) url = tab.url;
 	if (tab.pendingUrl) url = tab.pendingUrl;
-
-	//console.log(url);
 
 	if (!url) {
 		return false;
@@ -282,18 +236,3 @@ function getUriParams(tab, param) {
 	let params = new URL(url).searchParams;
 	return params.get(param);
 }
-
-// function getPageNameRu(tab) {
-// 	let urlString = tab.url;
-
-// 	if (!urlString) {
-// 		return false;
-// 	}
-
-// 	let url = new URL(urlString);
-// 	let pathname = url.pathname;
-
-// 	let pathnameArr = pathname.split("/");
-
-// 	return pathnameArr[1];
-// }

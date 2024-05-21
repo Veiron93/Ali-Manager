@@ -66,13 +66,15 @@ class SearchOrdersPopup extends HelpersPopup {
 	}
 
 	async initLastSearch() {
-		let lastSearchOrders = await this.getStorageLocal("lastSearchOrders");
+		const code = await this.getStorageLocal("codeResultSearchOrders");
+		const date = await this.getStorageLocal("lastSearchOrders");
 
-		if (!lastSearchOrders) {
+		if (!code || !date) {
 			return false;
 		}
 
-		this.dateLastSearchElement.innerText = lastSearchOrders;
+		this.lastSearchElement.href += code;
+		this.dateLastSearchElement.innerText = date;
 		this.stateElementClass(this.lastSearchElement, true);
 	}
 

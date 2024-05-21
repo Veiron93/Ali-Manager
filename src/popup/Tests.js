@@ -12,7 +12,7 @@ class Tests {
 
 	initEvents() {
 		this.btnTestTracking.addEventListener("click", () => {
-			chrome.runtime.sendMessage({ orderDataComplete: true });
+			chrome.runtime.sendMessage({ send: true });
 		});
 	}
 }

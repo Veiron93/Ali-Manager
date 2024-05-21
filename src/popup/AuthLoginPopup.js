@@ -11,7 +11,6 @@ class AuthLoginPopup extends HelpersPopup {
 		(async () => {
 			await this.initElements();
 			await this.initEvents();
-			// await this.initState();
 		})();
 	}
 
@@ -47,7 +46,7 @@ class AuthLoginPopup extends HelpersPopup {
 	}
 
 	async onAuth() {
-		fetch(this.api + "/auth", {
+		fetch(this.DEV_API_HOST + this.API_v1 + "/auth", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
