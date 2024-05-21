@@ -9,8 +9,9 @@ class Popup extends HelpersPopup {
 			window.login = new AuthLoginPopup();
 			window.confirmation = new ConfirmationPopup();
 			window.searchOrders = new SearchOrdersPopup();
+			window.logout = new LogoutPopup();
 
-			await this.onAuth();
+			await this.checkAuthToken();
 			await this.initElements();
 			await this.init();
 		})();
@@ -18,13 +19,9 @@ class Popup extends HelpersPopup {
 
 	initElements() {
 		return new Promise((resolve) => {
-			this.container = document.querySelector(".auth-login");
+			this.container = document.querySelector(".popup");
 			resolve();
 		});
-	}
-
-	async onAuth() {
-		await this.setStorageLocal("isAuth", true);
 	}
 
 	async init() {
@@ -47,8 +44,50 @@ class Popup extends HelpersPopup {
 
 		this.stateElementClass(showContainer, true);
 	}
+
+	// проверка токена
+	async checkAuthToken() {
+		return new Promise(async (resolve) => {
+			const authToken = await this.getStorageLocal("authToken");
+			const user = await this.getStorageLocal("user");
+
+			if (!authToken || !user || !user.email) {
+				resolve();
+				return false;
+			}
+
+			await this.onCheckAuthToken(user.email, authToken);
+			resolve();
+		});
+	}
+
+	onCheckAuthToken(email, authToken) {
+		return new Promise(async (resolve) => {
+			fetch(this.DEV_API_HOST + this.API_v1 + "/check-auth-token", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + authToken,
+				},
+				body: JSON.stringify({
+					email: email,
+				}),
+			})
+				.then((res) => this.handlerResponse(res))
+				.then(() => this.successIsActiveToken())
+				.catch((error) => this.failedIsActiveToken(error))
+				.finally(() => resolve());
+		});
+	}
+
+	async successIsActiveToken() {
+		await this.setStorageLocal("isAuth", true);
+		this.stateElementClass(window.logout.btnLogoutElement, true);
+	}
+
+	async failedIsActiveToken(error) {
+		await this.setStorageLocal("isAuth", false);
+	}
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-	new Popup();
-});
+document.addEventListener("DOMContentLoaded", () => new Popup());

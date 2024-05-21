@@ -81,15 +81,7 @@ class ConfirmationPopup extends HelpersPopup {
 				code: this.inputCodeElement.value,
 			}),
 		})
-			.then(async (response) => {
-				if (!response.ok) {
-					return response.text().then((data) => {
-						throw new Error(data);
-					});
-				}
-
-				return response.json();
-			})
+			.then((res) => this.handlerResponse(res))
 			.then((response) => {
 				if (response.token) {
 					this.successSendCode(response);
@@ -97,7 +89,6 @@ class ConfirmationPopup extends HelpersPopup {
 			})
 			.catch((error) => {
 				this.onError(error);
-				//console.log(error);
 			})
 			.finally(() => {
 				this.stateElementClass(window.loader.container, false);
@@ -117,13 +108,12 @@ class ConfirmationPopup extends HelpersPopup {
 		this.stateElementDisabled(this.btnSendCodeElement, false);
 	}
 
-	successSendCode(data) {
-		this.setStorageLocal("authToken", data.token);
-		this.setStorageLocal("isAuth", true);
-		this.clearStorageLocal("waitingConfirmation");
-		this.stateElementClass(this.container, false);
-		//this.stateApp(true);
-		this.onError();
+	async successSendCode(data) {
+		await this.setStorageLocal("authToken", data.token);
+		await this.setStorageLocal("isAuth", true);
+		await this.clearStorageLocal("waitingConfirmation");
+
+		window.location.reload();
 	}
 
 	// вывод ошибки

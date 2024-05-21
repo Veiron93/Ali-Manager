@@ -12,8 +12,17 @@ class LoaderPopup extends HelpersPopup {
 	initElements() {
 		return new Promise((resolve) => {
 			this.container = document.querySelector(".loader");
-
 			resolve();
 		});
+	}
+
+	start() {
+		this.stateElementClass(this.container, true);
+	}
+
+	stop() {
+		setTimeout(() => {
+			this.stateElementClass(this.container, false);
+		}, 1000);
 	}
 }

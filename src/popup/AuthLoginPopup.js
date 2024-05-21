@@ -31,15 +31,16 @@ class AuthLoginPopup extends HelpersPopup {
 		this.inputPasswordElement.addEventListener("input", () => this.stateBthLogin());
 
 		// кнопка Войти
-		this.btnLoginElement.addEventListener("click", () => this.sendLogin());
+		this.btnLoginElement.addEventListener("click", () => this.logIn());
 	}
 
-	sendLogin() {
-		if (this.validationEmail(this.inputPasswordElement.value)) {
-			this.stateElementClass(window.loader.container, true);
-			this.stateElementDisabled(this.btnLoginElement, false);
+	logIn() {
+		const validEmail = this.validationEmail(this.inputPasswordElement.value);
+
+		if (validEmail) {
+			window.loader.start();
 			this.onAuth();
-			this.onError();
+			this.stateElementDisabled(this.btnLoginElement, false);
 		} else {
 			this.onError("Некорректный формат электронной почты");
 		}
@@ -56,37 +57,39 @@ class AuthLoginPopup extends HelpersPopup {
 				password: this.inputPasswordElement.value,
 			}),
 		})
-			.then(async (response) => {
-				if (!response.ok) {
-					return response.text().then((data) => {
-						throw new Error(data);
-					});
-				}
-
-				return response.json();
-			})
+			.then((res) => this.handlerResponse(res))
 			.then((response) => {
 				this.successLogin(response);
 			})
 			.catch((error) => {
-				console.log(error);
+				this.onError(error);
 			})
 			.finally(() => {
-				this.stateElementClass(window.loader.container, false);
+				window.loader.stop();
 				this.stateElementDisabled(this.btnLoginElement, true);
 			});
 	}
 
-	successLogin(data) {
+	async successLogin(data) {
 		// новый пользователь
 		if (data.type == 1) {
-			this.newUser(data.user);
+			await this.clearUserDataStore();
+			await this.newUser(data.user);
 		}
 
-		// пользователь успешно аутентицирован
+		// пользователь успешно вошел
 		if (data.type == 2) {
-			// this.stateApp(true);
-			// this.stateClassElement(false, this.loginWrapperAuthElement);
+			// удкление данных если зашел другой пользователь
+			const lastUser = await this.getStorageLocal("user");
+
+			if (lastUser && lastUser.email !== data.user.email) {
+				await this.clearUserDataStore();
+			}
+
+			await this.setStorageLocal("authToken", data.token);
+			await this.setStorageLocal("user", data.user);
+
+			window.location.reload();
 		}
 	}
 
@@ -118,5 +121,20 @@ class AuthLoginPopup extends HelpersPopup {
 	// вывод ошибки
 	onError(message = "") {
 		this.error.textContent = message;
+	}
+
+	// очистка данных если зашли под другим пользователем
+	clearUserDataStore() {
+		return new Promise((resolve) => {
+			const userDataStorage = ["codeResultSearchOrders", "datesSearch", "lastSearchOrders"];
+
+			userDataStorage.forEach((element, index) => {
+				this.clearStorageLocal(element);
+
+				if (index === userDataStorage.length - 1) {
+					resolve();
+				}
+			});
+		});
 	}
 }

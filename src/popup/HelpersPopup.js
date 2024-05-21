@@ -23,14 +23,6 @@ class HelpersPopup {
 		await chrome.storage.local.remove([key]);
 	}
 
-	stateElementClass(element, state) {
-		if (state) {
-			element.classList.remove("hidden");
-		} else {
-			element.classList.add("hidden");
-		}
-	}
-
 	stateElementDisabled(element, state) {
 		if (state) {
 			element.removeAttribute("disabled");
@@ -42,4 +34,28 @@ class HelpersPopup {
 	validationEmail() {
 		return true;
 	}
+
+	stateElementClass(element, state) {
+		if (state) {
+			element.classList.remove("hidden");
+		} else {
+			element.classList.add("hidden");
+		}
+	}
+
+	async handlerResponse(response) {
+		if (!response.ok) {
+			return response.text().then((data) => {
+				throw new Error(data);
+			});
+		}
+
+		return response.json();
+	}
+
+	// stateElementsStyleClass(styleClass, elements) {
+	// 	elements.forEach((element) => {
+	// 		this.stateElementClass(element.el, element.state);
+	// 	});
+	// }
 }

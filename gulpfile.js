@@ -36,6 +36,7 @@ const JS_FILES_POPUP = [
 	"./src/popup/AuthLoginPopup.js",
 	"./src/popup/ConfirmationPopup.js",
 	"./src/popup/SearchOrdersPopup.js",
+	"./src/popup/LogoutPopup.js",
 	"./src/popup/Popup.js",
 ];
 
@@ -95,11 +96,11 @@ gulp.task("default", gulp.parallel("browser-sync-start", "scripts-dev", "styles-
 // replace
 gulp.task("replace", (done) => {
 	gulp.src("./src/popup.html")
-		.pipe(replace("/temp/popup.css", "/public/popup.min.css"))
-		.pipe(replace("/temp/popup.js", "/public/popup.min.js"))
+		.pipe(replace("/temp/popup.css", "popup.min.css"))
+		.pipe(replace("/temp/popup.js", "popup.min.js"))
 		.pipe(gulp.dest(PUBLIC_PATH));
 
-	gulp.src("./manifest.json").pipe(replace("src/background.js", "/background.js")).pipe(gulp.dest(PUBLIC_PATH));
+	gulp.src("./manifest.json").pipe(replace("src", "")).pipe(replace("public", "")).pipe(gulp.dest(PUBLIC_PATH));
 
 	done();
 });

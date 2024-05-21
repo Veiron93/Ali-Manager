@@ -119,7 +119,8 @@ input {
 		left: 0;
 
 		width: 100%;
-		padding: 10px;
+		padding: 0 10px;
+		height: 42px;
 
 		background: $color;
 
@@ -150,8 +151,8 @@ input {
 		}
 
 		.btn-logout {
-			padding: 6px 10px;
-			border-radius: 10px;
+			padding: 4px 10px;
+			border-radius: $brs;
 			background: #000;
 			margin-left: auto;
 			color: #fff;
