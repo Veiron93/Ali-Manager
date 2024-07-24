@@ -86,7 +86,7 @@ class AuthLoginPopup extends HelpersPopup {
 				await this.clearUserDataStore();
 			}
 
-			await this.setStorageLocal("authToken", data.token);
+			await this.setStorageLocal("authToken", data.authToken);
 			await this.setStorageLocal("user", data.user);
 
 			window.location.reload();

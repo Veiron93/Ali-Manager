@@ -71,7 +71,7 @@ class ConfirmationPopup extends HelpersPopup {
 	}
 
 	async onSend(email) {
-		fetch(this.DEV_API_HOST + this.API_v1 + "/confirm-registration", {
+		fetch(this.DEV_API_HOST + this.API_v1 + "/auth/confirm-registration", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -83,7 +83,7 @@ class ConfirmationPopup extends HelpersPopup {
 		})
 			.then((res) => this.handlerResponse(res))
 			.then((response) => {
-				if (response.token) {
+				if (response.authToken) {
 					this.successSendCode(response);
 				}
 			})
@@ -109,7 +109,7 @@ class ConfirmationPopup extends HelpersPopup {
 	}
 
 	async successSendCode(data) {
-		await this.setStorageLocal("authToken", data.token);
+		await this.setStorageLocal("authToken", data.authToken);
 		await this.setStorageLocal("isAuth", true);
 		await this.clearStorageLocal("waitingConfirmation");
 

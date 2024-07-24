@@ -10,6 +10,7 @@ class Popup extends HelpersPopup {
 			window.confirmation = new ConfirmationPopup();
 			window.searchOrders = new SearchOrdersPopup();
 			window.logout = new LogoutPopup();
+			window.subscriptionPopup = new SubscriptionPopup();
 
 			await this.checkAuthToken();
 			await this.initElements();
@@ -28,21 +29,18 @@ class Popup extends HelpersPopup {
 		let isAuth = await this.getStorageLocal("isAuth");
 		let waitingConfirmation = await this.getStorageLocal("waitingConfirmation");
 
-		let showContainer = null;
-
 		if (!isAuth) {
-			showContainer = window.login.container;
+			this.stateElementClass(window.login.container, true);
 		}
 
 		if (isAuth) {
-			showContainer = window.searchOrders.container;
+			this.stateElementClass(window.searchOrders.container, true);
+			this.stateElementClass(window.subscriptionPopup.container, true);
 		}
 
 		if (waitingConfirmation) {
-			showContainer = window.confirmation.container;
+			this.stateElementClass(window.confirmation.container, true);
 		}
-
-		this.stateElementClass(showContainer, true);
 	}
 
 	// проверка токена
@@ -62,21 +60,26 @@ class Popup extends HelpersPopup {
 	}
 
 	onCheckAuthToken(email, authToken) {
+		// return new Promise(async (resolve) => {
+		// 	fetch(this.DEV_API_HOST + this.API_v1 + "/auth/check-token", {
+		// 		method: "POST",
+		// 		headers: {
+		// 			"Content-Type": "application/json",
+		// 			Authorization: "Bearer " + authToken,
+		// 		},
+		// 		body: JSON.stringify({
+		// 			email: email,
+		// 		}),
+		// 	})
+		// 		.then((res) => this.handlerResponse(res))
+		// 		.then(() => this.successIsActiveToken())
+		// 		.catch((error) => this.failedIsActiveToken(error))
+		// 		.finally(() => resolve());
+		// });
+
 		return new Promise(async (resolve) => {
-			fetch(this.DEV_API_HOST + this.API_v1 + "/check-auth-token", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: "Bearer " + authToken,
-				},
-				body: JSON.stringify({
-					email: email,
-				}),
-			})
-				.then((res) => this.handlerResponse(res))
-				.then(() => this.successIsActiveToken())
-				.catch((error) => this.failedIsActiveToken(error))
-				.finally(() => resolve());
+			this.successIsActiveToken();
+			resolve();
 		});
 	}
 
@@ -87,6 +90,7 @@ class Popup extends HelpersPopup {
 
 	async failedIsActiveToken(error) {
 		await this.setStorageLocal("isAuth", false);
+		await this.clearStorageLocal("authToken");
 	}
 }
 

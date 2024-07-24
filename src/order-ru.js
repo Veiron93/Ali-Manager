@@ -1,26 +1,31 @@
-//console.log("скрипт встроен");
-
 //console.time("myScript");
 
 class OrderRu {
-	elementsOrder = new Map([
-		["productsList", ".RedOrderDetailsProducts_RedOrderDetailsProducts__box__17lnl"],
-		["paymentWrapper", ".RedOrderDetailsProducts_Summary__totalWrapper__fewhe"],
-		["paymentCountProducts", ".RedOrderDetailsProducts_Summary__row__fewhe:nth-child(1) > span"],
-		["paymentPrePrice", ".RedOrderDetailsProducts_Summary__row__fewhe:nth-child(1) > div span"],
-		["paymentDelivery", ".RedOrderDetailsProducts_Summary__row__fewhe:nth-child(2) > div span"],
-		["paymentTotalPriceWrapper", ".RedOrderDetailsProducts_Summary__total__fewhe"],
-		["paymentTotalPrice", ".RedOrderDetailsProducts_Summary__total__fewhe span:nth-child(2)"],
+	mainClass = ".RedOrderDetailsProducts";
+
+	elementsOrder = new Map([["productsList", ".RedOrderDetailsProducts_RedOrderDetailsProducts__box__17lnl"]]);
+
+	paymentClass = this.mainClass + "_Summary";
+	paymentPostfix = "1l2dj";
+	elementsPayment = new Map([
+		["paymentWrapper", this.paymentClass + "__totalWrapper__" + this.paymentPostfix],
+		["paymentCountProducts", this.paymentClass + "__row__" + this.paymentPostfix + ":nth-child(1) > span"],
+		["paymentPrePrice", this.paymentClass + "__row__" + this.paymentPostfix + ":nth-child(1) > div span"],
+		["paymentDelivery", this.paymentClass + "__row__" + this.paymentPostfix + ":nth-child(2) > div span"],
+		["paymentTotalPriceWrapper", this.paymentClass + "__total__" + this.paymentPostfix],
+		["paymentTotalPrice", this.paymentClass + "__total__" + this.paymentPostfix + " span:nth-child(2)"],
 	]);
 
+	elementProductClass = this.mainClass + "_Product";
+	elementProductPostfix = "dlsuj";
 	elementsProduct = new Map([
-		["product", ".RedOrderDetailsProducts_Product__wrapper__1tmn5"],
-		["productLink", ".RedOrderDetailsProducts_Product__content__1tmn5 > a"],
-		["productPhoto", ".RedOrderDetailsProducts_Product__image__1tmn5 img"],
-		["productName", ".RedOrderDetailsProducts_Product__title__1tmn5"],
-		["productSKU", ".RedOrderDetailsProducts_Product__description__1tmn5"],
-		["productPrice", ".RedOrderDetailsProducts_Product__priceDesktop__1tmn5 > div:nth-child(1)"],
-		["productAmount", ".RedOrderDetailsProducts_Product__priceDesktop__1tmn5 > div:nth-child(2)"],
+		["product", this.elementProductClass + "__wrapper__" + this.elementProductPostfix],
+		["productLink", this.elementProductClass + "__content__" + this.elementProductPostfix + " > a"],
+		["productPhoto", this.elementProductClass + "__image__" + this.elementProductPostfix + " img"],
+		["productName", this.elementProductClass + "__title__" + this.elementProductPostfix],
+		["productSKU", this.elementProductClass + "__description__" + this.elementProductPostfix],
+		["productPrice", this.elementProductClass + "__priceDesktop__" + this.elementProductPostfix + " > div:nth-child(1)"],
+		["productAmount", this.elementProductClass + "__priceDesktop__" + this.elementProductPostfix + " > div:nth-child(2)"],
 	]);
 
 	orderNumber = null;
@@ -53,6 +58,8 @@ class OrderRu {
 			// 4. получаем данные о товарах
 			await this.getProductsData();
 
+			console.log(1111);
+
 			// 5. собираем все данные о заказе
 			await this.orderInit();
 
@@ -83,6 +90,8 @@ class OrderRu {
 	getOrderProducts() {
 		return new Promise((resolve) => {
 			this.productsElements = document.querySelectorAll(this.elementsProduct.get("product"));
+
+			console.log(this.productsElements);
 			resolve();
 		});
 	}
@@ -90,29 +99,30 @@ class OrderRu {
 	getOrderPaymentInfo() {
 		return new Promise((resolve) => {
 			let id = setInterval(() => {
-				let btnShowListInfo = document.querySelector(this.elementsOrder.get("paymentTotalPriceWrapper"));
+				let btnShowListInfo = document.querySelector(this.elementsPayment.get("paymentTotalPriceWrapper"));
 
+				console.log(this.elementsPayment.values());
 				btnShowListInfo.click();
 
-				let paymentPositions = document.querySelectorAll(this.elementsOrder.get("paymentWrapper") + " > div");
+				let paymentPositions = document.querySelectorAll(this.elementsPayment.get("paymentWrapper") + " > div");
 
 				if (paymentPositions.length > 1) {
 					clearInterval(id);
 
 					// стоимость товаров с доставкой
-					let totalPriceElement = document.querySelector(this.elementsOrder.get("paymentTotalPrice"));
+					let totalPriceElement = document.querySelector(this.elementsPayment.get("paymentTotalPrice"));
 					let totalPriceValue = this.getValueNumber(totalPriceElement);
 
 					// стоимость товаров без доставки
-					let prePriceElement = paymentPositions[1].querySelector(this.elementsOrder.get("paymentPrePrice"));
+					let prePriceElement = paymentPositions[1].querySelector(this.elementsPayment.get("paymentPrePrice"));
 					let prePriceValue = this.getValueNumber(prePriceElement);
 
 					// количество товаров
-					let countProductsElement = paymentPositions[1].querySelector(this.elementsOrder.get("paymentCountProducts"));
+					let countProductsElement = paymentPositions[1].querySelector(this.elementsPayment.get("paymentCountProducts"));
 					let countProductsValue = this.getValueNumber(countProductsElement);
 
 					// доставка
-					let deliveryElement = paymentPositions[1].querySelector(this.elementsOrder.get("paymentDelivery"));
+					let deliveryElement = paymentPositions[1].querySelector(this.elementsPayment.get("paymentDelivery"));
 					let deliveryValue = this.getValueNumber(deliveryElement);
 					let deliveryFactor = (deliveryValue / (prePriceValue * 0.1)) * 0.1;
 

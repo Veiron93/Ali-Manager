@@ -11,8 +11,6 @@
 
 		<link rel="stylesheet" href="/temp/popup.css" />
 		<script src="/temp/popup.js"></script>
-
-		<!-- <script src="./popup/Tests.js"></script> -->
 	</head>
 	<body>
 		<div class="popup">
@@ -38,7 +36,10 @@
 				<input type="text" name="email" placeholder="Email" />
 				<input type="password" name="password" placeholder="Пароль" />
 				<div class="btns">
-					<button type="button" class="btn btn--red btn-login btn-send-auth" disabled>Войти</button>
+					<button type="button" class="btn btn--red btn-login" disabled>Войти</button>
+					<a href="https://cabinet.alimanager.ru/account/password-reset" class="btn btn--blue btn-reset-password" target="_blank"
+						>Забыли пароль?</a
+					>
 				</div>
 				<div class="error"></div>
 			</div>
@@ -98,10 +99,14 @@
 			<!-- <button class="test-tracking">тест</button> -->
 
 			<!-- Подписка -->
-			<!-- <div class="subscription">
-				<div class="subscription_status">Оплачено до <span class="subscription_date">10.12.2024</span></div>
+			<div class="subscription hidden">
+				<div class="subscription_user-email"></div>
+				<div class="subscription_status">
+					<div class="is-paid hidden">Оплачено до <span class="subscription_date"></span></div>
+					<div class="is-not-paid">Подписка закончилась</div>
+				</div>
 				<a class="btn btn--blue subscription_pay" href="https://alimanager.ru" target="_blank">Продлить</a>
-			</div> -->
+			</div>
 		</div>
 	</body>
 </html>

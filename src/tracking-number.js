@@ -1,7 +1,7 @@
 class TrackingNumbers {
 	elementsPage = new Map([
 		["pageWrapper", ".tracking-page-pc-wrap"],
-		["trackingNumber", ".logistic-info--mailNo-pc--3cTqcXe span"],
+		["trackingNumber", ".logistic-info--mailNo-pc--3cTqcXe div span"],
 	]);
 
 	trackingNumbers = {
@@ -53,7 +53,7 @@ class TrackingNumbers {
 	async sendOrderTrackingNumbers() {
 		// генерируем рандомное число для того что бы не обновлять страницу слишком часто
 		// иначе будет подозрение на парсинг и заблокируют доступ к сайту
-		let time = Math.floor(Math.random() * (4 - 3 + 1)) + 3;
+		let time = Math.floor(Math.random() * (4 - 3 + 1)) + 2;
 
 		setTimeout(async () => {
 			await chrome.runtime.sendMessage({ orderTrackingNumbersComplete: this.trackingNumbers });

@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 			})
 			.then((tab) => (activeTab = tab));
 
-		await addFilesTab(activeTab, ["dates.js", "orders.js"]);
+		await addFilesTab(activeTab, ["./temp/dates.js", "./temp/orders.js"]);
 
 		// записываем дату поиска
 		setDateSearch();
@@ -82,17 +82,12 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 				indexOrder = 0;
 
 				await addTrackingsToOrders();
-				//await sendResult();
+				await sendResult();
 			});
 		} else {
 			indexOrder++;
 			getOrderTrackNumbers();
 		}
-	}
-
-	// темка для тестирования - удалить
-	if (request.send) {
-		await sendResult();
 	}
 });
 
@@ -103,24 +98,29 @@ chrome.tabs.onUpdated.addListener(async () => {
 	let page = getUriParams(activeTab, "alimanager");
 	let pageStatus = activeTab.status;
 
+	if (page === "order") {
+		console.log(pageStatus);
+	}
+
 	// страница данных о заказе - RU версия
 	if (page === "order" && pageStatus === "complete") {
-		addFilesTab(activeTab, ["order-ru.js"]);
+		addFilesTab(activeTab, ["./temp/order-ru.js"]);
 	}
 
 	// страница трек-кода посылки
 	if (page === "track-number" && pageStatus === "complete") {
-		addFilesTab(activeTab, ["tracking-number.js"]);
+		addFilesTab(activeTab, ["./temp/tracking-number.js"]);
 	}
 });
 
 function sendResult() {
 	return new Promise(async (resolve) => {
 		const orders = await getStorage("ordersData");
-		const authToken = await getStorage("authToken");
+		//const authToken = await getStorage("authToken");
 		const user = await getStorage("user");
 
-		if (!authToken || !user || !user.email || !orders) {
+		//!authToken ||
+		if (!user || !user.email || !orders) {
 			return false;
 		}
 
@@ -133,7 +133,7 @@ function sendResult() {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: "Bearer " + authToken,
+				//Authorization: "Bearer " + authToken,
 			},
 			body: JSON.stringify(data),
 		})
@@ -151,6 +151,10 @@ function sendResult() {
 		resolve();
 	});
 }
+
+// setTimeout(async () => {
+// 	await sendResult();
+// }, 5000);
 
 /**
  * Выполняет скрипт из указанной вкладки.

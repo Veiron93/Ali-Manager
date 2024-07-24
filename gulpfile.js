@@ -37,6 +37,7 @@ const JS_FILES_POPUP = [
 	"./src/popup/ConfirmationPopup.js",
 	"./src/popup/SearchOrdersPopup.js",
 	"./src/popup/LogoutPopup.js",
+	"./src/popup/SubscriptionPopup.js",
 	"./src/popup/Popup.js",
 ];
 
@@ -62,13 +63,20 @@ gulp.task("browser-sync-start", function (done) {
 	done();
 });
 
-// scripts
-gulp.task("scripts-dev", () => {
-	gulp.src(JS_FILES_POPUP).pipe(concat("popup.js")).pipe(gulp.dest(TEMP_PATH));
-	gulp.src(JS_FILES).pipe(gulp.dest(TEMP_PATH));
+// слежение за файлами
+gulp.task("watch-files", function () {
+	gulp.watch("./src/popup/*.scss", gulp.parallel("styles-dev"));
 
 	gulp.watch(JS_FILES_POPUP, gulp.parallel(["scripts-dev"]));
 	gulp.watch(JS_FILES, gulp.parallel(["scripts-dev"]));
+});
+
+// scripts
+gulp.task("scripts-dev", (done) => {
+	gulp.src(JS_FILES_POPUP).pipe(concat("popup.js")).pipe(gulp.dest(TEMP_PATH));
+	gulp.src(JS_FILES).pipe(gulp.dest(TEMP_PATH));
+
+	done();
 });
 
 // styles
@@ -80,12 +88,10 @@ gulp.task("styles-dev", (done) => {
 		.pipe(gulp.dest(TEMP_PATH))
 		.pipe(browserSync.reload({ stream: true }));
 
-	gulp.watch("./src/popup/*.scss", gulp.parallel(["styles-dev"]));
-
 	done();
 });
 
-gulp.task("default", gulp.parallel("browser-sync-start", "scripts-dev", "styles-dev"), () => {
+gulp.task("default", gulp.parallel("browser-sync-start", "scripts-dev", "styles-dev", "watch-files"), () => {
 	return true;
 });
 

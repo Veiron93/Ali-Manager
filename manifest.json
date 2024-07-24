@@ -14,7 +14,7 @@
 	},
 
 	"permissions": ["scripting", "activeTab", "storage", "tabs"],
-	"host_permissions": ["https://www.aliexpress.com/*", "https://aliexpress.ru/*", "https://login.aliexpress.ru/*"],
+	"host_permissions": ["https://www.aliexpress.com/*", "https://aliexpress.com/*", "https://aliexpress.ru/*", "https://login.aliexpress.ru/*"],
 	"optional_host_permissions": ["https://*/*", "http://*/*"],
 	"background": {
 		"service_worker": "src/background.js",

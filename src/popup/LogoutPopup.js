@@ -40,7 +40,7 @@ class LogoutPopup extends HelpersPopup {
 
 	// выход
 	onLogout(authToken, email) {
-		return fetch(this.DEV_API_HOST + this.API_v1 + "/logout", {
+		return fetch(this.DEV_API_HOST + this.API_v1 + "/auth/logout", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -55,6 +55,7 @@ class LogoutPopup extends HelpersPopup {
 	async successLogout() {
 		await this.setStorageLocal("isAuth", false);
 		await this.clearStorageLocal("authToken");
+		await this.clearStorageLocal("user");
 
 		window.location.reload();
 	}
