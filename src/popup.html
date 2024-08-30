@@ -25,27 +25,19 @@
 				<div class="btn-logout hidden">выйти</div>
 			</header>
 
-			<!-- Лоадер -->
-			<div class="loader hidden">
-				<div class="animation"></div>
-			</div>
-
-			<!-- Авторизация / Регистрация  -->
-			<div class="auth-login hidden">
-				<div class="helper">Если Вы не зарегистрированы, то на Email придет код подтверждения.</div>
-				<input type="text" name="email" placeholder="Email" />
-				<input type="password" name="password" placeholder="Пароль" />
+			<!-- Авторизация -->
+			<div class="login hidden">
+				<div class="helper">Введите ключ авторизации, его можно создать в Личном кабинете!</div>
+				<input type="text" name="key" maxlength="19" placeholder="Ключ авторизации" />
 				<div class="btns">
-					<button type="button" class="btn btn--red btn-login" disabled>Войти</button>
-					<a href="https://cabinet.alimanager.ru/account/password-reset" class="btn btn--blue btn-reset-password" target="_blank"
-						>Забыли пароль?</a
-					>
+					<button type="button" class="btn-login btn btn--red" disabled>Войти</button>
+					<a href="https://cabinet.alimanager.ru/" class="btn-cabinet btn btn--blue" target="_blank">Личный кабинет</a>
 				</div>
 				<div class="error"></div>
 			</div>
 
 			<!-- Подтверждение -->
-			<div class="confirmation hidden">
+			<!-- <div class="confirmation hidden">
 				<div class="helper">Введите код подтверждения, мы его отправили на Ваш Email.</div>
 				<div class="user-email"></div>
 				<input type="text" name="confirmation-code" maxlength="4" placeholder="Код подтверждения" />
@@ -54,7 +46,7 @@
 					<button type="button" class="btn btn--orange btn-cancel">Отмена</button>
 				</div>
 				<div class="error"></div>
-			</div>
+			</div> -->
 
 			<!-- Поиск -->
 			<div class="search-orders hidden">
@@ -106,6 +98,11 @@
 					<div class="is-not-paid">Подписка закончилась</div>
 				</div>
 				<a class="btn btn--blue subscription_pay" href="https://alimanager.ru" target="_blank">Продлить</a>
+			</div>
+
+			<!-- Лоадер -->
+			<div class="loader hidden">
+				<div class="animation"></div>
 			</div>
 		</div>
 	</body>

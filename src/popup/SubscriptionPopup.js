@@ -28,6 +28,12 @@ class SubscriptionPopup extends HelpersPopup {
 		if (user && user.email) {
 			this.emailElement.innerHTML = user.email;
 		}
+
+		this.accessToken = await this.getStorageLocal("accessToken");
+
+		if (this.accessToken) {
+			this.stateElementClass(this.container, true);
+		}
 	}
 
 	async getSubscription() {

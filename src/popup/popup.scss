@@ -174,8 +174,7 @@ input {
 	}
 }
 
-.auth-login,
-.confirmation {
+.login {
 	display: flex;
 	flex-direction: column;
 	gap: 7px;
@@ -183,6 +182,10 @@ input {
 	.btns {
 		display: flex;
 		column-gap: 7px;
+
+		.btn-cabinet {
+			width: 160px;
+		}
 	}
 
 	.error {
@@ -190,25 +193,6 @@ input {
 		font-weight: 500;
 		margin-top: 5px;
 		font-size: 13px;
-
-		&:empty {
-			display: none;
-		}
-	}
-}
-
-.auth-login {
-	.btns {
-		.btn-reset-password {
-			width: 160px;
-		}
-	}
-}
-
-.confirmation {
-	.user-email {
-		font-size: 14px;
-		font-weight: 500;
 
 		&:empty {
 			display: none;

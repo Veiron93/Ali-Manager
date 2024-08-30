@@ -33,8 +33,7 @@ const TEMP_PATH = "./temp";
 const JS_FILES_POPUP = [
 	"./src/popup/HelpersPopup.js",
 	"./src/popup/LoaderPopup.js",
-	"./src/popup/AuthLoginPopup.js",
-	"./src/popup/ConfirmationPopup.js",
+	"./src/popup/LoginPopup.js",
 	"./src/popup/SearchOrdersPopup.js",
 	"./src/popup/LogoutPopup.js",
 	"./src/popup/SubscriptionPopup.js",

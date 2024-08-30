@@ -2,7 +2,7 @@ class HelpersPopup {
 	PUBLIC_API_HOST = "https://api.alimanager.ru";
 	DEV_API_HOST = "http://alimanager-server.web";
 
-	API_v1 = "/api/cabinet/v1";
+	API_v1 = "/api/extension/v1";
 
 	// Storage
 	async getStorageLocal(key) {
@@ -19,7 +19,11 @@ class HelpersPopup {
 		await chrome.storage.local.set({ [key]: value });
 	}
 
-	async clearStorageLocal(key) {
+	async clearStorageLocal() {
+		await chrome.storage.local.clear();
+	}
+
+	async removeStorageLocal(key) {
 		await chrome.storage.local.remove([key]);
 	}
 
@@ -52,10 +56,4 @@ class HelpersPopup {
 
 		return response.json();
 	}
-
-	// stateElementsStyleClass(styleClass, elements) {
-	// 	elements.forEach((element) => {
-	// 		this.stateElementClass(element.el, element.state);
-	// 	});
-	// }
 }

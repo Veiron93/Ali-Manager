@@ -6,7 +6,8 @@ class LogoutPopup extends HelpersPopup {
 
 		(async () => {
 			await this.initElements();
-			await this.initEvents();
+			this.initEvents();
+			this.init();
 		})();
 	}
 
@@ -18,45 +19,41 @@ class LogoutPopup extends HelpersPopup {
 	}
 
 	initEvents() {
-		return new Promise((resolve) => {
-			this.btnLogoutElement.addEventListener("click", () => this.logout());
-			resolve();
-		});
+		this.btnLogoutElement.addEventListener("click", () => this.logout());
+	}
+
+	async init() {
+		this.accessToken = await this.getStorageLocal("accessToken");
+
+		if (this.accessToken) {
+			this.stateElementClass(this.btnLogoutElement, true);
+		}
 	}
 
 	async logout() {
-		const authToken = await this.getStorageLocal("authToken");
-		const user = await this.getStorageLocal("user");
-
-		if (!authToken || !user || !user.email) {
+		if (!this.accessToken) {
 			return false;
 		}
 
-		await this.onLogout(authToken, user.email)
+		await this.onLogout()
 			.then((res) => this.handlerResponse(res))
 			.then(this.successLogout())
 			.catch((error) => this.failedLogout(error));
 	}
 
 	// выход
-	onLogout(authToken, email) {
+	onLogout() {
 		return fetch(this.DEV_API_HOST + this.API_v1 + "/auth/logout", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: "Bearer " + authToken,
+				Authorization: "Bearer " + this.accessToken,
 			},
-			body: JSON.stringify({
-				email: email,
-			}),
 		});
 	}
 
 	async successLogout() {
-		await this.setStorageLocal("isAuth", false);
-		await this.clearStorageLocal("authToken");
-		await this.clearStorageLocal("user");
-
+		await this.clearStorageLocal();
 		window.location.reload();
 	}
 

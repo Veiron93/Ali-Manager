@@ -1,5 +1,6 @@
 class SearchOrdersPopup extends HelpersPopup {
 	container;
+	accessToken;
 
 	// форма поиска
 	inputDatesElement;
@@ -11,8 +12,8 @@ class SearchOrdersPopup extends HelpersPopup {
 	dateLastSearchElement;
 
 	// документация
-	documentation;
-	btnMoreDocumentation;
+	documentationElement;
+	btnMoreDocumentationElement;
 
 	constructor() {
 		super();
@@ -38,8 +39,8 @@ class SearchOrdersPopup extends HelpersPopup {
 			this.dateLastSearchElement = this.lastSearchElement.querySelector(".last-search_date");
 
 			// документация
-			this.documentation = this.container.querySelector(".documentation");
-			this.btnMoreDocumentation = this.container.querySelector(".documentation_btn-more");
+			this.documentationElement = this.container.querySelector(".documentation");
+			this.btnMoreDocumentationElement = this.container.querySelector(".documentation_btn-more");
 
 			resolve();
 		});
@@ -52,12 +53,18 @@ class SearchOrdersPopup extends HelpersPopup {
 		this.btnClearElement.addEventListener("click", () => this.clear());
 
 		// документация
-		this.btnMoreDocumentation.addEventListener("click", () => this.stateDocumentation());
+		this.btnMoreDocumentationElement.addEventListener("click", () => this.stateDocumentation());
 	}
 
 	async init() {
 		this.initFormSearch();
 		this.initLastSearch();
+
+		this.accessToken = await this.getStorageLocal("accessToken");
+
+		if (this.accessToken) {
+			this.stateElementClass(this.container, true);
+		}
 	}
 
 	async initFormSearch() {
@@ -86,7 +93,8 @@ class SearchOrdersPopup extends HelpersPopup {
 
 	clear() {
 		this.inputDatesElement.value = "";
-		this.clearStorageLocal("datesSearch");
+
+		this.removeStorageLocal("datesSearch");
 		this.stateBtnsSearch();
 	}
 
@@ -129,6 +137,6 @@ class SearchOrdersPopup extends HelpersPopup {
 	}
 
 	stateDocumentation() {
-		this.documentation.classList.toggle("active");
+		this.documentationElement.classList.toggle("active");
 	}
 }

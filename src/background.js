@@ -72,6 +72,10 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 	if (request.orderTrackingNumbersComplete) {
 		let result = request.orderTrackingNumbersComplete;
 
+		if (!orders) {
+			orders = await getStorage("orders");
+		}
+
 		trackings.set(orders[indexOrder].orderNumber, {
 			original: result.original,
 		});
@@ -82,12 +86,24 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 				indexOrder = 0;
 
 				await addTrackingsToOrders();
-				await sendResult();
+				//await sendResult();
 			});
 		} else {
 			indexOrder++;
 			getOrderTrackNumbers();
 		}
+	}
+});
+
+chrome.tabs.onCreated.addListener(async () => {
+	await chrome.tabs.query({ active: true }).then((tabs) => (activeTab = tabs[0]));
+
+	let page = getUriParams(activeTab, "alimanager");
+	let pageStatus = activeTab.status;
+
+	// страница трек-кода посылки
+	if (page === "track-number" && pageStatus === "complete") {
+		addFilesTab(activeTab, ["./temp/tracking-number.js"]);
 	}
 });
 
@@ -194,11 +210,15 @@ function getOrderTrackNumbers() {
 }
 
 function addTrackingsToOrders() {
-	return new Promise((resolve) => {
-		if (!ordersData) {
-			resolve();
-			return false;
-		}
+	return new Promise(async (resolve) => {
+		// if (!ordersData) {
+		// 	resolve();
+		// 	return false;
+		// }
+
+		ordersData = await getStorage("ordersData");
+
+		console.log(ordersData);
 
 		let i = 0;
 
